@@ -1,129 +1,212 @@
 import React from 'react';
-import { ArrowRight, Users, Zap, Shield, Sparkles, Filter, Code } from 'lucide-react';
+import { 
+  ArrowRight, 
+  Users, 
+  Zap, 
+  Shield, 
+  Sparkles, 
+  Filter, 
+  Code, 
+  CheckCircle2, 
+  MessageSquare, 
+  FolderKanban, 
+  BarChart3, 
+  HeartHandshake,
+  Trophy,
+  Award
+} from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 
 export default function Home({ onNavigate }) {
   const { theme } = useAppContext();
 
-  const features = [
-    {
-      icon: Users,
-      title: 'Discover Skilled Teammates',
-      desc: 'Browse hundreds of student profiles based on precise technical skills like React, Python, or UI/UX design.',
-      color: 'text-[#00f0ff]',
-      bg: 'bg-[#00f0ff]/10',
-      border: 'border-[#00f0ff]/30'
-    },
-    {
-      icon: Zap,
-      title: 'Build Teams Faster',
-      desc: 'Skip the networking anxiety. Find exactly who you need to complete your hackathon team instantly.',
-      color: 'text-[#a855f7]',
-      bg: 'bg-[#a855f7]/10',
-      border: 'border-[#a855f7]/30'
-    },
+  const stats = [
+    { number: '5,000+', label: 'Verified Students', color: 'text-gs-cyan' },
+    { number: '500+', label: 'Formed Squads', color: 'text-gs-green' },
+    { number: '50+', label: 'Campus Chapters', color: 'text-gs-violet' },
+    { number: '80%+', label: 'Project Success Rate', color: 'text-gs-amber' },
+  ];
+
+  const advantages = [
     {
       icon: Filter,
       title: 'Skill-Based Matching',
-      desc: 'Our AI matching engine pairs you with groups lacking your specific skill set for the perfect dynamic.',
-      color: 'text-[#f59e0b]',
-      bg: 'bg-[#f59e0b]/10',
-      border: 'border-[#f59e0b]/30'
+      desc: 'AI algorithm pairs you with peers possessing complementary skills rather than mere social circles.',
+      color: 'text-gs-cyan',
+      bg: 'bg-gs-cyan/10',
+      border: 'border-gs-cyan/30'
     },
     {
-      icon: Code,
-      title: 'Cross-Discipline Collab',
-      desc: 'Connect frontend developers with designers, AI researchers, and backend engineers all in one place.',
-      color: 'text-[#ec4899]',
-      bg: 'bg-[#ec4899]/10',
-      border: 'border-[#ec4899]/30'
+      icon: Award,
+      title: 'Verified Credentials',
+      desc: 'Prove your proficiencies through standardized skill quizzes, certificates, and peer endorsements.',
+      color: 'text-gs-green',
+      bg: 'bg-gs-green/10',
+      border: 'border-gs-green/30'
+    },
+    {
+      icon: MessageSquare,
+      title: 'Integrated Collaboration',
+      desc: 'Real-time team chat, direct messaging, and group channels all centralized in one fast platform.',
+      color: 'text-gs-violet',
+      bg: 'bg-gs-violet/10',
+      border: 'border-gs-violet/30'
+    },
+    {
+      icon: FolderKanban,
+      title: 'Hackathon & Project Focus',
+      desc: 'Discover upcoming hackathons, campus bounties, and term capstones actively recruiting talent.',
+      color: 'text-gs-amber',
+      bg: 'bg-gs-amber/10',
+      border: 'border-gs-amber/30'
+    },
+    {
+      icon: BarChart3,
+      title: 'Team Analytics & XP',
+      desc: 'Track team synergy, milestone progress, and earn XP badges as you complete collaborative challenges.',
+      color: 'text-pink-400',
+      bg: 'bg-pink-500/10',
+      border: 'border-pink-500/30'
+    },
+    {
+      icon: HeartHandshake,
+      title: 'Inclusive by Design',
+      desc: 'Eliminates popularity contests so introverts and underrepresented talent get fair discovery.',
+      color: 'text-sky-400',
+      bg: 'bg-sky-500/10',
+      border: 'border-sky-500/30'
     }
   ];
 
   const steps = [
     {
       step: '01',
-      title: 'Create Your Profile',
-      desc: 'Sign up and list your technical skills, interests, and past projects.',
+      title: 'Build Verified Profile',
+      desc: 'List your stack, pass interactive skill quizzes, and showcase your best repositories and portfolio.',
     },
     {
       step: '02',
-      title: 'Discover Developers',
-      desc: 'Use our advanced filters to find teammates with the exact skills your project requires.',
+      title: 'AI Matches Your Synergy',
+      desc: 'Our neural matching engine analyzes skill gaps, interests, and schedules to suggest high-compatibility teams.',
     },
     {
       step: '03',
-      title: 'Form & Build',
-      desc: 'Invite members to your group, lock in your team, and start building the future.',
+      title: 'Form, Collaborate & Win',
+      desc: 'Join squad channels, lock in roles, track milestones, and conquer hackathons together.',
     }
   ];
 
   return (
     <div className="w-full flex justify-center pb-20 overflow-x-hidden min-h-screen bg-transparent">
-      <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 space-y-32 z-10">
+      <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 space-y-24 z-10">
         
         {/* --- Hero Section --- */}
-        <section className="relative pt-32 pb-10 md:pt-48 md:pb-20 flex flex-col items-center text-center animate-page-load">
+        <section className="relative pt-32 pb-6 md:pt-44 md:pb-12 flex flex-col items-center text-center animate-page-load">
           {/* Abstract glows */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[var(--color-gs-primary)]/10 rounded-full blur-[100px] pointer-events-none" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/4 -translate-y-1/3 w-[500px] h-[500px] bg-[var(--color-gs-secondary)]/10 rounded-full blur-[100px] pointer-events-none" />
 
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--color-gs-primary)]/30 bg-[var(--color-gs-primary)]/10 text-[var(--color-gs-primary)] text-sm font-medium mb-8">
-            <Sparkles size={14} /> The Ultimate Student Collaboration Hub
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gs-primary/30 bg-gs-primary/10 text-gs-primary text-sm font-semibold mb-6 shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+            <Sparkles size={16} /> Connect Talent · Build Teams · Win Together
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-extrabold text-white max-w-4xl tracking-tight leading-tight mb-8 font-heading">
-            <span className="inline-block opacity-0 animate-[load-fade-up_0.5s_ease-out_0.2s_forwards]">Find</span>{' '}
-            <span className="inline-block opacity-0 animate-[load-fade-up_0.5s_ease-out_0.4s_forwards]">the</span>{' '}
-            <span className="inline-block opacity-0 animate-[load-fade-up_0.5s_ease-out_0.6s_forwards]">Perfect</span>
-            <br className="hidden md:block"/>
-            <span className="inline-block opacity-0 animate-[load-fade-up_0.5s_ease-out_0.8s_forwards] text-transparent bg-clip-text bg-gradient-to-r from-[#00f0ff] to-[#a855f7]">
-              Hackathon Teammates
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-white max-w-4xl tracking-tight leading-tight mb-6 font-heading">
+            Build Your Dream Squad on{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gs-primary via-cyan-200 to-gs-secondary">
+              GroupSync
             </span>
           </h1>
           
-          <p className="text-[18px] text-[var(--color-gs-text-muted)] max-w-2xl mb-10 leading-relaxed opacity-0 animate-[load-fade-up_0.5s_ease-out_1s_forwards]">
-            Stop struggling to form a team. Connect with developers, 
-            designers, and innovators. Build your dream squad in seconds, 
-            and focus entirely on creating your product.
+          <p className="text-lg sm:text-xl text-[var(--color-gs-text-muted)] max-w-3xl mb-10 leading-relaxed font-medium">
+            Stop defaulting to friend circles with skill mismatches. GroupSync connects student developers, designers, and innovators based on complementary proficiencies, shared interests, and verified track records.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 opacity-0 animate-[load-fade-up_0.5s_ease-out_1.2s_forwards] relative z-10">
+          <div className="flex flex-col sm:flex-row gap-4 relative z-10">
             <button 
               onClick={() => onNavigate('signup')}
-              className="px-8 py-4 bg-gradient-to-br from-[#00f0ff] to-[#a855f7] text-[#050810] text-lg font-bold rounded-full btn-scale flex items-center justify-center gap-2"
+              className="px-8 py-4 bg-gradient-to-br from-[#00f0ff] to-[#a855f7] text-[#050810] text-lg font-black rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-[0_0_25px_rgba(0,240,255,0.4)] flex items-center justify-center gap-2"
             >
-              Get Started <ArrowRight size={20} />
+              Find Teammates Now <ArrowRight size={20} />
             </button>
             <button 
               onClick={() => onNavigate('login')}
-              className="px-8 py-4 bg-transparent border border-white/20 text-lg font-bold rounded-full text-white hover:border-[#00f0ff] transition-colors btn-scale flex items-center justify-center gap-2"
+              className="px-8 py-4 bg-gs-card/80 border border-white/20 text-lg font-bold rounded-2xl text-white hover:border-gs-primary transition-all flex items-center justify-center gap-2 hover:bg-white/5"
             >
-              Login to Account
+              Sign In to Campus Hub
             </button>
           </div>
         </section>
 
-        {/* --- Features Grid --- */}
+        {/* --- Stats Counter Grid --- */}
+        <section className="relative z-10">
+          <div className="bg-gs-card border border-gs-border rounded-3xl p-8 md:p-12 shadow-2xl backdrop-blur-xl">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-y md:divide-y-0 md:divide-x divide-gs-border/60">
+              {stats.map((s, i) => (
+                <div key={i} className={`text-center ${i > 0 ? 'pt-6 md:pt-0' : ''}`}>
+                  <div className={`text-4xl md:text-5xl font-black font-heading mb-2 ${s.color}`}>
+                    {s.number}
+                  </div>
+                  <p className="text-sm md:text-base font-bold text-gs-text-muted uppercase tracking-wider">
+                    {s.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* --- For Introverts Too Spotlight --- */}
+        <section className="relative z-10">
+          <div className="bg-gradient-to-r from-purple-950/40 via-gs-card to-cyan-950/40 border border-purple-500/30 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
+              <div className="w-20 h-20 rounded-3xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-4xl shrink-0 shadow-[0_0_25px_rgba(168,85,247,0.3)]">
+                💜
+              </div>
+              <div className="flex-1 text-center md:text-left">
+                <h3 className="text-2xl md:text-3xl font-black font-heading text-white mb-2">
+                  Built For Introverts & Hidden Talent Too
+                </h3>
+                <p className="text-gs-text-muted text-base md:text-lg leading-relaxed">
+                  No social anxiety or awkward networking required. GroupSync evaluates compatibility by technical proficiencies, verified badges, and work styles so your genuine talent speaks for itself.
+                </p>
+              </div>
+              <button
+                onClick={() => onNavigate('signup')}
+                className="shrink-0 px-6 py-3.5 bg-purple-500 hover:bg-purple-400 text-white font-bold rounded-2xl transition-all shadow-[0_0_20px_rgba(168,85,247,0.4)]"
+              >
+                Join Anonymously
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* --- Competitive Advantages Grid --- */}
         <section className="relative z-10" id="features">
           <div className="text-center mb-16">
-             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 font-heading">Why GroupSync?</h2>
-             <p className="text-[var(--color-gs-text-muted)] max-w-2xl mx-auto text-[18px]">
-               Everything you need to seamlessly form or join a group without the friction.
-             </p>
+            <h2 className="text-3xl md:text-5xl font-black text-white mb-4 font-heading">
+              Why Students Choose GroupSync
+            </h2>
+            <p className="text-[var(--color-gs-text-muted)] max-w-2xl mx-auto text-lg font-medium">
+              Everything required to go from solo hacker to winning cross-functional team in minutes.
+            </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature, i) => {
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {advantages.map((feature, i) => {
               const Icon = feature.icon;
               return (
-                <div key={i} style={{ animationDelay: `${i * 0.1}s` }} className="glass-card glass-card-hover p-8 relative overflow-hidden group opacity-0 animate-[load-fade-up_0.5s_ease-out_forwards]">
-                  <div className={`absolute top-0 right-0 w-32 h-32 blur-3xl rounded-full opacity-20 transition-opacity group-hover:opacity-50 ${feature.bg} translate-x-10 -translate-y-10`} />
-                  
-                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 border ${feature.bg} ${feature.color} ${feature.border}`}>
-                    <Icon size={24} />
+                <div 
+                  key={i} 
+                  className="bg-gs-card border border-gs-border rounded-3xl p-8 hover:border-gs-primary/40 hover:-translate-y-1 transition-all duration-300 shadow-xl flex flex-col justify-between"
+                >
+                  <div>
+                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 border ${feature.bg} ${feature.color} ${feature.border} shadow-inner`}>
+                      <Icon size={26} />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 font-heading">{feature.title}</h3>
+                    <p className="text-[var(--color-gs-text-muted)] text-sm leading-relaxed">{feature.desc}</p>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3 font-heading">{feature.title}</h3>
-                  <p className="text-[var(--color-gs-text-muted)] text-sm leading-relaxed">{feature.desc}</p>
                 </div>
               );
             })}
@@ -132,55 +215,51 @@ export default function Home({ onNavigate }) {
 
         {/* --- How it Works --- */}
         <section className="relative z-10" id="how-it-works">
-           <div className="glass-card p-8 md:p-16 relative overflow-hidden">
-             
-             {/* decorative accents */}
-             <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-gradient-to-tl from-[var(--color-gs-secondary)]/10 to-transparent pointer-events-none rounded-tl-full" />
-             
-             <div className="text-center mb-16 relative z-10">
-               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 font-heading">How it works</h2>
-               <p className="text-[var(--color-gs-text-muted)] max-w-2xl mx-auto text-[18px]">
-                 Three simple steps to go from solo hacker to a fully-equipped team.
-               </p>
-             </div>
+          <div className="bg-gs-card border border-gs-border rounded-3xl p-8 md:p-14 shadow-2xl relative overflow-hidden">
+            <div className="text-center mb-14 relative z-10">
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-3 font-heading">
+                How It Works
+              </h2>
+              <p className="text-[var(--color-gs-text-muted)] max-w-xl mx-auto text-base">
+                Three frictionless steps to assemble a high-compatibility squad.
+              </p>
+            </div>
 
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
-               {steps.map((step, i) => (
-                 <div key={i} className="flex gap-4">
-                   <div className="text-5xl font-extrabold text-white/10 select-none font-heading">
-                     {step.step}
-                   </div>
-                   <div className="pt-2">
-                     <h3 className="text-xl font-bold text-white mb-2 font-heading">{step.title}</h3>
-                     <p className="text-[var(--color-gs-text-muted)] text-sm">{step.desc}</p>
-                   </div>
-                 </div>
-               ))}
-             </div>
-           </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+              {steps.map((step, i) => (
+                <div key={i} className="flex flex-col gap-3 p-6 bg-gs-bg/60 border border-gs-border rounded-2xl">
+                  <div className="text-4xl font-black text-gs-cyan font-heading">
+                    {step.step}
+                  </div>
+                  <h3 className="text-lg font-bold text-white font-heading">{step.title}</h3>
+                  <p className="text-[var(--color-gs-text-muted)] text-sm leading-relaxed">{step.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
 
         {/* --- CTA Section --- */}
-        <section className="relative z-10 text-center flex flex-col items-center pb-20">
-          <Shield size={48} className="text-[#00f0ff] mb-6 opacity-80" />
-          <h2 className="text-4xl font-bold text-white mb-6 max-w-2xl font-heading">
-            Ready to build your dream hackathon team?
+        <section className="relative z-10 text-center flex flex-col items-center pb-16">
+          <Shield size={48} className="text-gs-cyan mb-6 drop-shadow-[0_0_15px_rgba(0,240,255,0.6)]" />
+          <h2 className="text-3xl md:text-5xl font-black text-white mb-4 max-w-2xl font-heading">
+            Ready to Build Your Winning Team?
           </h2>
-          <p className="text-lg text-[var(--color-gs-text-muted)] mb-10 max-w-xl">
-            Join thousands of students who have already connected and launched award-winning projects at top universities.
+          <p className="text-base md:text-lg text-[var(--color-gs-text-muted)] mb-10 max-w-xl">
+            Join thousands of university peers forming high-performance teams and winning top hackathons.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <button 
               onClick={() => onNavigate('signup')}
-              className="px-8 py-4 bg-gradient-to-br from-[#00f0ff] to-[#a855f7] text-[#050810] text-lg font-bold rounded-full btn-scale"
+              className="px-8 py-4 bg-gradient-to-br from-[#00f0ff] to-[#a855f7] text-[#050810] text-lg font-black rounded-2xl shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:scale-105 active:scale-95 transition-all"
             >
-              Join Now
+              Get Started for Free
             </button>
             <button 
               onClick={() => onNavigate('login')}
-              className="px-8 py-4 bg-transparent border border-white/20 text-lg font-bold rounded-full text-white hover:border-[#00f0ff] transition-colors btn-scale"
+              className="px-8 py-4 bg-gs-card border border-white/20 text-lg font-bold rounded-2xl text-white hover:border-gs-primary transition-all hover:bg-white/5"
             >
-              Login To Continue
+              Sign In
             </button>
           </div>
         </section>

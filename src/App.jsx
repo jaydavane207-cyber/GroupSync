@@ -21,6 +21,9 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import DashboardPage from './pages/DashboardPage';
 import OnboardingPage from './pages/OnboardingPage';
+import ProjectsPage from './pages/ProjectsPage';
+import FriendsPage from './pages/FriendsPage';
+import NotificationsPage from './pages/NotificationsPage';
 
 const PublicLayout = () => {
   const navigate = useNavigate();
@@ -153,7 +156,12 @@ export default function GroupSyncApp() {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/browse" element={<BrowseGroups />} />
             <Route path="/ai" element={<AISuggestions />} />
+            <Route path="/ai-suggestions" element={<Navigate to="/ai" replace />} />
+            <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/friends" element={<FriendsPage />} />
+            <Route path="/notifications" element={<NotificationsPage />} />
             <Route path="/chat" element={<CampusChat />} />
+            <Route path="/campus-chat" element={<Navigate to="/chat" replace />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/group/:id" element={<GroupDetails />} />
             <Route path="/profile" element={<UserProfile />} />

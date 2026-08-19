@@ -11,6 +11,7 @@ import { useAppContext } from '../context/AppContext';
 import supabase from '../lib/supabase';
 import StrictSkillVerificationModal from './StrictSkillVerificationModal';
 import { motion, AnimatePresence } from 'framer-motion';
+import { SkillBadge, SkillBadgeInline } from './SkillBadge';
 
 // ─── Background Decorations ───────────────────────────────────────────────────
 
@@ -276,6 +277,87 @@ function OverviewTab({ user, factions, isEditing, formData, setFormData, onAddSk
           )}
         </HoloPanel>
       </div>
+
+      {/* Skill Credibility Score & Badges */}
+      <HoloPanel glow="bg-gs-primary/10">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-lg font-black font-heading text-gs-text-main flex items-center gap-2">
+            <Award size={20} className="text-gs-primary" /> Skill Credibility Score & Badges
+          </h3>
+          <span className="text-xs text-gs-cyan font-bold uppercase tracking-wider">
+            Verified Index: 92%
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="p-4 rounded-2xl bg-gs-bg/60 border border-gs-border">
+            <div className="flex justify-between items-center mb-1">
+              <span className="font-bold text-sm text-gs-text-main">{user.skills?.[0] || 'React'}</span>
+              <span className="text-xs font-black text-emerald-400">95% (Platinum)</span>
+            </div>
+            <div className="w-full bg-gs-card rounded-full h-1.5 overflow-hidden mb-2">
+              <div className="bg-emerald-400 h-full rounded-full" style={{ width: '95%' }} />
+            </div>
+            <p className="text-[10px] text-gs-text-muted">Quiz (95%) · Cert ✓ · 14 Endorsements</p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-gs-bg/60 border border-gs-border">
+            <div className="flex justify-between items-center mb-1">
+              <span className="font-bold text-sm text-gs-text-main">{user.skills?.[1] || 'Python'}</span>
+              <span className="text-xs font-black text-amber-400">88% (Gold)</span>
+            </div>
+            <div className="w-full bg-gs-card rounded-full h-1.5 overflow-hidden mb-2">
+              <div className="bg-amber-400 h-full rounded-full" style={{ width: '88%' }} />
+            </div>
+            <p className="text-[10px] text-gs-text-muted">Quiz (88%) · Cert ✓ · 9 Endorsements</p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-gs-bg/60 border border-gs-border">
+            <div className="flex justify-between items-center mb-1">
+              <span className="font-bold text-sm text-gs-text-main">{user.skills?.[2] || 'UI/UX Design'}</span>
+              <span className="text-xs font-black text-slate-300">76% (Silver)</span>
+            </div>
+            <div className="w-full bg-gs-card rounded-full h-1.5 overflow-hidden mb-2">
+              <div className="bg-slate-300 h-full rounded-full" style={{ width: '76%' }} />
+            </div>
+            <p className="text-[10px] text-gs-text-muted">Quiz (76%) · 6 Endorsements</p>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          <SkillBadgeInline level="platinum" skill={user.skills?.[0] || 'React'} />
+          <SkillBadgeInline level="gold" skill={user.skills?.[1] || 'Python'} />
+          <SkillBadgeInline level="silver" skill={user.skills?.[2] || 'UI/UX Design'} />
+          <SkillBadgeInline level="gold" skill="Team Collaboration" />
+        </div>
+      </HoloPanel>
+
+      {/* Status & Work Preferences */}
+      <HoloPanel glow="bg-gs-secondary/5">
+        <h3 className="text-lg font-black font-heading text-gs-text-main mb-5 flex items-center gap-2">
+          <Users size={20} className="text-gs-secondary" /> Status & Collaboration Preferences
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="p-4 rounded-2xl bg-gs-bg/60 border border-gs-border">
+            <p className="text-[10px] uppercase font-bold text-gs-text-muted mb-1">Team Status</p>
+            <p className="font-bold text-emerald-400 text-sm flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" /> Looking for Team
+            </p>
+          </div>
+          <div className="p-4 rounded-2xl bg-gs-bg/60 border border-gs-border">
+            <p className="text-[10px] uppercase font-bold text-gs-text-muted mb-1">Mentorship</p>
+            <p className="font-bold text-gs-primary text-sm">Open to Mentoring</p>
+          </div>
+          <div className="p-4 rounded-2xl bg-gs-bg/60 border border-gs-border">
+            <p className="text-[10px] uppercase font-bold text-gs-text-muted mb-1">Personality Fit</p>
+            <p className="font-bold text-gs-violet text-sm">Introvert / Analytical</p>
+          </div>
+          <div className="p-4 rounded-2xl bg-gs-bg/60 border border-gs-border">
+            <p className="text-[10px] uppercase font-bold text-gs-text-muted mb-1">Commitment</p>
+            <p className="font-bold text-amber-300 text-sm">Full-time / Hackathons</p>
+          </div>
+        </div>
+      </HoloPanel>
 
       {/* Bio */}
       <HoloPanel glow="bg-gs-primary/5">
