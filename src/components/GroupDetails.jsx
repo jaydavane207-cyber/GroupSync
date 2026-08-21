@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Users, Lock, Unlock, Settings, LogOut, ShieldAlert, MessageSquare, Layout, Calendar as CalendarIcon, CornerDownRight, AlignLeft, AtSign, Send, Smile, Paperclip, Clock, MapPin, X, Image, File, BarChart3, Plus, Trash2, Loader2, Zap, Medal } from 'lucide-react';
+import { Users, Lock, Unlock, Settings, LogOut, ShieldAlert, MessageSquare, Layout, Calendar as CalendarIcon, CornerDownRight, AlignLeft, AtSign, Send, Smile, Paperclip, Clock, MapPin, X, Image, File, BarChart3, Plus, Trash2, Loader2, Zap, Medal, Info, Sparkles, ExternalLink } from 'lucide-react';
 import { XP_VALUES } from './Leaderboard';
 import { useAppContext } from '../context/AppContext';
 import { ONBOARDING_AVATARS } from '../data/mockData';
 import KanbanBoard from './KanbanBoard';
+import EventDetailsModal from './EventDetailsModal';
 import supabase from '../lib/supabase';
 
 // ─── Emoji Data ───────────────────────────────────────────────────────────────
@@ -70,6 +71,8 @@ export default function GroupDetails() {
   const group = groups.find(g => g.id === Number(id));
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [creatorProfile, setCreatorProfile] = useState(null);
   const [activeTab, setActiveTab] = useState('chat'); // 'chat', 'tasks'
   const [chatInput, setChatInput] = useState('');
   const chatEndRef = useRef(null);
@@ -96,7 +99,7 @@ export default function GroupDetails() {
     const fetchRealMembers = async () => {
       const { data, error } = await supabase
         .from('group_members')
-        .select('profile_id, profiles(id, name, avatar, faction, online)')
+        .select('profile_id, profiles(id, name, avatar, faction, online, department, college, branch, year)')
         .eq('group_id', Number(id));
       if (!error && data) {
         setRealMembers(data.map(m => m.profiles).filter(Boolean));
@@ -104,6 +107,23 @@ export default function GroupDetails() {
     };
     fetchRealMembers();
   }, [id]);
+
+  // Fetch creator profile if not present
+  useEffect(() => {
+    const adminId = group?.admin_id || group?.adminId;
+    if (!adminId) return;
+    const fetchCreator = async () => {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', adminId)
+        .single();
+      if (!error && data) {
+        setCreatorProfile(data);
+      }
+    };
+    fetchCreator();
+  }, [group?.admin_id, group?.adminId]);
 
   const formatMessage = useCallback((m) => ({
     id: m.id,
@@ -818,24 +838,67 @@ export default function GroupDetails() {
           {/* Event Details Bar */}
           <div className="glass-card rounded-2xl overflow-hidden relative group">
             {group.poster_url && (
-              <div className="overflow-hidden h-40">
-                <img src={group.poster_url} alt={`${group.name} Event Banner`} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div 
+                onClick={() => setShowEventModal(true)}
+                className="overflow-hidden h-40 cursor-pointer relative group/banner"
+                title="Click to view full event information"
+              >
+                <img src={group.poster_url} alt={`${group.name} Event Banner`} className="w-full h-full object-cover transition-transform duration-500 group-hover/banner:scale-105" />
                 <div className="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-transparent to-[#050810]" />
+                <div className="absolute bottom-2 right-2 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 text-[10px] font-bold text-white flex items-center gap-1 opacity-0 group-hover/banner:opacity-100 transition-opacity">
+                  <Sparkles size={11} className="text-[var(--color-gs-cyan)]" /> View Event Details
+                </div>
               </div>
             )}
             <div className="p-6 relative z-10">
-              <h3 className="text-xl font-bold font-heading text-white mb-4 flex items-center gap-2"><CalendarIcon className="text-[#a855f7]" /> Event Details</h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 
+                  onClick={() => setShowEventModal(true)}
+                  className="text-xl font-bold font-heading text-white flex items-center gap-2 cursor-pointer hover:text-[var(--color-gs-cyan)] transition-colors"
+                  title="Click to view event details"
+                >
+                  <CalendarIcon className="text-[#a855f7]" /> Event Details
+                </h3>
+                <button
+                  onClick={() => setShowEventModal(true)}
+                  className="text-xs font-bold px-2.5 py-1 rounded-lg bg-[var(--color-gs-cyan)]/15 border border-[var(--color-gs-cyan)]/30 text-[var(--color-gs-cyan)] hover:bg-[var(--color-gs-cyan)]/25 transition-all flex items-center gap-1"
+                  title="View full event details provided by creator"
+                >
+                  <Info size={13} /> Full Info
+                </button>
+              </div>
+
               <div className="space-y-3">
-              <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10 hover:border-[#00f0ff]/50 transition-colors">
-                <div className="p-2 rounded-lg bg-[var(--color-gs-cyan)]/10">
-                  <CalendarIcon size={16} className="text-[var(--color-gs-cyan)]" />
+              {/* Event Name card (Circled in UI) */}
+              <div 
+                onClick={() => setShowEventModal(true)}
+                className="flex items-center justify-between p-3.5 bg-gradient-to-r from-[var(--color-gs-cyan)]/10 via-white/5 to-transparent rounded-xl border border-[var(--color-gs-cyan)]/30 hover:border-[var(--color-gs-cyan)] hover:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all cursor-pointer group/event"
+                role="button"
+                tabIndex={0}
+                title="Click to view full event information provided by creator"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-[var(--color-gs-cyan)]/20 text-[var(--color-gs-cyan)] group-hover/event:scale-110 transition-transform">
+                    <CalendarIcon size={18} className="text-[var(--color-gs-cyan)]" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <p className="text-[11px] font-bold text-[var(--color-gs-text-muted)] uppercase tracking-wider">Event Name</p>
+                      <span className="text-[9px] font-black px-1.5 py-0.2 rounded bg-[var(--color-gs-cyan)]/20 text-[var(--color-gs-cyan)]">View Info</span>
+                    </div>
+                    <p className="text-sm font-black text-white group-hover/event:text-[var(--color-gs-cyan)] transition-colors">{group.event}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs text-[var(--color-gs-text-muted)]">Event Name</p>
-                  <p className="text-sm font-bold text-[var(--color-gs-text-main)]">{group.event}</p>
+                <div className="p-1.5 rounded-lg bg-white/5 text-[var(--color-gs-text-muted)] group-hover/event:text-[var(--color-gs-cyan)] group-hover/event:bg-[var(--color-gs-cyan)]/10 transition-all">
+                  <Info size={16} />
                 </div>
               </div>
-              <div className="flex items-center gap-3 p-3 bg-[var(--color-gs-bg)] rounded-xl border border-[var(--color-gs-border)]">
+
+              <div 
+                onClick={() => setShowEventModal(true)}
+                className="flex items-center gap-3 p-3 bg-[var(--color-gs-bg)] hover:bg-white/5 rounded-xl border border-[var(--color-gs-border)] hover:border-[var(--color-gs-amber)]/40 transition-colors cursor-pointer"
+                title="Click to view event details"
+              >
                 <div className="p-2 rounded-lg bg-[var(--color-gs-amber)]/10">
                   <CalendarIcon size={16} className="text-[var(--color-gs-amber)]" />
                 </div>
@@ -844,7 +907,12 @@ export default function GroupDetails() {
                   <p className="text-sm font-bold text-[var(--color-gs-text-main)]">{new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 p-3 bg-[var(--color-gs-bg)] rounded-xl border border-[var(--color-gs-border)]">
+
+              <div 
+                onClick={() => setShowEventModal(true)}
+                className="flex items-center gap-3 p-3 bg-[var(--color-gs-bg)] hover:bg-white/5 rounded-xl border border-[var(--color-gs-border)] hover:border-[var(--color-gs-violet)]/40 transition-colors cursor-pointer"
+                title="Click to view event details"
+              >
                 <div className="p-2 rounded-lg bg-[var(--color-gs-violet)]/10">
                   <Clock size={16} className="text-[var(--color-gs-violet)]" />
                 </div>
@@ -853,7 +921,12 @@ export default function GroupDetails() {
                   <p className="text-sm font-bold text-[var(--color-gs-text-main)]">10:00 AM — 6:00 PM</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 p-3 bg-[var(--color-gs-bg)] rounded-xl border border-[var(--color-gs-border)]">
+
+              <div 
+                onClick={() => setShowEventModal(true)}
+                className="flex items-center gap-3 p-3 bg-[var(--color-gs-bg)] hover:bg-white/5 rounded-xl border border-[var(--color-gs-border)] hover:border-[var(--color-gs-green)]/40 transition-colors cursor-pointer"
+                title="Click to view event details"
+              >
                 <div className="p-2 rounded-lg bg-[var(--color-gs-green)]/10">
                   <MapPin size={16} className="text-[var(--color-gs-green)]" />
                 </div>
@@ -865,6 +938,49 @@ export default function GroupDetails() {
             </div>
             </div>
           </div>
+
+          {/* Creator's Event Overview Card (Inline Details) */}
+          <div className="glass-card p-5 rounded-2xl border border-white/10 relative overflow-hidden">
+            <div className="flex items-center justify-between mb-2.5">
+              <h4 className="text-sm font-bold font-heading text-white flex items-center gap-2">
+                <Sparkles size={16} className="text-[var(--color-gs-cyan)]" /> Organizer's Event Brief
+              </h4>
+              <button
+                onClick={() => setShowEventModal(true)}
+                className="text-[11px] font-bold text-[var(--color-gs-cyan)] hover:underline flex items-center gap-1"
+                title="Open full event popup"
+              >
+                Expand <ExternalLink size={11} />
+              </button>
+            </div>
+            
+            <p className="text-xs text-[var(--color-gs-text-muted)] leading-relaxed line-clamp-3 mb-3 font-medium">
+              {group.description || "Building innovative solutions together."}
+            </p>
+
+            {group.skills && group.skills.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mb-3">
+                {group.skills.slice(0, 4).map(skill => (
+                  <span key={skill} className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-white/5 border border-white/10 text-white">
+                    {skill}
+                  </span>
+                ))}
+                {group.skills.length > 4 && (
+                  <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold text-[var(--color-gs-text-muted)]">
+                    +{group.skills.length - 4} more
+                  </span>
+                )}
+              </div>
+            )}
+
+            <button
+              onClick={() => setShowEventModal(true)}
+              className="w-full py-2.5 bg-gradient-to-r from-[var(--color-gs-cyan)]/20 to-[var(--color-gs-violet)]/20 border border-[var(--color-gs-cyan)]/40 hover:border-[var(--color-gs-cyan)] text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-[0_0_10px_rgba(0,240,255,0.1)] hover:scale-[1.01] active:scale-[0.99]"
+            >
+              <Info size={14} className="text-[var(--color-gs-cyan)]" /> View Full Event & Creator Info
+            </button>
+          </div>
+
           <div className="glass-card p-6 rounded-2xl">
             <h3 className="text-xl font-bold font-heading text-white mb-4 flex items-center gap-2"><Users className="text-[#ec4899]" /> {`Members (${realMembers.length || group.members}${group.maxMembers ? '/' + group.maxMembers : ''})`}</h3>
             
@@ -908,6 +1024,20 @@ export default function GroupDetails() {
           </div>
         </div>
       </div>
+
+      {/* Event Details Modal */}
+      <EventDetailsModal
+        isOpen={showEventModal}
+        onClose={() => setShowEventModal(false)}
+        group={group}
+        creatorProfile={creatorProfile}
+        isMember={isMember}
+        isAdmin={isAdmin}
+        onJoinGroup={handleJoinGroup}
+        onGroupUpdated={(updatedGroup) => {
+          setGroups(groups.map(g => g.id === updatedGroup.id ? updatedGroup : g));
+        }}
+      />
     </div>
   );
 }
