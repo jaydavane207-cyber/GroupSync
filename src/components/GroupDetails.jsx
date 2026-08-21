@@ -942,7 +942,7 @@ export default function GroupDetails() {
                         </div>
                         <div>
                           <p className="text-xs font-bold text-white">
-                            {creatorProfile?.name || (group.adminId === user?.id ? `${user?.name || 'You'} (Creator)` : 'Organizer')}
+                            {creatorProfile?.name || ((group?.adminId === user?.id || group?.admin_id === user?.id) ? `${user?.name || 'You'} (Creator)` : 'Organizer')}
                           </p>
                           <p className="text-[10px] text-[var(--color-gs-cyan)] font-semibold">Event Creator & Lead</p>
                         </div>
