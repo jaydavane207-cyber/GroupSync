@@ -63,12 +63,53 @@ export default function GroupDetails() {
   const navigate = useNavigate();
   const { user, groups, setGroups, selectedGroupId, setSelectedGroupId, showToast, factions, students, refreshGroups, loading } = useAppContext();
   
+  const [localGroup, setLocalGroup] = useState(null);
+  const [isFetchingGroup, setIsFetchingGroup] = useState(true);
+
   // Update context state but use 'id' primarily
   useEffect(() => {
     if (id) setSelectedGroupId(Number(id));
   }, [id, setSelectedGroupId]);
 
-  const group = groups.find(g => g.id === Number(id));
+  // Sync or fetch group from Supabase
+  useEffect(() => {
+    if (!id) return;
+    const found = groups.find(g => g.id === Number(id));
+    if (found) {
+      setLocalGroup(found);
+      setIsFetchingGroup(false);
+      return;
+    }
+
+    const fetchSingleGroup = async () => {
+      setIsFetchingGroup(true);
+      try {
+        const { data, error } = await supabase
+          .from('groups')
+          .select('*, group_members(profile_id)')
+          .eq('id', Number(id))
+          .maybeSingle();
+
+        if (!error && data) {
+          const mapped = {
+            ...data,
+            adminId: data.admin_id,
+            maxMembers: Math.min(data.max_members || data.maxMembers || 10, 10),
+            memberIds: data.group_members?.map(m => m.profile_id) || []
+          };
+          setLocalGroup(mapped);
+        }
+      } catch (e) {
+        console.error('Error fetching group:', e);
+      } finally {
+        setIsFetchingGroup(false);
+      }
+    };
+
+    fetchSingleGroup();
+  }, [id, groups]);
+
+  const group = groups.find(g => g.id === Number(id)) || localGroup;
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showEventModal, setShowEventModal] = useState(false);
@@ -132,13 +173,13 @@ export default function GroupDetails() {
     sender: m.sender?.name || 'User',
     avatar: m.sender?.avatar || '🎓',
     avatarBg: 'bg-[var(--color-gs-bg)] text-[var(--color-gs-text-main)]',
-    timestamp: new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    isMine: m.sender_id === user.id,
+    timestamp: m.created_at ? new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '',
+    isMine: user?.id ? m.sender_id === user.id : false,
     media: m.media,
     isPoll: m.is_poll,
     sender_id: m.sender_id,
     created_at: m.created_at
-  }), [user.id]);
+  }), [user?.id]);
 
   const fetchChatHistory = useCallback(async () => {
     if (!selectedGroupId) return;
@@ -198,22 +239,22 @@ export default function GroupDetails() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [selectedGroupId, fetchChatHistory, user.id]);
+  }, [selectedGroupId, fetchChatHistory, user?.id]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [groupMessages]);
 
+  if (isFetchingGroup && !group) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4 text-[var(--color-gs-text-muted)]">
+        <div className="w-12 h-12 border-4 border-[var(--color-gs-bg)] border-t-[var(--color-gs-cyan)] rounded-full animate-spin" />
+        <p className="text-sm font-bold animate-pulse text-[var(--color-gs-cyan)]">Loading group...</p>
+      </div>
+    );
+  }
+
   if (!group) {
-    // BUG-4 FIX: Show spinner while groups are loading, only 404 if fully loaded
-    if (loading || groups.length === 0) {
-      return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4 text-[var(--color-gs-text-muted)]">
-          <div className="w-12 h-12 border-4 border-[var(--color-gs-bg)] border-t-[var(--color-gs-cyan)] rounded-full animate-spin" />
-          <p className="text-sm font-bold animate-pulse">Loading group...</p>
-        </div>
-      );
-    }
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4 text-center p-8">
         <span className="text-6xl">🔍</span>
@@ -268,8 +309,8 @@ export default function GroupDetails() {
     }
   };
 
-  const isAdmin = group.adminId === user.id;
-  const isMember = group.memberIds?.includes(user.id);
+  const isAdmin = Boolean((group?.adminId && user?.id && group.adminId === user.id) || (group?.admin_id && user?.id && group.admin_id === user.id));
+  const isMember = Boolean((group?.memberIds && user?.id && group.memberIds.includes(user.id)) || (user?.id && realMembers.some(m => m.id === user.id)));
 
   const handleLeaveGroup = async () => {
     const { error } = await supabase
@@ -568,7 +609,7 @@ export default function GroupDetails() {
                     <option value="">-- Choose a member --</option>
                     {realMembers.map(m => (
                       <option key={m.id} value={m.id}>
-                        {m.avatar} {m.name || 'Unknown'} {m.id === user.id ? '(You)' : ''}
+                        {m.avatar} {m.name || 'Unknown'} {user?.id && m.id === user.id ? '(You)' : ''}
                       </option>
                     ))}
                   </select>
@@ -632,7 +673,7 @@ export default function GroupDetails() {
                           if (msg.isPoll) {
                             const pollData = msg.media;
                             const totalVotes = pollData.options.reduce((s, o) => s + o.votes, 0);
-                            const hasVoted = pollData.voters?.[user.id] !== undefined;
+                            const hasVoted = Boolean(user?.id && pollData.voters?.[user.id] !== undefined);
 
                             return (
                               <div key={msg.id} className={"flex gap-3 " + (msg.isMine ? "flex-row-reverse" : "")}>
@@ -649,7 +690,7 @@ export default function GroupDetails() {
                                     <div className="space-y-2">
                                       {pollData.options.map((opt, idx) => {
                                         const percentage = totalVotes > 0 ? Math.round((opt.votes / totalVotes) * 100) : 0;
-                                        const isSelected = pollData.voters?.[user.id] === idx;
+                                        const isSelected = Boolean(user?.id && pollData.voters?.[user.id] === idx);
                                         return (
                                           <button 
                                             key={idx}
@@ -800,7 +841,7 @@ export default function GroupDetails() {
                {activeTab === 'tasks' && (
                  <KanbanBoard
                    groupId={group.id}
-                   members={realMembers.length > 0 ? realMembers : [{ id: user.id, name: user.name || 'You', avatar: user.avatar || '🎓' }]}
+                   members={realMembers.length > 0 ? realMembers : [{ id: user?.id || 'you', name: user?.name || 'You', avatar: user?.avatar || '🎓' }]}
                  />
                )}
             </div>
@@ -1011,11 +1052,11 @@ export default function GroupDetails() {
                    Loading members...
                  </div>
                ) : realMembers.map((member) => {
-                  const isCurrentUser = member.id === user.id;
-                  const isGroupAdmin = member.id === group.adminId;
-                  const FactionColor = factions[member.faction]?.color || 'text-gray-500';
-                  const FactionBorder = factions[member.faction]?.border || 'border-gray-500';
-                  const FactionName = factions[member.faction]?.name || 'Member';
+                  const isCurrentUser = Boolean(user?.id && member.id === user.id);
+                  const isGroupAdmin = Boolean((group?.adminId && member.id === group.adminId) || (group?.admin_id && member.id === group.admin_id));
+                  const FactionColor = (member.faction && factions?.[member.faction]?.color) || 'text-gray-500';
+                  const FactionBorder = (member.faction && factions?.[member.faction]?.border) || 'border-gray-500';
+                  const FactionName = (member.faction && factions?.[member.faction]?.name) || 'Member';
                   return (
                    <div key={member.id} className="flex items-center gap-3 group cursor-pointer p-2 hover:bg-white/5 rounded-xl transition-all">
                      <div className="relative shrink-0">
