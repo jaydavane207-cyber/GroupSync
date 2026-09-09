@@ -8,10 +8,13 @@ import {
   BarChart2, Clock, CheckCircle, XCircle, Save, X, Plus
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import { useNavigate } from 'react-router-dom';
 import supabase from '../lib/supabase';
 import StrictSkillVerificationModal from './StrictSkillVerificationModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SkillBadge, SkillBadgeInline } from './SkillBadge';
+import { getCredibilityBreakdown, getEndorsements } from '../lib/profileService';
+import { getUserBadges } from '../lib/quizService';
 
 // ─── Background Decorations ───────────────────────────────────────────────────
 
@@ -103,13 +106,24 @@ function OverviewTab({ user, factions, isEditing, formData, setFormData, onAddSk
   const f = factions[user.faction];
   const groupsJoined = groups.filter(g => g.memberIds?.includes(user.id)).length;
 
+  const [credibility, setCredibility] = useState(null);
+  const [badges, setBadges] = useState([]);
+  const [endorsements, setEndorsements] = useState({});
+
+  React.useEffect(() => {
+    if (!user?.id) return;
+    getCredibilityBreakdown(user.id).then(res => setCredibility(res));
+    getUserBadges(user.id).then(res => { if (res.data) setBadges(res.data); });
+    getEndorsements(user.id).then(res => { if (res.data) setEndorsements(res.data.grouped || {}); });
+  }, [user?.id]);
+
   return (
     <div className="space-y-8">
       {/* Quick Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard value={groupsJoined} label="Groups Joined" color="text-gs-primary" />
-        <StatCard value="—" label="Events Attended" color="text-gs-secondary" />
-        <StatCard value="—" label="Badges Earned" color="text-gs-amber" />
+        <StatCard value={credibility ? `${credibility.total}%` : '—'} label="Credibility Score" color="text-gs-cyan" />
+        <StatCard value={badges.length} label="Badges Earned" color="text-gs-amber" />
         <StatCard value="—" label="Leaderboard" color="text-gs-green" />
       </div>
 
@@ -135,11 +149,13 @@ function OverviewTab({ user, factions, isEditing, formData, setFormData, onAddSk
             ) : (
               [
                 { icon: Mail, label: user.email || 'student@college.edu' },
-                { icon: Calendar, label: user.dob || 'Not specified' },
+                { icon: MapPin, label: user.location || 'Main Campus' },
+                { icon: Clock, label: user.availability || 'Available for Hackathons' },
+                { icon: User, label: user.personality_type || 'Innovator (ENTP)' },
               ].map(({ icon: Icon, label }) => (
                 <div key={label} className="flex items-center gap-3 text-sm">
                   <Icon size={16} className="text-gs-text-muted shrink-0" />
-                  <span className="text-gs-text-muted">{label}</span>
+                  <span className="text-gs-text-muted truncate">{label}</span>
                 </div>
               ))
             )}
@@ -253,11 +269,20 @@ function OverviewTab({ user, factions, isEditing, formData, setFormData, onAddSk
             <input type="text" value={(formData.skills || []).join(', ')} onChange={(e) => setFormData({ ...formData, skills: e.target.value.split(',').map(s => s.trim()) })} className="w-full bg-gs-bg border border-gs-border rounded px-3 py-2 text-gs-text-main" placeholder="React, Python, UI/UX (Comma separated)" />
           ) : (
             <div className="flex flex-wrap gap-2">
-              {(user.skills && user.skills.length > 0 ? user.skills : ['React', 'Node.js']).map(s => (
-                <span key={s} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gs-secondary/10 border border-gs-secondary/30 text-gs-secondary rounded-full text-sm font-medium">
-                  <Shield size={11} className="opacity-60" />{s}
-                </span>
-              ))}
+              {(user.skills && user.skills.length > 0 ? user.skills : ['React', 'Node.js']).map(s => {
+                const endorseCount = (endorsements[s] || []).length;
+                return (
+                  <span key={s} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gs-secondary/10 border border-gs-secondary/30 text-gs-secondary rounded-full text-sm font-medium">
+                    <Shield size={11} className="opacity-60" />
+                    <span>{s}</span>
+                    {endorseCount > 0 && (
+                      <span className="text-[11px] font-bold text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded-full" title={`${endorseCount} peer endorsement${endorseCount > 1 ? 's' : ''}`}>
+                        ⭐ {endorseCount}
+                      </span>
+                    )}
+                  </span>
+                );
+              })}
             </div>
           )}
         </HoloPanel>
@@ -285,50 +310,70 @@ function OverviewTab({ user, factions, isEditing, formData, setFormData, onAddSk
             <Award size={20} className="text-gs-primary" /> Skill Credibility Score & Badges
           </h3>
           <span className="text-xs text-gs-cyan font-bold uppercase tracking-wider">
-            Verified Index: 92%
+            Verified Index: {credibility?.total || 75}%
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="p-4 rounded-2xl bg-gs-bg/60 border border-gs-border">
-            <div className="flex justify-between items-center mb-1">
-              <span className="font-bold text-sm text-gs-text-main">{user.skills?.[0] || 'React'}</span>
-              <span className="text-xs font-black text-emerald-400">95% (Platinum)</span>
+        {/* 4 Weights Breakdown */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+          <div className="p-3.5 rounded-2xl bg-gs-bg/60 border border-gs-border">
+            <div className="flex justify-between items-center text-xs mb-1">
+              <span className="text-gs-text-muted">Quizzes</span>
+              <span className="font-bold text-gs-cyan">{credibility?.breakdown?.quiz?.score || 0}/40</span>
             </div>
-            <div className="w-full bg-gs-card rounded-full h-1.5 overflow-hidden mb-2">
-              <div className="bg-emerald-400 h-full rounded-full" style={{ width: '95%' }} />
+            <div className="w-full bg-gs-card rounded-full h-1.5 overflow-hidden">
+              <div className="bg-gs-cyan h-full rounded-full" style={{ width: `${((credibility?.breakdown?.quiz?.score || 0)/40)*100}%` }} />
             </div>
-            <p className="text-[10px] text-gs-text-muted">Quiz (95%) · Cert ✓ · 14 Endorsements</p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-gs-bg/60 border border-gs-border">
-            <div className="flex justify-between items-center mb-1">
-              <span className="font-bold text-sm text-gs-text-main">{user.skills?.[1] || 'Python'}</span>
-              <span className="text-xs font-black text-amber-400">88% (Gold)</span>
+          <div className="p-3.5 rounded-2xl bg-gs-bg/60 border border-gs-border">
+            <div className="flex justify-between items-center text-xs mb-1">
+              <span className="text-gs-text-muted">Certificates</span>
+              <span className="font-bold text-emerald-400">{credibility?.breakdown?.certificate?.score || 0}/35</span>
             </div>
-            <div className="w-full bg-gs-card rounded-full h-1.5 overflow-hidden mb-2">
-              <div className="bg-amber-400 h-full rounded-full" style={{ width: '88%' }} />
+            <div className="w-full bg-gs-card rounded-full h-1.5 overflow-hidden">
+              <div className="bg-emerald-400 h-full rounded-full" style={{ width: `${((credibility?.breakdown?.certificate?.score || 0)/35)*100}%` }} />
             </div>
-            <p className="text-[10px] text-gs-text-muted">Quiz (88%) · Cert ✓ · 9 Endorsements</p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-gs-bg/60 border border-gs-border">
-            <div className="flex justify-between items-center mb-1">
-              <span className="font-bold text-sm text-gs-text-main">{user.skills?.[2] || 'UI/UX Design'}</span>
-              <span className="text-xs font-black text-slate-300">76% (Silver)</span>
+          <div className="p-3.5 rounded-2xl bg-gs-bg/60 border border-gs-border">
+            <div className="flex justify-between items-center text-xs mb-1">
+              <span className="text-gs-text-muted">Endorsements</span>
+              <span className="font-bold text-amber-400">{credibility?.breakdown?.endorsement?.score || 0}/20</span>
             </div>
-            <div className="w-full bg-gs-card rounded-full h-1.5 overflow-hidden mb-2">
-              <div className="bg-slate-300 h-full rounded-full" style={{ width: '76%' }} />
+            <div className="w-full bg-gs-card rounded-full h-1.5 overflow-hidden">
+              <div className="bg-amber-400 h-full rounded-full" style={{ width: `${((credibility?.breakdown?.endorsement?.score || 0)/20)*100}%` }} />
             </div>
-            <p className="text-[10px] text-gs-text-muted">Quiz (76%) · 6 Endorsements</p>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-gs-bg/60 border border-gs-border">
+            <div className="flex justify-between items-center text-xs mb-1">
+              <span className="text-gs-text-muted">Projects</span>
+              <span className="font-bold text-gs-secondary">{credibility?.breakdown?.project?.score || 0}/5</span>
+            </div>
+            <div className="w-full bg-gs-card rounded-full h-1.5 overflow-hidden">
+              <div className="bg-gs-secondary h-full rounded-full" style={{ width: `${((credibility?.breakdown?.project?.score || 0)/5)*100}%` }} />
+            </div>
           </div>
         </div>
 
+        {/* Real Badges */}
         <div className="flex flex-wrap gap-2">
-          <SkillBadgeInline level="platinum" skill={user.skills?.[0] || 'React'} />
-          <SkillBadgeInline level="gold" skill={user.skills?.[1] || 'Python'} />
-          <SkillBadgeInline level="silver" skill={user.skills?.[2] || 'UI/UX Design'} />
-          <SkillBadgeInline level="gold" skill="Team Collaboration" />
+          {badges.length > 0 ? (
+            badges.map(b => (
+              <span key={b.id} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gs-bg border border-gs-border text-xs font-bold text-gs-text-main shadow-sm">
+                <span>{b.badge_tier === 'platinum' ? '💎' : b.badge_tier === 'gold' ? '🥇' : b.badge_tier === 'silver' ? '🥈' : '🥉'}</span>
+                <span>{b.badge_name}</span>
+                <span className="text-[10px] text-gs-text-muted">({Math.round(b.quiz_score || 0)}%)</span>
+              </span>
+            ))
+          ) : (
+            <>
+              <SkillBadgeInline level="platinum" skill={user.skills?.[0] || 'React'} />
+              <SkillBadgeInline level="gold" skill={user.skills?.[1] || 'Python'} />
+              <SkillBadgeInline level="silver" skill="Team Collaboration" />
+            </>
+          )}
         </div>
       </HoloPanel>
 
@@ -684,6 +729,7 @@ const TABS = [
 
 // ─── Main UserProfile Component ───────────────────────────────────────────────
 export default function UserProfile() {
+  const navigate = useNavigate();
   const { user, setUser, updateLocalUser, factions, showToast, logout } = useAppContext();
   const [activeTab, setActiveTab] = useState('overview');
   const [isEditing, setIsEditing] = useState(false);
@@ -784,8 +830,12 @@ export default function UserProfile() {
                 transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
                 className="absolute -inset-2 rounded-full border-2 border-dashed border-gs-primary/30"
               />
-              <div className="w-32 h-32 md:w-36 md:h-36 rounded-3xl flex items-center justify-center text-6xl bg-gs-bg border-2 border-gs-border shadow-[0_0_40px_rgba(0,240,255,0.15)] relative z-10">
-                {user.avatar || '🎓'}
+              <div className="w-32 h-32 md:w-36 md:h-36 rounded-3xl flex items-center justify-center text-6xl bg-gs-bg border-2 border-gs-border shadow-[0_0_40px_rgba(0,240,255,0.15)] relative z-10 overflow-hidden">
+                {user.avatar_url ? (
+                  <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
+                ) : (
+                  user.avatar || '🎓'
+                )}
               </div>
             </div>
 
@@ -819,6 +869,16 @@ export default function UserProfile() {
                     <span className="flex items-center gap-2 bg-gs-secondary/5 px-3 py-1.5 rounded-xl border border-gs-secondary/10">
                       <Shield size={15} /> {user.year || '3rd Year'}
                     </span>
+                    {user.availability && (
+                      <span className="flex items-center gap-1.5 bg-emerald-500/10 text-emerald-400 px-3 py-1.5 rounded-xl border border-emerald-500/20 text-xs">
+                        <Clock size={13} /> {user.availability}
+                      </span>
+                    )}
+                    {user.location && (
+                      <span className="flex items-center gap-1.5 bg-white/5 text-[var(--color-gs-text-muted)] px-3 py-1.5 rounded-xl border border-white/10 text-xs">
+                        <MapPin size={13} /> {user.location}
+                      </span>
+                    )}
                   </div>
                   <p className="text-base text-gs-text-muted max-w-2xl font-medium leading-relaxed italic opacity-80">
                     "{user.bio || 'Building the future, one commit at a time. 🚀'}"
@@ -841,10 +901,16 @@ export default function UserProfile() {
                     </button>
                   </>
                 ) : (
-                  <button onClick={() => setIsEditing(true)}
-                    className="px-5 py-2.5 bg-gs-primary text-[#0f172a] font-bold rounded-xl hover:brightness-110 transition-all flex items-center gap-2 text-sm shadow-[0_0_15px_rgba(0,240,255,0.3)]">
-                    <Edit3 size={15} /> Edit Profile
-                  </button>
+                  <div className="flex gap-2">
+                    <button onClick={() => navigate('/profile/edit')}
+                      className="px-5 py-2.5 bg-gradient-to-r from-[var(--color-gs-cyan)] to-[var(--color-gs-secondary)] text-white font-bold rounded-xl hover:opacity-90 transition-all flex items-center gap-2 text-sm shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+                      <Edit3 size={15} /> Edit Profile
+                    </button>
+                    <button onClick={() => setIsEditing(true)}
+                      className="px-4 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl text-xs font-bold transition-colors">
+                      Quick Edit
+                    </button>
+                  </div>
                 )}
               </div>
             </div>

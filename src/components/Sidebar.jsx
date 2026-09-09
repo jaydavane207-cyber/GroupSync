@@ -14,12 +14,15 @@ import {
   ChevronDown,
   FolderKanban,
   Users2,
-  Bell
+  Bell,
+  BookOpenCheck,
+  Award,
+  MessageCircle
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 
 export default function Sidebar() {
-  const { user, theme, setTheme, factions, logout } = useAppContext();
+  const { user, theme, setTheme, factions, logout, unreadNotificationCount } = useAppContext();
   const navigate = useNavigate();
   const location = useLocation();
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -27,11 +30,14 @@ export default function Sidebar() {
 
   const navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { path: '/browse', label: 'Browse Teams', icon: Users },
+    { path: '/teams', label: 'Teams', icon: Users },
     { path: '/ai', label: 'AI Match', icon: Bot },
     { path: '/projects', label: 'Projects', icon: FolderKanban },
+    { path: '/quiz', label: 'Skill Quizzes', icon: BookOpenCheck },
+    { path: '/badges', label: 'Badges & Certs', icon: Award },
     { path: '/friends', label: 'Friends', icon: Users2 },
     { path: '/notifications', label: 'Notifications', icon: Bell },
+    { path: '/messages', label: 'Messages', icon: MessageCircle },
     { path: '/chat', label: 'Campus Chat', icon: MessageSquare },
     { path: '/leaderboard', label: 'Leaderboard', icon: Trophy },
     { path: '/profile', label: 'Profile', icon: UserCircle },
@@ -73,13 +79,15 @@ export default function Sidebar() {
             {navItems.map((item) => {
               const isActive = location.pathname === item.path;
               const Icon = item.icon;
+              const isNotifications = item.path === '/notifications';
+              const badge = isNotifications && unreadNotificationCount > 0 ? unreadNotificationCount : 0;
               return (
                 <button
                   key={item.path}
                   onClick={() => navigate(item.path)}
                   className={`flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200 relative group w-full text-left overflow-hidden ${
-                    isActive 
-                      ? 'bg-[var(--color-gs-primary)]/15 text-[var(--color-gs-primary)] font-bold shadow-[0_0_15px_rgba(0,240,255,0.15)] border border-[var(--color-gs-primary)]/30' 
+                    isActive
+                      ? 'bg-[var(--color-gs-primary)]/15 text-[var(--color-gs-primary)] font-bold shadow-[0_0_15px_rgba(0,240,255,0.15)] border border-[var(--color-gs-primary)]/30'
                       : 'text-[var(--color-gs-text-muted)] hover:bg-white/5 hover:text-white font-medium'
                   }`}
                 >
@@ -87,9 +95,14 @@ export default function Sidebar() {
                     <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[var(--color-gs-primary)] shadow-[0_0_8px_rgba(0,240,255,0.6)]" />
                   )}
                   <Icon size={18} className="relative z-10 shrink-0" />
-                  <span className="text-sm relative z-10 w-full truncate">
+                  <span className="text-sm relative z-10 flex-1 truncate">
                     {item.label}
                   </span>
+                  {badge > 0 && (
+                    <span className="w-5 h-5 rounded-full bg-rose-500 text-white text-[10px] font-black flex items-center justify-center shadow-[0_0_8px_rgba(239,68,68,0.5)] shrink-0">
+                      {badge > 9 ? '9+' : badge}
+                    </span>
+                  )}
                 </button>
               );
             })}
@@ -165,12 +178,19 @@ export default function Sidebar() {
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
             const Icon = item.icon;
+            const isNotifications = item.path === '/notifications';
+            const badge = isNotifications && unreadNotificationCount > 0 ? unreadNotificationCount : 0;
             return (
               <button
                 key={item.path}
                 onClick={() => navigate(item.path)}
-                className="flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-xl transition-all duration-200 min-w-[58px]"
+                className="flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-xl transition-all duration-200 min-w-[58px] relative"
               >
+                {badge > 0 && (
+                  <span className="absolute top-0 right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-black flex items-center justify-center">
+                    {badge > 9 ? '9+' : badge}
+                  </span>
+                )}
                 <div className={`p-1.5 rounded-lg transition-all duration-200 ${isActive ? 'bg-[var(--color-gs-primary)]/20 shadow-[0_0_8px_rgba(0,240,255,0.4)]' : ''}`}>
                   <Icon
                     size={18}

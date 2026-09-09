@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Users, 
   Target, 
@@ -20,6 +20,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { seedDatabase } from '../lib/seeddata';
 import { SkillBadge } from '../components/SkillBadge';
+import supabase from '../lib/supabase';
+import { withRetry } from '../lib/withRetry';
 
 interface Faction {
   id: string;
@@ -43,6 +45,48 @@ export default function DashboardPage() {
   const { user, factions, stats: liveStats, refreshGroups, refreshStats, showToast } = useAppContext();
   const navigate = useNavigate();
   const [isSeeding, setIsSeeding] = useState(false);
+  const [upcomingDeadlines, setUpcomingDeadlines] = useState<any[]>([]);
+  const [deadlinesLoading, setDeadlinesLoading] = useState(true);
+
+  // ── Fetch upcoming project deadlines ────────────────────────────────────
+  useEffect(() => {
+    const fetchDeadlines = async () => {
+      setDeadlinesLoading(true);
+      const today = new Date().toISOString().split('T')[0];
+      const { data, error } = await withRetry(() =>
+        supabase
+          .from('projects')
+          .select('id, title, deadline, timeline, prize_pool, organizer_name')
+          .gte('deadline', today)
+          .order('deadline', { ascending: true })
+          .limit(3)
+      );
+      if (!error && data) {
+        setUpcomingDeadlines(data.map((p: any) => {
+          const daysLeft = Math.max(0, Math.ceil(
+            (new Date(p.deadline).getTime() - Date.now()) / 86400000
+          ));
+          return {
+            id: p.id,
+            title: p.title,
+            date: new Date(p.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+            daysLeft,
+            domain: p.organizer_name || 'Campus Event',
+            prize: p.prize_pool || 'Certificate',
+          };
+        }));
+      }
+      setDeadlinesLoading(false);
+    };
+    fetchDeadlines();
+  }, []);
+
+  // ── XP-based credibility score ───────────────────────────────────────────
+  // XP range: 0–2000 maps to 0–100. Cap at 100.
+  const xp = user.xp || 0;
+  const credibilityScore = Math.min(100, Math.round((xp / 2000) * 100));
+  const credibilityLabel = credibilityScore >= 80 ? 'Elite' : credibilityScore >= 50 ? 'Advanced' : credibilityScore >= 25 ? 'Rising' : 'New';
+
   
   if (!user) return null;
 
@@ -92,29 +136,6 @@ export default function DashboardPage() {
     },
   ];
 
-  const upcomingDeadlines = [
-    {
-      title: 'AI Chat Bot Challenge',
-      date: 'Sep 15, 2026',
-      daysLeft: 3,
-      domain: 'AI/ML Hackathon',
-      prize: '$5,000'
-    },
-    {
-      title: 'Real-time Climate Tracker',
-      date: 'Sep 20, 2026',
-      daysLeft: 8,
-      domain: 'Mobile Dev Society',
-      prize: '$2,000'
-    },
-    {
-      title: 'Campus Analytics Dashboard',
-      date: 'Sep 28, 2026',
-      daysLeft: 16,
-      domain: 'Data Science Club',
-      prize: '$3,500'
-    }
-  ];
 
   // User skills for badges
   const userSkills = user.skills && user.skills.length > 0 
@@ -248,22 +269,40 @@ export default function DashboardPage() {
             </div>
 
             <div className="space-y-3">
-              {upcomingDeadlines.map((item, idx) => {
-                const urgency = item.daysLeft <= 3 ? 'border-rose-500/40 bg-rose-500/5' : 'border-gs-border bg-gs-bg/50';
-                return (
-                  <div key={idx} className={`p-4 rounded-2xl border ${urgency} flex items-center justify-between gap-4 transition-all hover:border-gs-primary/40`}>
-                    <div>
-                      <h4 className="font-bold text-sm text-gs-text-main">{item.title}</h4>
-                      <p className="text-xs text-gs-text-muted mt-0.5">{item.domain} · Bounty: <span className="text-amber-300 font-semibold">{item.prize}</span></p>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${item.daysLeft <= 3 ? 'bg-rose-500/20 text-rose-300 border-rose-500/30 animate-pulse' : 'bg-gs-bg text-gs-text-muted border-gs-border'}`}>
-                        {item.daysLeft} days left
-                      </span>
-                    </div>
+              {deadlinesLoading ? (
+                Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="p-4 rounded-2xl border border-gs-border bg-gs-bg/50 animate-pulse">
+                    <div className="h-4 bg-gs-card rounded w-3/4 mb-2" />
+                    <div className="h-3 bg-gs-card rounded w-1/2" />
                   </div>
-                );
-              })}
+                ))
+              ) : upcomingDeadlines.length === 0 ? (
+                <div className="text-center py-6 text-gs-text-muted text-sm">
+                  <p>No upcoming project deadlines.</p>
+                  <button onClick={() => navigate('/projects')}
+                    className="text-gs-cyan font-bold text-xs mt-2 hover:text-cyan-300">
+                    Browse Projects →
+                  </button>
+                </div>
+              ) : (
+                upcomingDeadlines.map((item: any, idx: number) => {
+                  const urgency = item.daysLeft <= 3 ? 'border-rose-500/40 bg-rose-500/5' : 'border-gs-border bg-gs-bg/50';
+                  return (
+                    <div key={item.id || idx} className={`p-4 rounded-2xl border ${urgency} flex items-center justify-between gap-4 transition-all hover:border-gs-primary/40 cursor-pointer`}
+                      onClick={() => navigate('/projects')}>
+                      <div>
+                        <h4 className="font-bold text-sm text-gs-text-main line-clamp-1">{item.title}</h4>
+                        <p className="text-xs text-gs-text-muted mt-0.5">{item.domain} · Bounty: <span className="text-amber-300 font-semibold">{item.prize}</span></p>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${item.daysLeft <= 3 ? 'bg-rose-500/20 text-rose-300 border-rose-500/30 animate-pulse' : 'bg-gs-bg text-gs-text-muted border-gs-border'}`}>
+                          {item.daysLeft === 0 ? 'Due today!' : `${item.daysLeft}d left`}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
             </div>
           </div>
 
@@ -297,18 +336,23 @@ export default function DashboardPage() {
             <div className="bg-gs-bg/70 border border-gs-border rounded-2xl p-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold text-gs-text-main uppercase tracking-wider flex items-center gap-1.5">
-                  <BarChart3 size={14} className="text-gs-primary" /> Overall Credibility Index
+                  <BarChart3 size={14} className="text-gs-primary" /> XP Credibility Index
                 </span>
-                <span className="text-sm font-black text-gs-green">91 / 100</span>
+                <span className={`text-sm font-black ${credibilityScore >= 80 ? 'text-gs-primary' : credibilityScore >= 50 ? 'text-amber-400' : 'text-gs-text-muted'}`}>
+                  {credibilityScore} / 100
+                  <span className="ml-1.5 text-[10px] font-semibold opacity-70">{credibilityLabel}</span>
+                </span>
               </div>
               <div className="w-full bg-gs-card rounded-full h-2 overflow-hidden border border-gs-border mb-2">
-                <div className="h-full bg-gradient-to-r from-gs-primary via-emerald-400 to-gs-secondary rounded-full" style={{ width: '91%' }} />
+                <div
+                  className="h-full bg-gradient-to-r from-gs-primary via-emerald-400 to-gs-secondary rounded-full transition-all duration-700"
+                  style={{ width: `${credibilityScore}%` }}
+                />
               </div>
               <div className="flex justify-between text-[10px] text-gs-text-muted">
-                <span>Quiz Score (40%)</span>
-                <span>Certificates (35%)</span>
-                <span>Endorsements (20%)</span>
-                <span>Projects (5%)</span>
+                <span>XP: {xp.toLocaleString()}</span>
+                <span>Max XP: 2,000</span>
+                <span>Level: {credibilityLabel}</span>
               </div>
             </div>
           </div>

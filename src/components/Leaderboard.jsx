@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Trophy, Wifi, WifiOff, Activity } from 'lucide-react';
+import { Trophy, Wifi, WifiOff, Activity, Users, Search, Award, Shield, Zap, Sparkles, Filter, Crown, ArrowUp, ArrowDown } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import supabase from '../lib/supabase';
 
@@ -247,7 +247,13 @@ function ConnectionBadge({ status }) {
 // Main Leaderboard
 // ─────────────────────────────────────────────────────────────
 export default function Leaderboard() {
-  const { factions } = useAppContext();
+  const { user, factions } = useAppContext();
+
+  const [viewMode, setViewMode] = useState('factions'); // 'factions' | 'individual'
+  const [individualProfiles, setIndividualProfiles] = useState([]);
+  const [searchStudent, setSearchStudent] = useState('');
+  const [factionFilter, setFactionFilter] = useState('all');
+  const [timeframe, setTimeframe] = useState('all_time');
 
   const [factionScores, setFactionScores] = useState([]);
   const [realtimeStatus, setRealtimeStatus] = useState('CONNECTING');
@@ -258,13 +264,18 @@ export default function Leaderboard() {
   // ── Fetch real leaderboard data from DB ─────────────────────
   const fetchLeaderboard = useCallback(async () => {
     setDataLoading(true);
-    // Fetch all profiles with XP, ordered descending
+    // Fetch all profiles with XP, badges & credibility, ordered descending
     const { data: profiles, error } = await supabase
       .from('profiles')
-      .select('id, name, avatar, faction, xp')
+      .select(`
+        id, name, avatar, avatar_url, faction, xp, credibility_score, college, branch,
+        badges:skill_badges(id, badge_name, badge_tier)
+      `)
       .order('xp', { ascending: false });
 
     if (error) { console.error('Leaderboard fetch error:', error); setDataLoading(false); return; }
+
+    setIndividualProfiles(profiles || []);
 
     // Group by faction
     const grouped = {};
@@ -367,6 +378,16 @@ export default function Leaderboard() {
     }, ...prev].slice(0, 10));
   }, [factionScores]);
 
+  // Filtered individual students
+  const filteredIndividuals = individualProfiles.filter(p => {
+    const matchesSearch = !searchStudent || p.name?.toLowerCase().includes(searchStudent.toLowerCase());
+    const matchesFaction = factionFilter === 'all' || p.faction === factionFilter;
+    return matchesSearch && matchesFaction;
+  });
+
+  const myRank = user?.id ? (individualProfiles.findIndex(p => p.id === user.id) + 1) : null;
+  const myProfileData = user?.id ? individualProfiles.find(p => p.id === user.id) : null;
+
   return (
     <>
       <style>{`@keyframes xp-pulse-flash { 0%{opacity:.9} 50%{opacity:.5} 100%{opacity:0} }`}</style>
@@ -392,21 +413,265 @@ export default function Leaderboard() {
         {/* Live Ticker */}
         {tickerEvents.length > 0 && <LiveTicker events={tickerEvents} />}
 
-        {/* Skeleton / Cards */}
-        {dataLoading ? (
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="h-72 rounded-[2.5rem] bg-gs-card border border-gs-border animate-pulse" />
-            ))}
+        {/* View Mode Switcher */}
+        <div className="flex items-center justify-between flex-wrap gap-4 relative z-10">
+          <div className="flex p-1 rounded-2xl bg-gs-card border border-gs-border shadow-md">
+            <button
+              onClick={() => setViewMode('factions')}
+              className={`px-5 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
+                viewMode === 'factions'
+                  ? 'bg-gradient-to-r from-[var(--color-gs-cyan)] to-[var(--color-gs-secondary)] text-white shadow-[0_0_12px_rgba(0,240,255,0.25)]'
+                  : 'text-gs-text-muted hover:text-white'
+              }`}
+            >
+              <Trophy size={15} /> Faction Standings
+            </button>
+            <button
+              onClick={() => setViewMode('individual')}
+              className={`px-5 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
+                viewMode === 'individual'
+                  ? 'bg-gradient-to-r from-[var(--color-gs-cyan)] to-[var(--color-gs-secondary)] text-white shadow-[0_0_12px_rgba(0,240,255,0.25)]'
+                  : 'text-gs-text-muted hover:text-white'
+              }`}
+            >
+              <Users size={15} /> Individual Rankings
+            </button>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 relative z-10">
-            {factionScores.map((f, idx) => (
-              <FactionCard key={f.key} faction={f} idx={idx} maxXP={maxXP} onXPIncrease={handleXPIncrease} />
-            ))}
+
+          {/* Timeframe selector */}
+          {viewMode === 'individual' && (
+            <div className="flex gap-1.5 bg-gs-card p-1 rounded-xl border border-gs-border text-xs">
+              {[
+                { id: 'all_time', label: 'All Time' },
+                { id: 'month', label: 'This Month' },
+                { id: 'week', label: 'This Week' }
+              ].map(t => (
+                <button
+                  key={t.id}
+                  onClick={() => setTimeframe(t.id)}
+                  className={`px-3 py-1.5 rounded-lg font-bold transition-colors ${
+                    timeframe === t.id ? 'bg-white/10 text-white' : 'text-gs-text-muted hover:text-white'
+                  }`}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* ── View 1: FACTION CARDS ─────────────────────────────────── */}
+        {viewMode === 'factions' && (
+          dataLoading ? (
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className="h-72 rounded-[2.5rem] bg-gs-card border border-gs-border animate-pulse" />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 relative z-10">
+              {factionScores.map((f, idx) => (
+                <FactionCard key={f.key} faction={f} idx={idx} maxXP={maxXP} onXPIncrease={handleXPIncrease} />
+              ))}
+            </div>
+          )
+        )}
+
+        {/* ── View 2: INDIVIDUAL RANKINGS ───────────────────────────── */}
+        {viewMode === 'individual' && (
+          <div className="space-y-6 relative z-10">
+            {/* My Standing Banner (if logged in) */}
+            {user && (
+              <div className="p-6 rounded-3xl bg-gradient-to-r from-[var(--color-gs-cyan)]/15 via-gs-card to-[var(--color-gs-secondary)]/15 border border-[var(--color-gs-cyan)]/40 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-gs-bg border border-[var(--color-gs-cyan)]/50 flex items-center justify-center text-2xl font-black text-[var(--color-gs-cyan)] shrink-0 shadow-lg">
+                    {myRank ? `#${myRank}` : '—'}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-bold text-base text-white">{user.name}</h3>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[var(--color-gs-cyan)]/20 text-[var(--color-gs-cyan)]">
+                        Your Standing
+                      </span>
+                    </div>
+                    <p className="text-xs text-gs-text-muted mt-0.5">
+                      {factions[user.faction]?.name || 'Scholar'} · {myProfileData?.badges?.length || 0} verified badges
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-6">
+                  <div className="text-right">
+                    <div className="text-2xl font-black text-[var(--color-gs-cyan)]">{myProfileData?.xp || user.xp || 0} XP</div>
+                    <div className="text-[10px] text-gs-text-muted uppercase tracking-wider font-bold">Total Experience</div>
+                  </div>
+                  <div className="text-right border-l border-white/10 pl-6">
+                    <div className="text-2xl font-black text-emerald-400">{myProfileData?.credibility_score || 75}%</div>
+                    <div className="text-[10px] text-gs-text-muted uppercase tracking-wider font-bold">Credibility</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Filter & Search Controls */}
+            <div className="flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1">
+                <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gs-text-muted" />
+                <input
+                  type="text"
+                  placeholder="Search students by name..."
+                  value={searchStudent}
+                  onChange={e => setSearchStudent(e.target.value)}
+                  className="w-full bg-gs-card border border-gs-border rounded-2xl pl-11 pr-4 py-3 text-sm text-white placeholder-gs-text-muted outline-none focus:border-[var(--color-gs-cyan)]"
+                />
+              </div>
+
+              <div className="w-full sm:w-56">
+                <select
+                  value={factionFilter}
+                  onChange={e => setFactionFilter(e.target.value)}
+                  className="w-full bg-gs-card border border-gs-border rounded-2xl px-4 py-3 text-sm text-white outline-none focus:border-[var(--color-gs-cyan)]"
+                >
+                  <option value="all">All Factions</option>
+                  {Object.entries(factions).map(([k, f]) => (
+                    <option key={k} value={k}>{f.name}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Individual Rankings Table */}
+            <div className="bg-gs-card border border-gs-border rounded-3xl overflow-hidden shadow-2xl backdrop-blur-xl">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-white/5 text-[10px] font-black uppercase tracking-wider text-gs-text-muted bg-white/5">
+                      <th className="p-4 sm:px-6">Rank</th>
+                      <th className="p-4 sm:px-6">Student</th>
+                      <th className="p-4 sm:px-6">Faction</th>
+                      <th className="p-4 sm:px-6">Verified Badges</th>
+                      <th className="p-4 sm:px-6">Credibility</th>
+                      <th className="p-4 sm:px-6 text-right">Total XP</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5 text-sm">
+                    {filteredIndividuals.map((student, idx) => {
+                      const rankNum = idx + 1;
+                      const isTop1 = rankNum === 1;
+                      const isTop2 = rankNum === 2;
+                      const isTop3 = rankNum === 3;
+                      const isMe = user?.id === student.id;
+                      const f = factions[student.faction] || {};
+                      const badges = student.badges || [];
+
+                      return (
+                        <tr
+                          key={student.id}
+                          className={`transition-colors ${
+                            isMe ? 'bg-[var(--color-gs-cyan)]/10 font-bold border-l-4 border-l-[var(--color-gs-cyan)]' : 'hover:bg-white/5'
+                          }`}
+                        >
+                          {/* Rank */}
+                          <td className="p-4 sm:px-6 whitespace-nowrap">
+                            <div className="flex items-center gap-1.5 font-heading">
+                              {isTop1 && <span className="text-xl">🥇</span>}
+                              {isTop2 && <span className="text-xl">🥈</span>}
+                              {isTop3 && <span className="text-xl">🥉</span>}
+                              <span className={`font-black ${
+                                isTop1 ? 'text-amber-400 font-extrabold text-base' :
+                                isTop2 ? 'text-slate-300 font-extrabold text-base' :
+                                isTop3 ? 'text-amber-600 font-extrabold text-base' :
+                                'text-gs-text-muted'
+                              }`}>
+                                #{rankNum}
+                              </span>
+                            </div>
+                          </td>
+
+                          {/* Student */}
+                          <td className="p-4 sm:px-6">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-xl bg-gs-bg border border-white/10 flex items-center justify-center text-xl shrink-0 overflow-hidden">
+                                {student.avatar_url ? (
+                                  <img src={student.avatar_url} alt={student.name} className="w-full h-full object-cover" />
+                                ) : (
+                                  student.avatar || '🎓'
+                                )}
+                              </div>
+                              <div className="min-w-0">
+                                <div className="font-bold text-white flex items-center gap-1.5 truncate">
+                                  <span>{student.name}</span>
+                                  {isMe && (
+                                    <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-[var(--color-gs-cyan)] text-[#0f172a] font-black">
+                                      YOU
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="text-[10px] text-gs-text-muted truncate">
+                                  {student.college || 'GroupSync Scholar'}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+
+                          {/* Faction */}
+                          <td className="p-4 sm:px-6 whitespace-nowrap">
+                            <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${f.border || 'border-white/10'} ${f.color || 'text-white'} bg-white/5`}>
+                              {f.name || 'Student'}
+                            </span>
+                          </td>
+
+                          {/* Badges */}
+                          <td className="p-4 sm:px-6">
+                            <div className="flex items-center gap-1 flex-wrap">
+                              {badges.length > 0 ? (
+                                badges.slice(0, 3).map(b => (
+                                  <span
+                                    key={b.id}
+                                    className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/5 border border-white/10 text-white"
+                                    title={b.badge_name}
+                                  >
+                                    {b.badge_tier === 'platinum' ? '💎' : b.badge_tier === 'gold' ? '🥇' : b.badge_tier === 'silver' ? '🥈' : '🥉'} {b.badge_name}
+                                  </span>
+                                ))
+                              ) : (
+                                <span className="text-[11px] text-gs-text-muted">—</span>
+                              )}
+                              {badges.length > 3 && (
+                                <span className="text-[10px] text-gs-text-muted font-bold">+{badges.length - 3}</span>
+                              )}
+                            </div>
+                          </td>
+
+                          {/* Credibility */}
+                          <td className="p-4 sm:px-6 whitespace-nowrap">
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-xs text-emerald-400">
+                                {student.credibility_score || 70}%
+                              </span>
+                              <div className="w-16 bg-gs-card rounded-full h-1.5 overflow-hidden border border-white/5 hidden sm:block">
+                                <div className="bg-emerald-400 h-full rounded-full" style={{ width: `${student.credibility_score || 70}%` }} />
+                              </div>
+                            </div>
+                          </td>
+
+                          {/* Total XP */}
+                          <td className="p-4 sm:px-6 text-right whitespace-nowrap">
+                            <span className="font-black text-base text-[var(--color-gs-cyan)] tracking-tight">
+                              {(student.xp || 0).toLocaleString()} <span className="text-xs text-gs-text-muted font-bold">XP</span>
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         )}
       </div>
     </>
   );
 }
+

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import supabase from '../lib/supabase';
 import { MOCK_FACTIONS } from '../data/mockData';
+import { withRetry } from '../lib/withRetry';
 
 const AppContext = createContext();
 
@@ -26,6 +27,7 @@ export const AppProvider = ({ children }) => {
   const [theme, setThemeState] = useState(getInitialTheme);
   const [toast, setToast] = useState(null);
   const [isInitializingAuth, setIsInitializingAuth] = useState(true);
+  const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
   // Track user state in a ref so auth listener can check without stale closure
   const userRef = useRef(null);
 
@@ -133,6 +135,14 @@ export const AppProvider = ({ children }) => {
           // BUG-5 FIX: Set online=true on session init so dashboard stats work
           await supabase.from('profiles').update({ online: true }).eq('id', authUser.id);
           setUserState({ ...profileData, onboardingComplete: true, online: true });
+
+          // Fetch unread notification count on login
+          const { data: unreadData } = await supabase
+            .from('notifications')
+            .select('id', { count: 'exact', head: true })
+            .eq('user_id', authUser.id)
+            .eq('read', false);
+          setUnreadNotificationCount(unreadData?.length ?? 0);
         } else {
           // Either no profile row, or profile exists but essential fields are missing → needs onboarding
           setUserState({ 
@@ -301,7 +311,9 @@ export const AppProvider = ({ children }) => {
       students,
       stats,
       refreshStats: fetchStats,
-      factions: MOCK_FACTIONS
+      factions: MOCK_FACTIONS,
+      unreadNotificationCount,
+      setUnreadCount: setUnreadNotificationCount,
     }}>
       {children}
     </AppContext.Provider>

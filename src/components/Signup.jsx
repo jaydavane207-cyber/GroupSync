@@ -108,7 +108,11 @@ function Step1({ data, onChange, onNext }) {
         setIsVerifying(true);
       }
     } catch (err) {
-      setError(err.message || 'Registration failed. Please check your details.');
+      if (err.message?.toLowerCase().includes('failed to fetch') || err.name === 'TypeError') {
+        setError('Network error: Unable to connect to Supabase. The project may be paused or inactive — please restore it from your Supabase dashboard.');
+      } else {
+        setError(err.message || 'Registration failed. Please check your details.');
+      }
     } finally {
       setLoading(false);
     }
@@ -863,7 +867,11 @@ export default function Signup({ onNavigate, initialStep = 1 }) {
         onNavigate('dashboard');
       }
     } catch (err) {
-      setSubmitError(err.message || 'Failed to save profile. Please try again.');
+      if (err.message?.toLowerCase().includes('failed to fetch') || err.name === 'TypeError') {
+        setSubmitError('Network error: Unable to connect to Supabase. The project may be paused or inactive.');
+      } else {
+        setSubmitError(err.message || 'Failed to save profile. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }

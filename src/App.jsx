@@ -24,6 +24,16 @@ import OnboardingPage from './pages/OnboardingPage';
 import ProjectsPage from './pages/ProjectsPage';
 import FriendsPage from './pages/FriendsPage';
 import NotificationsPage from './pages/NotificationsPage';
+import QuizPage from './pages/QuizPage';
+import TakingQuizPage from './pages/TakingQuizPage';
+import QuizResultsPage from './pages/QuizResultsPage';
+import SkillBadgesPage from './pages/SkillBadgesPage';
+import TeamBrowsePage from './pages/TeamBrowsePage';
+import CreateTeamPage from './pages/CreateTeamPage';
+import TeamDetailPage from './pages/TeamDetailPage';
+import EditProfilePage from './pages/EditProfilePage';
+import DirectMessagesPage from './pages/DirectMessagesPage';
+import DMConversationPage from './pages/DMConversationPage';
 
 const PublicLayout = () => {
   const navigate = useNavigate();
@@ -154,17 +164,27 @@ export default function GroupSyncApp() {
           {/* App Routes */}
           <Route element={<ProtectedLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/browse" element={<BrowseGroups />} />
+            <Route path="/teams" element={<TeamBrowsePage />} />
+            <Route path="/teams/create" element={<CreateTeamPage />} />
+            <Route path="/teams/:id" element={<TeamDetailPage />} />
+            <Route path="/browse" element={<Navigate to="/teams" replace />} />
             <Route path="/ai" element={<AISuggestions />} />
             <Route path="/ai-suggestions" element={<Navigate to="/ai" replace />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/friends" element={<FriendsPage />} />
             <Route path="/notifications" element={<NotificationsPage />} />
+            <Route path="/quiz" element={<QuizPage />} />
+            <Route path="/quiz/:quizId/take" element={<TakingQuizPage />} />
+            <Route path="/quiz/:quizId/results" element={<QuizResultsPage />} />
+            <Route path="/badges" element={<SkillBadgesPage />} />
+            <Route path="/messages" element={<DirectMessagesPage />} />
+            <Route path="/messages/:targetUserId" element={<DMConversationPage />} />
             <Route path="/chat" element={<CampusChat />} />
             <Route path="/campus-chat" element={<Navigate to="/chat" replace />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/group/:id" element={<GroupDetails />} />
             <Route path="/profile" element={<UserProfile />} />
+            <Route path="/profile/edit" element={<EditProfilePage />} />
             <Route path="/public-profile" element={<PublicProfileView />} />
           </Route>
 
