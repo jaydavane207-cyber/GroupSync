@@ -1,0 +1,77 @@
+/* Clean, minimal SaaS typography stack (Inter, tight letter-spacing) */
+h1 {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--color-gs-text-main);
+}
+
+h2 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  color: var(--color-gs-text-main);
+}
+
+h3 {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--color-gs-text-main);
+}
+
+h4 {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--color-gs-text-main);
+}
+
+/* Body text: clean hierarchy with theme-aware colors */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-gs-text-main);
+}
+
+p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Secondary & Muted text */
+.text-muted, .text-secondary {
+  color: var(--color-gs-text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.text-sm {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.text-xs {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* Numeric stats: large, tabular-nums */
+.stat-value {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  color: var(--color-gs-text-main);
+}
+
+/* Code: monospace, sharp */
+code, pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+  font-size: 12px;
+}

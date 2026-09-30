@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+@import "./styles/colors.css";
+@import "./styles/typography.css";
+@import "./styles/shadows.css";
+@import "./styles/animations.css";
+@import "./styles/globals.css";
+
+@theme {
+  --color-gs-bg: #09090b;
+  --color-gs-primary: #6d6af6;
+  --color-gs-primary-hover: #7e7bf8;
+  --color-gs-primary-active: #5c59ec;
+  --color-gs-cyan: #6d6af6;
+  --color-gs-secondary: #7c6ff0;
+  --color-gs-pink: #fb7185;
+  --color-gs-amber: #fbbf24;
+  --color-gs-green: #34d399;
+  --color-gs-text-main: #fafafa;
+  --color-gs-text-secondary: #a1a1aa;
+  --color-gs-text-muted: #71717a;
+  
+  --color-gs-card: #14141a;
+  --color-gs-card-bg: #14141a;
+  --color-gs-elevated: #1c1c24;
+  --color-gs-card-border: rgba(255, 255, 255, 0.07);
+  --color-gs-border: rgba(255, 255, 255, 0.07);
+  --color-gs-border-hover: rgba(255, 255, 255, 0.14);
+}
+
+/* ── Tailored Utility Layers ── */
+@layer utilities {
+  .machined-edge {
+    border-top: 1px solid rgba(255, 255, 255, 0.09) !important;
+  }
+  .theme-light .machined-edge {
+    border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
+  }
+
+  .text-glow-cyan {
+    text-shadow: none;
+  }
+  
+  .glass-card {
+    background-color: var(--color-gs-card);
+    border: 1px solid var(--color-gs-border);
+    border-radius: 12px;
+  }
+  
+  .glass-card-hover {
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+  
+  .glass-card-hover:hover {
+    border-color: var(--color-gs-border-hover);
+    background-color: #181820;
+  }
+  .theme-light .glass-card-hover:hover {
+    border-color: #d4d4d8;
+    background-color: #fcfcfc;
+  }
+
+  .segmented-control {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px;
+    background-color: var(--color-gs-card);
+    border: 1px solid var(--color-gs-border);
+    border-radius: 8px;
+  }
+
+  .btn-tactile {
+    transition: transform 0.1s ease, background-color 0.15s ease, opacity 0.15s ease;
+  }
+  .btn-tactile:active {
+    transform: scale(0.98);
+  }
+
+  .animate-page-load {
+    animation: load-fade-up 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .badge-tint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 0.15rem 0.6rem;
+    border-radius: 9999px;
+    border-width: 1px;
+  }
+
+  .tag-skill {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 400;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.04);
+    color: #a1a1aa;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+  }
+  .theme-light .tag-skill {
+    background-color: #f4f4f5;
+    color: #71717a;
+    border-color: #e4e4e7;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

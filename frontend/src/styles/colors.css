@@ -1,0 +1,37 @@
+/* GroupSync Color Tokens */
+:root {
+  --color-gs-bg: #09090b;
+  --color-gs-primary: #6d6af6;
+  --color-gs-primary-hover: #7e7bf8;
+  --color-gs-primary-active: #5c59ec;
+  --color-gs-cyan: #6d6af6;
+  --color-gs-secondary: #7c6ff0;
+  --color-gs-pink: #fb7185;
+  --color-gs-amber: #fbbf24;
+  --color-gs-green: #34d399;
+  --color-gs-text-main: #fafafa;
+  --color-gs-text-secondary: #a1a1aa;
+  --color-gs-text-muted: #71717a;
+  --color-gs-card: #14141a;
+  --color-gs-card-bg: #14141a;
+  --color-gs-elevated: #1c1c24;
+  --color-gs-card-border: rgba(255, 255, 255, 0.07);
+  --color-gs-border: rgba(255, 255, 255, 0.07);
+  --color-gs-border-hover: rgba(255, 255, 255, 0.14);
+}
+
+.theme-light {
+  --color-gs-bg: #fafafa;
+  --color-gs-card: #ffffff;
+  --color-gs-card-bg: #ffffff;
+  --color-gs-elevated: #ffffff;
+  --color-gs-card-border: #e4e4e7;
+  --color-gs-border: #e4e4e7;
+  --color-gs-border-hover: #d4d4d8;
+  --color-gs-text-main: #09090b;
+  --color-gs-text-secondary: #52525b;
+  --color-gs-text-muted: #71717a;
+  --color-gs-primary: #6d6af6;
+  --color-gs-primary-hover: #5c59ec;
+  --color-gs-secondary: #7c6ff0;
+}
