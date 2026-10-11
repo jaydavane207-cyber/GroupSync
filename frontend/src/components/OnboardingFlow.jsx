@@ -11,7 +11,7 @@ export default function OnboardingFlow({ onComplete }) {
   const [skills, setSkills] = useState([]);
   const [interests, setInterests] = useState([]);
   const [quizAnswers, setQuizAnswers] = useState(Array(6).fill(null));
-  const [avatar, setAvatar] = useState('ðŸ¤–');
+  const [avatar, setAvatar] = useState('🤖');
   const [assignedFaction, setAssignedFaction] = useState(null);
 
   const handleNext = () => {

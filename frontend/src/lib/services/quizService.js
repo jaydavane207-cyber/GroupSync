@@ -12,10 +12,10 @@ import { withRetry } from '@/lib/withRetry';
  * 60-74%: Bronze, 75-84%: Silver, 85-94%: Gold, 95-100%: Platinum
  */
 export function getBadgeTier(percentage) {
-  if (percentage >= 95) return { tier: 'platinum', emoji: 'ðŸ’Ž', label: 'Platinum' };
-  if (percentage >= 85) return { tier: 'gold',     emoji: 'ðŸ¥‡', label: 'Gold' };
-  if (percentage >= 75) return { tier: 'silver',   emoji: 'ðŸ¥ˆ', label: 'Silver' };
-  if (percentage >= 60) return { tier: 'bronze',   emoji: 'ðŸ¥‰', label: 'Bronze' };
+  if (percentage >= 95) return { tier: 'platinum', emoji: '💎', label: 'Platinum' };
+  if (percentage >= 85) return { tier: 'gold',     emoji: '🥇', label: 'Gold' };
+  if (percentage >= 75) return { tier: 'silver',   emoji: '🥈', label: 'Silver' };
+  if (percentage >= 60) return { tier: 'bronze',   emoji: '🥉', label: 'Bronze' };
   return null; // didn't pass
 }
 

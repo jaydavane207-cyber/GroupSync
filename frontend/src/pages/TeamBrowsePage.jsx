@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Users, Plus, Search, Filter, Globe, Trophy, Rocket,
@@ -23,6 +23,7 @@ export default function TeamBrowsePage() {
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isOfflineMode, setIsOfflineMode] = useState(false);
 
   // Filters
   const [category, setCategory] = useState('all');
@@ -35,7 +36,7 @@ export default function TeamBrowsePage() {
   const fetchTeamList = useCallback(async () => {
     setLoading(true);
     setError(null);
-    const { data, error: err } = await getTeams({
+    const { data, error: err, isOffline } = await getTeams({
       category: category === 'all' ? undefined : category,
       status: onlyRecruiting ? 'recruiting' : undefined,
       search: searchTerm,
@@ -46,6 +47,7 @@ export default function TeamBrowsePage() {
       setError(err.userMessage || 'Unable to load teams. Please retry.');
     } else {
       setTeams(data || []);
+      if (isOffline) setIsOfflineMode(true);
     }
     setLoading(false);
   }, [category, onlyRecruiting, searchTerm, skillFilter]);
@@ -154,6 +156,22 @@ export default function TeamBrowsePage() {
           </label>
         </div>
       </div>
+
+      {/* ── Offline Notice ────────────────────────────────────────── */}
+      {isOfflineMode && (
+        <div className="p-3.5 bg-amber-500/10 border border-amber-500/25 rounded-xl flex items-center justify-between text-amber-300 text-xs">
+          <div className="flex items-center gap-2.5">
+            <AlertCircle size={16} className="shrink-0 text-amber-400" />
+            <div>
+              <p className="font-semibold text-amber-200">Supabase Table Pending</p>
+              <p className="text-amber-300/80 mt-0.5">
+                The <code className="px-1 py-0.5 rounded bg-black/30 font-mono text-amber-200">public.teams</code> table is pending execution in Supabase.
+                Displaying campus squads in local mode. Run migration 004 in your Supabase SQL editor to enable cloud sync.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Error Banner ───────────────────────────────────────────── */}
       {error && (

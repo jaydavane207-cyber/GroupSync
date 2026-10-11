@@ -173,7 +173,7 @@ export default function EditProfilePage() {
                 {avatarPreview ? (
                   <img src={avatarPreview} alt="Avatar" className="w-full h-full object-cover" />
                 ) : (
-                  user?.avatar || 'ðŸŽ“'
+                  user?.avatar || '🎓'
                 )}
               </div>
               <div className="absolute inset-0 bg-black/50 rounded-xl opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">

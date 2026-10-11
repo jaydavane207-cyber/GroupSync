@@ -951,7 +951,7 @@ export default function StrictSkillVerificationModal({ isOpen, onClose, onSkillA
       // ── Signal parent to refresh its Skills section ────────────────────────
       onSkillAdded?.(selectedSkill.label);
 
-      showToast?.(`ðŸŽ‰ ${selectedSkill.label} verified and added to your profile!`, 'success');
+      showToast?.(`🎉 ${selectedSkill.label} verified and added to your profile!`, 'success');
       setCurrentStep(4);
     } catch (err) {
       console.error('[StrictSkillVerificationModal] Failed to save verified skill:', err);

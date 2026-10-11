@@ -279,7 +279,7 @@ export default function DMConversationPage() {
     );
   }
 
-  const target = dmInfo?.targetUser || { name: 'Student', avatar: 'ðŸŽ“' };
+  const target = dmInfo?.targetUser || { name: 'Student', avatar: '🎓' };
 
   return (
     <div className="max-w-4xl mx-auto flex flex-col h-[calc(100vh-7.5rem)] glass-card rounded-xl overflow-hidden shadow-sm">
@@ -299,7 +299,7 @@ export default function DMConversationPage() {
               {target.avatar_url ? (
                 <img src={target.avatar_url} alt={target.name} className="w-full h-full object-cover" />
               ) : (
-                target.avatar || 'ðŸŽ“'
+                target.avatar || '🎓'
               )}
             </div>
 
@@ -329,7 +329,7 @@ export default function DMConversationPage() {
         {messages.length === 0 && (
           <div className="py-20 text-center space-y-2">
             <div className="w-12 h-12 rounded-xl bg-black/5 dark:bg-white/[0.04] border border-gs-border flex items-center justify-center text-xl mx-auto">
-              {target.avatar || 'ðŸ’¬'}
+              {target.avatar || '💬'}
             </div>
             <h3 className="font-semibold text-gs-text-main text-sm">Conversation with {target.name}</h3>
             <p className="text-xs text-gs-text-muted max-w-xs mx-auto">
@@ -382,7 +382,7 @@ export default function DMConversationPage() {
                   }`}
                 >
                   {isDeleted ? (
-                    <span>ðŸš« Message deleted</span>
+                    <span>🚫 Message deleted</span>
                   ) : isEditingThis ? (
                     <div className="space-y-2">
                       <input

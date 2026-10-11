@@ -125,7 +125,7 @@ export async function getDMConversations(currentUserId) {
       if (!grp) continue;
 
       const otherMember = (grp.group_members || []).find(m => m.profile_id !== currentUserId);
-      const otherUser = otherMember?.profile || { name: 'Student', avatar: 'ðŸŽ“' };
+      const otherUser = otherMember?.profile || { name: 'Student', avatar: '🎓' };
 
       // Fetch last message
       const { data: lastMsgs } = await supabase
@@ -155,7 +155,7 @@ export async function getDMConversations(currentUserId) {
       conversations.push({
         groupId: grp.id,
         targetUser: otherUser,
-        lastMessage: lastMsg?.is_deleted ? 'Message deleted' : (lastMsg?.text || (lastMsg?.message_type === 'image' ? 'ðŸ“· Image' : (lastMsg?.message_type === 'file' ? 'ðŸ“Ž File' : 'No messages yet'))),
+        lastMessage: lastMsg?.is_deleted ? 'Message deleted' : (lastMsg?.text || (lastMsg?.message_type === 'image' ? '📷 Image' : (lastMsg?.message_type === 'file' ? '📎 File' : 'No messages yet'))),
         lastMessageTime: lastMsg?.created_at || grp.created_at,
         lastMessageSenderId: lastMsg?.sender_id,
         isUnread

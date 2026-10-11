@@ -176,7 +176,7 @@ export default function DirectMessagesPage() {
                     {target.avatar_url ? (
                       <img src={target.avatar_url} alt={target.name} className="w-full h-full object-cover" />
                     ) : (
-                      target.avatar || 'ðŸŽ“'
+                      target.avatar || '🎓'
                     )}
                     {isUnread && (
                       <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#6D6AF6] ring-2 ring-gs-card" />
@@ -268,7 +268,7 @@ export default function DirectMessagesPage() {
                     {s.avatar_url ? (
                       <img src={s.avatar_url} alt={s.name} className="w-full h-full object-cover" />
                     ) : (
-                      s.avatar || 'ðŸŽ“'
+                      s.avatar || '🎓'
                     )}
                   </div>
                   <div className="min-w-0 flex-1">

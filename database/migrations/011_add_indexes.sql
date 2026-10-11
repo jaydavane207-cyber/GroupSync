@@ -8,3 +8,5 @@ CREATE INDEX IF NOT EXISTS idx_chat_messages_channel ON public.chat_messages(cha
 CREATE INDEX IF NOT EXISTS idx_direct_messages_participants ON public.direct_messages(sender_id, recipient_id);
 CREATE INDEX IF NOT EXISTS idx_notifications_user_unread ON public.notifications(user_id) WHERE read = false;
 CREATE INDEX IF NOT EXISTS idx_projects_owner ON public.projects(owner_id);
+CREATE INDEX IF NOT EXISTS idx_friendships_requester ON public.friendships(requester_id, status);
+CREATE INDEX IF NOT EXISTS idx_friendships_addressee ON public.friendships(addressee_id, status);

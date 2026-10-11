@@ -1,4 +1,6 @@
-﻿/**
+import { AlertTriangle } from 'lucide-react';
+
+/**
  * withRetry — Supabase call wrapper with exponential backoff & error normalization
  *
  * Usage:
@@ -141,7 +143,7 @@ export function normalizeError(error) {
 }
 
 function isNonRetryableError(code, status) {
-  const nonRetryableCodes = ['23505', '23503', '42501', 'PGRST116'];
+  const nonRetryableCodes = ['23505', '23503', '42501', 'PGRST116', 'PGRST205'];
   const nonRetryableStatuses = [400, 401, 403, 404, 409, 422];
   return nonRetryableCodes.includes(code) || nonRetryableStatuses.includes(status);
 }
@@ -157,7 +159,9 @@ function sleep(ms) {
 export function ErrorCard({ message, onRetry, className = '' }) {
   return (
     <div className={`text-center py-16 bg-gs-card border border-rose-500/30 rounded-xl p-8 ${className}`}>
-      <div className="text-4xl mb-4">⚠️ï¸</div>
+      <div className="flex justify-center mb-4">
+        <AlertTriangle className="w-10 h-10 text-amber-400" />
+      </div>
       <p className="text-lg font-bold text-gs-text-main mb-2">Something went wrong</p>
       <p className="text-sm text-gs-text-muted mb-6 max-w-xs mx-auto">{message}</p>
       {onRetry && (

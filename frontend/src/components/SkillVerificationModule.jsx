@@ -470,7 +470,7 @@ function QuizFlow({ skill, onComplete, onCancel }) {
         }
       }
 
-      showToast?.(`ðŸŽ‰ ${skill.label} verified! Badge added to your profile.`, 'success');
+      showToast?.(`🎉 ${skill.label} verified! Badge added to your profile.`, 'success');
     } catch (err) {
       console.error('[SkillVerificationModule] Failed to save verified skill:', err);
       showToast?.('Skill earned but could not be saved. Try again later.', 'error');
@@ -623,7 +623,7 @@ function QuizFlow({ skill, onComplete, onCancel }) {
         </div>
 
         <p className="text-xs text-[var(--color-gs-text-muted)]">
-          ðŸ’¡ Tip: You can also verify this skill by uploading a certificate instead.
+          💡 Tip: You can also verify this skill by uploading a certificate instead.
         </p>
       </div>
     );
@@ -784,7 +784,7 @@ function CertificateFlow({ skill, onComplete, onCancel }) {
       }
 
       setVerificationStatus('success');
-      showToast?.(`ðŸ“œ Certificate submitted! ${skill.label} is pending review.`, 'success');
+      showToast?.(`📜 Certificate submitted! ${skill.label} is pending review.`, 'success');
     } catch (err) {
       console.error('[SkillVerificationModule] Certificate upload failed:', err);
       setVerificationStatus('error');

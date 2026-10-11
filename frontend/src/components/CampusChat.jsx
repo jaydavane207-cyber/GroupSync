@@ -975,7 +975,7 @@ export default function CampusChat() {
               <div className="relative shrink-0 cursor-pointer"
                 onClick={(e) => { e.stopPropagation(); handleUserProfileClick(student); }}>
                 <div className="w-6 h-6 rounded-md border border-gs-border flex items-center justify-center text-xs bg-white/[0.04] font-medium text-gs-text-main">
-                  {student.avatar || 'ðŸ‘¤'}
+                  {student.avatar || '👤'}
                 </div>
                 {student.online && <div className="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-emerald-400 rounded-full border border-gs-card" />}
               </div>
@@ -1013,7 +1013,7 @@ export default function CampusChat() {
             <div className="flex items-center gap-2.5 cursor-pointer rounded-lg px-1.5 py-1 hover:bg-white/[0.02] transition-colors"
               onClick={() => handleUserProfileClick(activeUser)}>
               <div className="w-7 h-7 rounded-md border border-gs-border flex items-center justify-center bg-white/[0.04] text-xs text-gs-text-main font-medium">
-                {activeUser.avatar || 'ðŸ‘¤'}
+                {activeUser.avatar || '👤'}
               </div>
               <div>
                 <h1 className="font-semibold text-xs text-gs-text-main hover:text-[#9182f8] transition-colors">{activeUser.name}</h1>
@@ -1104,7 +1104,7 @@ export default function CampusChat() {
           {/* Messages */}
           {!isInitialLoading && messages.map(msg => {
             const { sender, isMe } = getSenderInfo(msg);
-            const resolvedSender = sender || { name: 'Unknown', avatar: 'ðŸŽ“', faction: null };
+            const resolvedSender = sender || { name: 'Unknown', avatar: '🎓', faction: null };
             const hasFaction = isMe ? factions[user?.faction] : factions[resolvedSender.faction];
             const isOptimistic = !!msg._optimistic;
             const isOfflineMsg = !!msg._offline;
@@ -1126,7 +1126,7 @@ export default function CampusChat() {
                 <div
                   className="w-8 h-8 shrink-0 rounded-full border border-gs-border flex items-center justify-center text-sm bg-gs-card mt-0.5 cursor-pointer"
                   onClick={() => !isMe && handleUserProfileClick(resolvedSender)}>
-                  {resolvedSender.avatar || 'ðŸŽ“'}
+                  {resolvedSender.avatar || '🎓'}
                 </div>
 
                 <div className={`flex flex-col ${isMe ? 'items-end' : 'items-start'} min-w-0 flex-1`}>
@@ -1152,7 +1152,7 @@ export default function CampusChat() {
                   {/* Deleted message */}
                   {msg.isDeleted ? (
                     <div className="px-4 py-2.5 rounded-2xl text-xs text-[var(--color-gs-text-muted)] italic bg-[var(--color-gs-card)] border border-[var(--color-gs-border)]/50 border-dashed">
-                      ðŸš« Message deleted
+                      🚫 Message deleted
                     </div>
                   ) : (
                     <>
@@ -1293,7 +1293,7 @@ export default function CampusChat() {
           {typingLabel && (
             <div className="self-start flex gap-2.5 items-end">
               <div className="w-7 h-7 rounded-full bg-gs-card border border-gs-border flex items-center justify-center text-xs">
-                {typingUsers[0] ? (students.find(s => s.id === typingUsers[0].userId)?.avatar || 'ðŸ‘¤') : 'ðŸ‘¤'}
+                {typingUsers[0] ? (students.find(s => s.id === typingUsers[0].userId)?.avatar || '👤') : '👤'}
               </div>
               <div>
                 <div className="px-3 py-2 glass-elevated rounded-xl rounded-tl-none flex items-center gap-1.5 mb-1">

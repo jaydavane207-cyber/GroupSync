@@ -82,7 +82,7 @@ function FactionCard({ faction, idx, maxXP }) {
                 <div key={u.id || i} className="flex items-center gap-2.5 p-2 rounded-lg bg-white/[0.02] border border-gs-border/60">
                   <span className={`text-xs font-semibold w-5 text-center ${rankColor}`}>#{i + 1}</span>
                   <div className="w-6 h-6 rounded-md bg-white/[0.04] border border-gs-border flex items-center justify-center text-xs shrink-0">
-                    {u.avatar || 'ðŸ‘¤'}
+                    {u.avatar || '👤'}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-xs text-gs-text-main truncate">{u.name || 'Anonymous Student'}</p>
@@ -409,7 +409,7 @@ export default function Leaderboard() {
 
                     <div className="flex items-center gap-2.5 mb-3">
                       <div className="w-8 h-8 rounded-lg bg-white/[0.04] border border-gs-border flex items-center justify-center text-xs shrink-0">
-                        {topUser.avatar || 'ðŸŽ“'}
+                        {topUser.avatar || '🎓'}
                       </div>
                       <div className="min-w-0">
                         <h4 className="text-xs font-semibold text-gs-text-main truncate">{topUser.name}</h4>
@@ -499,7 +499,7 @@ export default function Leaderboard() {
                         <td className="p-3 px-4">
                           <div className="flex items-center gap-2.5">
                             <div className="w-7 h-7 rounded-md bg-white/[0.04] border border-gs-border flex items-center justify-center text-xs shrink-0">
-                              {student.avatar || 'ðŸŽ“'}
+                              {student.avatar || '🎓'}
                             </div>
                             <div className="min-w-0">
                               <div className="font-medium text-gs-text-main flex items-center gap-1.5 truncate">

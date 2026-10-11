@@ -171,7 +171,7 @@ export default function GroupDetails() {
     id: m.id,
     text: m.text,
     sender: m.sender?.name || 'User',
-    avatar: m.sender?.avatar || 'ðŸŽ“',
+    avatar: m.sender?.avatar || '🎓',
     avatarBg: 'bg-[var(--color-gs-bg)] text-[var(--color-gs-text-main)]',
     timestamp: m.created_at ? new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '',
     isMine: user?.id ? m.sender_id === user.id : false,
@@ -257,7 +257,7 @@ export default function GroupDetails() {
   if (!group) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4 text-center p-8">
-        <span className="text-5xl">ðŸ”</span>
+        <span className="text-5xl">🔍</span>
         <h2 className="text-2xl font-bold font-heading text-slate-900 dark:text-white">Group Not Found</h2>
         <p className="text-sm text-slate-500 dark:text-slate-400">This group may have been archived, disbanded, or you followed an invalid link.</p>
         <button onClick={() => navigate('/browse')} className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs rounded-xl shadow-xs transition-colors">Browse Groups</button>
@@ -300,7 +300,7 @@ export default function GroupDetails() {
     setAwardingXP(false);
 
     if (!error) {
-      showToast(`ðŸ† +${xpAmount} XP awarded for ${awardPlacement} place!`, 'success');
+      showToast(`🏆 +${xpAmount} XP awarded for ${awardPlacement} place!`, 'success');
       setAwardUserId('');
       setAwardPlacement('1st');
       setShowAwardXP(false);
@@ -590,7 +590,7 @@ export default function GroupDetails() {
                       onClick={() => setAwardPlacement(place)}
                     >
                       <div className="text-lg">
-                        {place === '1st' ? 'ðŸ¥‡' : place === '2nd' ? 'ðŸ¥ˆ' : place === '3rd' ? 'ðŸ¥‰' : '⚡'}
+                        {place === '1st' ? '🥇' : place === '2nd' ? '🥈' : place === '3rd' ? '🥉' : '⚡'}
                       </div>
                       <div className="text-[10px] font-black uppercase tracking-wider">{place}</div>
                       <div className="text-sm font-black">+{xp} XP</div>
@@ -837,7 +837,7 @@ export default function GroupDetails() {
                {activeTab === 'tasks' && (
                  <KanbanBoard
                    groupId={group.id}
-                   members={realMembers.length > 0 ? realMembers : [{ id: user?.id || 'you', name: user?.name || 'You', avatar: user?.avatar || 'ðŸŽ“' }]}
+                   members={realMembers.length > 0 ? realMembers : [{ id: user?.id || 'you', name: user?.name || 'You', avatar: user?.avatar || '🎓' }]}
                  />
                )}
             </div>
@@ -984,7 +984,7 @@ export default function GroupDetails() {
                   return (
                    <div key={member.id} className="flex items-center gap-3 group cursor-pointer p-2 hover:bg-white/5 rounded-xl transition-all">
                      <div className="relative shrink-0">
-                       <div className="w-10 h-10 rounded-full border border-white/10 bg-black/40 flex items-center justify-center text-lg">{member.avatar || 'ðŸ‘¤'}</div>
+                       <div className="w-10 h-10 rounded-full border border-white/10 bg-black/40 flex items-center justify-center text-lg">{member.avatar || '👤'}</div>
                        {member.online && <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#10b981] rounded-full border border-[#050810]" />}
                      </div>
                      <div className="flex-1">

@@ -248,7 +248,7 @@ export default function TeamDetailPage() {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 border-b border-gs-border">
           <div className="flex items-start gap-3.5">
             <div className="w-12 h-12 rounded-lg bg-black/5 dark:bg-white/[0.04] border border-gs-border flex items-center justify-center text-2xl shrink-0">
-              {team.banner_emoji || 'ðŸ‘¥'}
+              {team.banner_emoji || '👥'}
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-2 flex-wrap">
@@ -414,7 +414,7 @@ export default function TeamDetailPage() {
               >
                 <div className="flex items-start gap-3">
                   <div className="w-9 h-9 rounded-lg bg-black/5 dark:bg-white/[0.04] border border-gs-border flex items-center justify-center text-lg shrink-0">
-                    {memberProfile.avatar || 'ðŸ‘¤'}
+                    {memberProfile.avatar || '👤'}
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
@@ -479,7 +479,7 @@ export default function TeamDetailPage() {
                 >
                   <div className="flex items-start gap-3">
                     <div className="w-9 h-9 rounded-lg bg-black/5 dark:bg-white/[0.04] border border-gs-border flex items-center justify-center text-lg shrink-0">
-                      {applicant.avatar || 'ðŸ‘¤'}
+                      {applicant.avatar || '👤'}
                     </div>
                     <div className="space-y-0.5">
                       <div className="flex items-center gap-2">
@@ -563,7 +563,7 @@ export default function TeamDetailPage() {
                           isSelected ? 'bg-[#6D6AF6]/10 text-[#9182f8] font-medium' : 'text-gs-text-muted hover:text-gs-text-main hover:bg-white/[0.04]'
                         }`}
                       >
-                        <span className="text-sm">{s.avatar || 'ðŸ‘¤'}</span>
+                        <span className="text-sm">{s.avatar || '👤'}</span>
                         <div className="flex-1 min-w-0 truncate">
                           <p className="font-medium text-gs-text-main">{s.name}</p>
                           <p className="text-[10px] text-gs-text-muted">{s.college || 'Student'}</p>

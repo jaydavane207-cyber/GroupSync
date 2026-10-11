@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Globe, Lock, Loader2, X
@@ -11,7 +11,7 @@ const SUGGESTED_SKILLS = [
   'UI/UX', 'Solidity', 'FastAPI', 'PyTorch', 'AWS', 'Flutter', 'TypeScript'
 ];
 
-const EMOJI_OPTIONS = ['ðŸš€', 'ðŸ¤–', '⚡', 'ðŸ’¡', 'ðŸ§ ', 'ðŸ›¡ï¸', 'ðŸŒ', 'ðŸŒ±', 'ðŸŽ¨', 'ðŸ§¬', 'ðŸ’»', 'ðŸŽ¯'];
+const EMOJI_OPTIONS = ['🚀', '🤖', '⚡', '💡', '🧠', '🛡️', '🌐', '🌱', '🎨', '🧪', '💻', '🎯'];
 
 export default function CreateTeamPage() {
   const navigate = useNavigate();
@@ -22,7 +22,19 @@ export default function CreateTeamPage() {
   const [category, setCategory] = useState('hackathon');
   const [maxMembers, setMaxMembers] = useState(4);
   const [privacy, setPrivacy] = useState('public');
-  const [bannerEmoji, setBannerEmoji] = useState('ðŸš€');
+  const [bannerEmoji, setBannerEmoji] = useState('🚀');
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const emojiPickerRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
+        setShowEmojiPicker(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const [skills, setSkills] = useState(['React', 'Node.js']);
   const [skillInput, setSkillInput] = useState('');
@@ -117,18 +129,28 @@ export default function CreateTeamPage() {
             </label>
             <div className="flex gap-2.5">
               {/* Emoji Selector */}
-              <div className="relative group">
-                <div className="w-10 h-10 rounded-lg bg-black/5 dark:bg-white/[0.04] border border-gs-border flex items-center justify-center text-xl cursor-pointer hover:border-blue-500/40 transition-colors">
+              <div className="relative group" ref={emojiPickerRef}>
+                <button
+                  type="button"
+                  title="Choose team icon"
+                  onClick={() => setShowEmojiPicker(prev => !prev)}
+                  className="w-10 h-10 rounded-lg bg-black/5 dark:bg-white/[0.04] border border-gs-border flex items-center justify-center text-xl cursor-pointer hover:border-blue-500/40 transition-colors select-none"
+                >
                   {bannerEmoji}
-                </div>
+                </button>
                 {/* Quick Emoji Dropdown */}
-                <div className="absolute left-0 top-full mt-1.5 bg-gs-card border border-gs-border p-2 rounded-lg shadow-xl grid grid-cols-4 gap-1 z-30 hidden group-hover:grid">
+                <div className={`absolute left-0 top-full mt-1.5 bg-gs-card border border-gs-border p-2 rounded-lg shadow-xl grid grid-cols-4 gap-1 z-30 ${showEmojiPicker ? 'grid' : 'hidden group-hover:grid'}`}>
                   {EMOJI_OPTIONS.map(em => (
                     <button
                       key={em}
                       type="button"
-                      onClick={() => setBannerEmoji(em)}
-                      className="p-1.5 hover:bg-black/5 dark:hover:bg-white/[0.06] rounded text-lg"
+                      onClick={() => {
+                        setBannerEmoji(em);
+                        setShowEmojiPicker(false);
+                      }}
+                      className={`p-1.5 hover:bg-black/5 dark:hover:bg-white/[0.06] rounded text-lg transition-colors ${
+                        bannerEmoji === em ? 'bg-blue-500/15 border border-blue-500/30' : ''
+                      }`}
                     >
                       {em}
                     </button>

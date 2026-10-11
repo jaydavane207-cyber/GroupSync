@@ -102,7 +102,7 @@ function TaskCard({ task, members, onDelete, onDragStart }) {
           ) : <span />}
           {assignee && (
             <span className="text-[10px] flex items-center gap-1 text-[var(--color-gs-text-muted)]">
-              <span className="text-sm">{assignee.avatar || 'ðŸ‘¤'}</span>
+              <span className="text-sm">{assignee.avatar || '👤'}</span>
               <span className="truncate max-w-[80px]">{assignee.name?.split(' ')[0]}</span>
             </span>
           )}
@@ -361,7 +361,7 @@ export default function KanbanBoard({ groupId, members = [] }) {
                       <option value="">Unassigned</option>
                       {members.map(m => (
                         <option key={m.id} value={m.id}>
-                          {m.avatar || 'ðŸ‘¤'} {m.name || 'Member'}
+                          {m.avatar || '👤'} {m.name || 'Member'}
                         </option>
                       ))}
                     </select>

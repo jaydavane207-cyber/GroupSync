@@ -43,3 +43,20 @@ CREATE POLICY "Users can view direct messages sent to or from them"
 
 CREATE POLICY "Users can send direct messages"
   ON public.direct_messages FOR INSERT WITH CHECK (auth.uid() = sender_id);
+
+-- Friendships
+CREATE POLICY "Users can view their own friendships"
+  ON public.friendships FOR SELECT
+  USING (auth.uid() = requester_id OR auth.uid() = addressee_id);
+
+CREATE POLICY "Authenticated users can send friend requests"
+  ON public.friendships FOR INSERT
+  WITH CHECK (auth.uid() = requester_id);
+
+CREATE POLICY "Users can update their own friend requests"
+  ON public.friendships FOR UPDATE
+  USING (auth.uid() = requester_id OR auth.uid() = addressee_id);
+
+CREATE POLICY "Users can remove their own friendships"
+  ON public.friendships FOR DELETE
+  USING (auth.uid() = requester_id OR auth.uid() = addressee_id);

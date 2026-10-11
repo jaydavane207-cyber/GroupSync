@@ -24,7 +24,7 @@ async function notifyOrganizer(project, applicant) {
       type: 'projects',
       title: 'New project application',
       message: `${applicant.name || 'A student'} applied to join "${project.title}".`,
-      icon: 'ðŸ“‹',
+      icon: '📋',
       action_label: 'View project',
       action_path: '/projects',
       reference_id: String(project.id),
@@ -472,7 +472,7 @@ function CreateProjectModal({ onClose, onCreate }) {
       prize_pool: prizePool.trim() || 'Certificate & Swag',
       team_size: teamSize,
       skills: skills.length > 0 ? skills : ['General Development'],
-      image: 'ðŸ“',
+      image: '📁',
       spots_left: 3,
     });
     setSubmitting(false);

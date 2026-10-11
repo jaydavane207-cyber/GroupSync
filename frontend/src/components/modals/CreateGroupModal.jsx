@@ -229,7 +229,7 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
       // Refresh the group list in AppContext so BrowseGroups shows the new entry immediately
       if (refreshGroups) await refreshGroups();
 
-      showToast(`ðŸŽ‰ "${groupName.trim()}" is live! Start recruiting.`, 'success');
+      showToast(`🎉 "${groupName.trim()}" is live! Start recruiting.`, 'success');
       onSuccess?.(insertedGroup);
       onClose();
     } catch (err) {

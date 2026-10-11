@@ -447,7 +447,7 @@ function Step1({ data, onChange, onNext }) {
 
 // ─── Step 2: Personal Information ────────────────────────────────────────────
 function Step2({ data, onChange, onNext, onBack }) {
-  const AVATARS = ['ðŸ¦Š', 'ðŸ‰', 'ðŸ¤–', 'ðŸ¦‹', 'ðŸº', 'ðŸ¦…', 'ðŸ¬', 'ðŸ¦', 'ðŸ¸', 'ðŸ¦„', 'ðŸ»', 'ðŸ¦–'];
+  const AVATARS = ['🦊', '🐉', '🤖', '🦋', '🐺', '🦅', '🐬', '🦁', '🐸', '🦄', '🐻', '🦖'];
   const isValid = data.fullName;
 
   return (
@@ -918,7 +918,7 @@ export default function Signup({ onNavigate, initialStep = 1 }) {
     // Step 1
     email: '', password: '', confirmPassword: '',
     // Step 2
-    fullName: '', avatar: 'ðŸ¦Š', dob: '', gender: '',
+    fullName: '', avatar: '🦊', dob: '', gender: '',
     // Step 3
     college: '', studentId: '', course: '', branch: '',
     year: '', semester: '', gradYear: '', cgpa: '',

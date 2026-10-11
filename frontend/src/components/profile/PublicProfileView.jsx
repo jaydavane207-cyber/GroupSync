@@ -277,7 +277,7 @@ export default function PublicProfileView({ userProfile = MOCK_USER_PROFILE }) {
     handleViewCert(skill.certificate_url, skill.name);
   };
 
-  const placementEmoji = (p) => p === '1st' ? 'ðŸ¥‡' : p === '2nd' ? 'ðŸ¥ˆ' : p === '3rd' ? 'ðŸ¥‰' : '⚡';
+  const placementEmoji = (p) => p === '1st' ? '🥇' : p === '2nd' ? '🥈' : p === '3rd' ? '🥉' : '⚡';
 
   return (
     <div className="relative w-full text-gs-text-main py-8">

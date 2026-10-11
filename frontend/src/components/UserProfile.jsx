@@ -364,7 +364,7 @@ function OverviewTab({ user, factions, isEditing, formData, setFormData, onAddSk
 
 // ─── Events Tab ───────────────────────────────────────────────────────────────
 const MOCK_EVENTS = [
-  { id: 1, name: 'Spring Hackathon 2025', date: 'Mar 15, 2025', type: 'Hackathon', status: 'attended', result: '2nd Place ðŸ¥ˆ' },
+  { id: 1, name: 'Spring Hackathon 2025', date: 'Mar 15, 2025', type: 'Hackathon', status: 'attended', result: '2nd Place 🥈' },
   { id: 2, name: 'AI Summit', date: 'Feb 10, 2025', type: 'Conference', status: 'attended', result: 'Participant' },
   { id: 3, name: '48h Game Jam', date: 'Jan 20, 2025', type: 'Game Jam', status: 'rsvpd', result: "RSVP'd" },
   { id: 4, name: 'UI/UX Workshop', date: 'Dec 5, 2024', type: 'Workshop', status: 'attended', result: 'Completed ✓' },
@@ -411,10 +411,10 @@ function EventsTab() {
 // ─── Teams Tab ────────────────────────────────────────────────────────────────
 const MOCK_TEAMS = [
   { id: 1, name: 'Quantum Hackers', event: 'Spring Hackathon', members: 4, role: 'Frontend Lead', status: 'current', emoji: '⚡' },
-  { id: 2, name: 'Design Wizards', event: 'UI/UX Challenge', members: 3, role: 'Member', status: 'past', emoji: 'ðŸŽ¨' },
+  { id: 2, name: 'Design Wizards', event: 'UI/UX Challenge', members: 3, role: 'Member', status: 'past', emoji: '🎨' },
 ];
 const MOCK_INVITES = [
-  { id: 1, team: 'Chain Breakers', event: 'Web3 Weekend', from: 'Bob', emoji: 'ðŸ”—' },
+  { id: 1, team: 'Chain Breakers', event: 'Web3 Weekend', from: 'Bob', emoji: '🔗' },
 ];
 
 function TeamsTab({ showToast }) {
@@ -483,12 +483,12 @@ function TeamsTab({ showToast }) {
 
 // ─── Achievements Tab ─────────────────────────────────────────────────────────
 const BADGES = [
-  { emoji: 'ðŸ†', label: 'Hack Winner', desc: 'Won Spring Hackathon 2025', unlocked: true },
-  { emoji: 'ðŸ¤', label: 'Team Player', desc: 'Joined 3 groups', unlocked: true },
-  { emoji: 'ðŸ”¥', label: 'On Fire', desc: 'Active 7 days straight', unlocked: false },
-  { emoji: 'ðŸš€', label: 'Launcher', desc: 'Submit first project', unlocked: false },
+  { emoji: '🏆', label: 'Hack Winner', desc: 'Won Spring Hackathon 2025', unlocked: true },
+  { emoji: '🤝', label: 'Team Player', desc: 'Joined 3 groups', unlocked: true },
+  { emoji: '🔥', label: 'On Fire', desc: 'Active 7 days straight', unlocked: false },
+  { emoji: '🚀', label: 'Launcher', desc: 'Submit first project', unlocked: false },
   { emoji: '⭐', label: 'Star Contributor', desc: 'Top 10 leaderboard', unlocked: false },
-  { emoji: 'ðŸŽ¯', label: 'Sharp Focus', desc: 'Complete 5 events', unlocked: false },
+  { emoji: '🎯', label: 'Sharp Focus', desc: 'Complete 5 events', unlocked: false },
 ];
 
 function AchievementsTab() {
@@ -744,7 +744,7 @@ export default function UserProfile() {
               {user.avatar_url ? (
                 <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
               ) : (
-                user.avatar || 'ðŸŽ“'
+                user.avatar || '🎓'
               )}
             </div>
           </div>

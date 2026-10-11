@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Users2,
   UserPlus,
@@ -10,12 +10,14 @@ import {
   UserCheck,
   RefreshCw,
   Clock,
-  UserMinus
+  UserMinus,
+  AlertCircle
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '@/context/AppContext';
 import supabase from '@/lib/supabase';
 import { withRetry, ErrorCard } from '@/lib/withRetry';
+import storage from '@/lib/utils/localStorage';
 
 function FriendSkeleton({ count = 4 }) {
   return (
@@ -37,8 +39,27 @@ function FriendSkeleton({ count = 4 }) {
 }
 
 async function createNotification(payload) {
-  await withRetry(() => supabase.from('notifications').insert([payload]));
+  try {
+    await withRetry(() => supabase.from('notifications').insert([payload]));
+  } catch (e) {
+    // Non-blocking notification failure
+  }
 }
+
+const isTableMissingError = (err) => {
+  if (!err) return false;
+  const msg = String(err.message || err.userMessage || '').toLowerCase();
+  const code = String(err.code || '');
+  return code === 'PGRST205' || msg.includes('schema cache') || (msg.includes('table') && msg.includes('friendships'));
+};
+
+const getLocalFriendships = (userId) => {
+  return storage.get(`groupsync_friendships_${userId}`, []);
+};
+
+const saveLocalFriendships = (userId, list) => {
+  storage.set(`groupsync_friendships_${userId}`, list);
+};
 
 export default function FriendsPage() {
   const { user, showToast } = useAppContext();
@@ -53,6 +74,7 @@ export default function FriendsPage() {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isOfflineMode, setIsOfflineMode] = useState(false);
 
   const [actionStates, setActionStates] = useState({});
   const setActionState = (id, state) =>
@@ -65,19 +87,42 @@ export default function FriendsPage() {
     setLoading(true);
     setError(null);
 
-    const { data: rows, error: err } = await withRetry(() =>
-      supabase
-        .from('friendships')
-        .select('*')
-        .or(`requester_id.eq.${user.id},addressee_id.eq.${user.id}`)
-        .order('created_at', { ascending: false })
-    );
+    let rows = [];
+    let usingLocal = false;
 
-    if (err) {
-      setError(err.userMessage || 'Failed to load connections.');
-      setLoading(false);
-      return;
+    try {
+      const { data, error: err } = await withRetry(() =>
+        supabase
+          .from('friendships')
+          .select('*')
+          .or(`requester_id.eq.${user.id},addressee_id.eq.${user.id}`)
+          .order('created_at', { ascending: false })
+      );
+
+      if (err) {
+        if (isTableMissingError(err)) {
+          usingLocal = true;
+          rows = getLocalFriendships(user.id);
+        } else {
+          setError(err.userMessage || 'Failed to load connections.');
+          setLoading(false);
+          return;
+        }
+      } else {
+        rows = data || [];
+      }
+    } catch (catchedErr) {
+      if (isTableMissingError(catchedErr)) {
+        usingLocal = true;
+        rows = getLocalFriendships(user.id);
+      } else {
+        setError(catchedErr.message || 'Failed to load connections.');
+        setLoading(false);
+        return;
+      }
     }
+
+    setIsOfflineMode(usingLocal);
 
     const acceptedRows = (rows || []).filter(r => r.status === 'accepted');
     const pendingIncoming = (rows || []).filter(
@@ -93,10 +138,14 @@ export default function FriendsPage() {
 
     let profileMap = {};
     if (allProfileIds.length > 0) {
-      const { data: profiles } = await withRetry(() =>
-        supabase.from('profiles').select('*').in('id', allProfileIds)
-      );
-      (profiles || []).forEach(p => { profileMap[p.id] = p; });
+      try {
+        const { data: profiles } = await withRetry(() =>
+          supabase.from('profiles').select('*').in('id', allProfileIds)
+        );
+        (profiles || []).forEach(p => { profileMap[p.id] = p; });
+      } catch (e) {
+        // Fallback to empty map
+      }
     }
 
     const friendsList = acceptedRows.map(row => {
@@ -106,7 +155,7 @@ export default function FriendsPage() {
         id: otherId,
         friendshipId: row.id,
         name: prof.name || 'Campus Student',
-        avatar: prof.avatar || 'ðŸŽ“',
+        avatar: prof.avatar || '🎓',
         college: prof.college || 'Engineering',
         course: prof.branch || prof.course || 'Computer Science',
         skills: prof.skills || [],
@@ -123,7 +172,7 @@ export default function FriendsPage() {
         requesterId: row.requester_id,
         friendshipId: row.id,
         name: prof.name || 'Campus Student',
-        avatar: prof.avatar || 'ðŸŽ“',
+        avatar: prof.avatar || '🎓',
         college: prof.college || 'Engineering',
         course: prof.branch || prof.course || 'Computer Science',
         skills: prof.skills || [],
@@ -137,22 +186,26 @@ export default function FriendsPage() {
 
     // Suggestions: students not already friends
     const excludedIds = new Set([user.id, ...friendIds, ...requesterIds]);
-    const { data: allProfiles } = await withRetry(() =>
-      supabase.from('profiles').select('*').limit(20)
-    );
-    if (allProfiles) {
-      const suggested = allProfiles
-        .filter(p => !excludedIds.has(p.id))
-        .map(p => ({
-          id: p.id,
-          name: p.name || 'Student',
-          avatar: p.avatar || 'ðŸŽ“',
-          college: p.college || 'Engineering',
-          course: p.branch || p.course || 'Computer Science',
-          skills: p.skills || [],
-          skillOverlap: (p.skills || []).filter(s => (user.skills || []).includes(s)),
-        }));
-      setSuggestions(suggested);
+    try {
+      const { data: allProfiles } = await withRetry(() =>
+        supabase.from('profiles').select('*').limit(20)
+      );
+      if (allProfiles) {
+        const suggested = allProfiles
+          .filter(p => !excludedIds.has(p.id))
+          .map(p => ({
+            id: p.id,
+            name: p.name || 'Student',
+            avatar: p.avatar || '🎓',
+            college: p.college || 'Engineering',
+            course: p.branch || p.course || 'Computer Science',
+            skills: p.skills || [],
+            skillOverlap: (p.skills || []).filter(s => (user?.skills || []).includes(s)),
+          }));
+        setSuggestions(suggested);
+      }
+    } catch (e) {
+      setSuggestions([]);
     }
 
     setLoading(false);
@@ -164,25 +217,56 @@ export default function FriendsPage() {
 
   // Real-time subscription
   useEffect(() => {
-    if (!user?.id) return;
-    const channel = supabase
-      .channel('friendships-realtime')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'friendships' }, () => {
-        fetchFriendsData();
-      })
-      .subscribe();
+    if (!user?.id || isOfflineMode) return;
+    try {
+      const channel = supabase
+        .channel('friendships-realtime')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'friendships' }, () => {
+          fetchFriendsData();
+        })
+        .subscribe();
 
-    channelRef.current = channel;
-    return () => { supabase.removeChannel(channel); };
-  }, [user?.id, fetchFriendsData]);
+      channelRef.current = channel;
+      return () => {
+        if (channel) supabase.removeChannel(channel);
+      };
+    } catch (e) {
+      // Ignored if table not in publication
+    }
+  }, [user?.id, isOfflineMode, fetchFriendsData]);
 
   const handleAcceptRequest = async (req) => {
     setActionState(req.friendshipId, 'accepting');
+
+    if (isOfflineMode || String(req.friendshipId).startsWith('local_')) {
+      const localList = getLocalFriendships(user.id);
+      const updated = localList.map(r =>
+        r.id === req.friendshipId ? { ...r, status: 'accepted' } : r
+      );
+      saveLocalFriendships(user.id, updated);
+      showToast(`Connected with ${req.name}`, 'success');
+      fetchFriendsData();
+      setActionState(req.friendshipId, null);
+      return;
+    }
+
     const { error: updateErr } = await withRetry(() =>
       supabase.from('friendships').update({ status: 'accepted' }).eq('id', req.friendshipId)
     );
 
     if (updateErr) {
+      if (isTableMissingError(updateErr)) {
+        setIsOfflineMode(true);
+        const localList = getLocalFriendships(user.id);
+        const updated = localList.map(r =>
+          r.id === req.friendshipId ? { ...r, status: 'accepted' } : r
+        );
+        saveLocalFriendships(user.id, updated);
+        showToast(`Connected with ${req.name}`, 'success');
+        fetchFriendsData();
+        setActionState(req.friendshipId, null);
+        return;
+      }
       showToast('Failed to accept request.', 'error');
       setActionState(req.friendshipId, null);
       return;
@@ -193,7 +277,7 @@ export default function FriendsPage() {
       type: 'friends',
       title: 'Connection accepted',
       message: `${user.name || 'A student'} accepted your connection request!`,
-      icon: 'ðŸ¤',
+      icon: '🤝',
       action_label: 'View friends',
       action_path: '/friends',
       reference_id: String(user.id),
@@ -205,11 +289,32 @@ export default function FriendsPage() {
 
   const handleDeclineRequest = async (req) => {
     setActionState(req.friendshipId, 'declining');
+
+    if (isOfflineMode || String(req.friendshipId).startsWith('local_')) {
+      const localList = getLocalFriendships(user.id);
+      const updated = localList.filter(r => r.id !== req.friendshipId);
+      saveLocalFriendships(user.id, updated);
+      showToast('Connection request declined.', 'info');
+      setRequests(prev => prev.filter(r => r.friendshipId !== req.friendshipId));
+      setActionState(req.friendshipId, null);
+      return;
+    }
+
     const { error: delErr } = await withRetry(() =>
       supabase.from('friendships').delete().eq('id', req.friendshipId)
     );
 
     if (delErr) {
+      if (isTableMissingError(delErr)) {
+        setIsOfflineMode(true);
+        const localList = getLocalFriendships(user.id);
+        const updated = localList.filter(r => r.id !== req.friendshipId);
+        saveLocalFriendships(user.id, updated);
+        showToast('Connection request declined.', 'info');
+        setRequests(prev => prev.filter(r => r.friendshipId !== req.friendshipId));
+        setActionState(req.friendshipId, null);
+        return;
+      }
       showToast('Failed to decline request.', 'error');
       setActionState(req.friendshipId, null);
       return;
@@ -217,15 +322,37 @@ export default function FriendsPage() {
 
     showToast('Connection request declined.', 'info');
     setRequests(prev => prev.filter(r => r.friendshipId !== req.friendshipId));
+    setActionState(req.friendshipId, null);
   };
 
   const handleRemoveFriend = async (friend) => {
     setActionState(friend.friendshipId, 'removing');
+
+    if (isOfflineMode || String(friend.friendshipId).startsWith('local_')) {
+      const localList = getLocalFriendships(user.id);
+      const updated = localList.filter(r => r.id !== friend.friendshipId);
+      saveLocalFriendships(user.id, updated);
+      showToast(`Removed ${friend.name}`, 'info');
+      setFriends(prev => prev.filter(f => f.friendshipId !== friend.friendshipId));
+      setActionState(friend.friendshipId, null);
+      return;
+    }
+
     const { error: delErr } = await withRetry(() =>
       supabase.from('friendships').delete().eq('id', friend.friendshipId)
     );
 
     if (delErr) {
+      if (isTableMissingError(delErr)) {
+        setIsOfflineMode(true);
+        const localList = getLocalFriendships(user.id);
+        const updated = localList.filter(r => r.id !== friend.friendshipId);
+        saveLocalFriendships(user.id, updated);
+        showToast(`Removed ${friend.name}`, 'info');
+        setFriends(prev => prev.filter(f => f.friendshipId !== friend.friendshipId));
+        setActionState(friend.friendshipId, null);
+        return;
+      }
       showToast('Failed to remove connection.', 'error');
       setActionState(friend.friendshipId, null);
       return;
@@ -233,10 +360,28 @@ export default function FriendsPage() {
 
     showToast(`Removed ${friend.name}`, 'info');
     setFriends(prev => prev.filter(f => f.friendshipId !== friend.friendshipId));
+    setActionState(friend.friendshipId, null);
   };
 
   const handleAddFriend = async (sugg) => {
     setActionState(sugg.id, 'sending');
+
+    if (isOfflineMode) {
+      const localList = getLocalFriendships(user.id);
+      const newEntry = {
+        id: `local_${Date.now()}`,
+        requester_id: user.id,
+        addressee_id: sugg.id,
+        status: 'pending',
+        created_at: new Date().toISOString(),
+      };
+      saveLocalFriendships(user.id, [...localList, newEntry]);
+      showToast(`Connection request sent to ${sugg.name}`, 'success');
+      setSuggestions(prev => prev.filter(s => s.id !== sugg.id));
+      setActionState(sugg.id, null);
+      return;
+    }
+
     const { error: insertErr } = await withRetry(() =>
       supabase.from('friendships').insert([{
         requester_id: user.id,
@@ -246,6 +391,22 @@ export default function FriendsPage() {
     );
 
     if (insertErr) {
+      if (isTableMissingError(insertErr)) {
+        setIsOfflineMode(true);
+        const localList = getLocalFriendships(user.id);
+        const newEntry = {
+          id: `local_${Date.now()}`,
+          requester_id: user.id,
+          addressee_id: sugg.id,
+          status: 'pending',
+          created_at: new Date().toISOString(),
+        };
+        saveLocalFriendships(user.id, [...localList, newEntry]);
+        showToast(`Connection request sent to ${sugg.name}`, 'success');
+        setSuggestions(prev => prev.filter(s => s.id !== sugg.id));
+        setActionState(sugg.id, null);
+        return;
+      }
       showToast(insertErr.userMessage || 'Failed to send invite.', 'error');
       setActionState(sugg.id, null);
       return;
@@ -255,8 +416,8 @@ export default function FriendsPage() {
       user_id: sugg.id,
       type: 'friends',
       title: 'New connection request',
-      message: `${user.name || 'A student'} wants to connect on GroupSync!`,
-      icon: 'ðŸ‘‹',
+      message: `${user?.name || 'A student'} wants to connect on GroupSync!`,
+      icon: '👋',
       action_label: 'View request',
       action_path: '/friends',
       reference_id: String(user.id),
@@ -264,6 +425,7 @@ export default function FriendsPage() {
 
     showToast(`Connection request sent to ${sugg.name}`, 'success');
     setSuggestions(prev => prev.filter(s => s.id !== sugg.id));
+    setActionState(sugg.id, null);
   };
 
   const filteredFriends = friends.filter(f =>
@@ -300,6 +462,22 @@ export default function FriendsPage() {
           <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
         </button>
       </div>
+
+      {/* Offline / Table Notice */}
+      {isOfflineMode && (
+        <div className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs">
+          <div className="flex items-center gap-2.5">
+            <AlertCircle size={16} className="shrink-0 text-amber-400" />
+            <div>
+              <p className="font-semibold text-amber-200">Supabase Table Pending</p>
+              <p className="text-amber-300/80 mt-0.5">
+                The <code className="px-1 py-0.5 rounded bg-black/30 font-mono text-amber-200">public.friendships</code> table has not been created in Supabase yet.
+                Running in local peer cache mode — connections will persist locally. Run migration 007 in your Supabase SQL editor to enable multi-device sync.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Segmented Control Tabs */}
       <div className="segmented-control p-1 glass-elevated rounded-lg inline-flex gap-1">
@@ -349,12 +527,14 @@ export default function FriendsPage() {
             />
             {searchTerm && (
               <button onClick={() => setSearchTerm('')} className="text-gs-text-muted hover:text-gs-text-main">
-                <X size={13} />
+                <X size={12} />
               </button>
             )}
           </div>
 
-          {loading ? <FriendSkeleton count={4} /> : (
+          {loading ? (
+            <FriendSkeleton count={6} />
+          ) : (
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredFriends.map(friend => (
@@ -366,7 +546,7 @@ export default function FriendsPage() {
                       <div className="flex items-start gap-3 mb-2.5">
                         <div className="relative">
                           <div className="w-10 h-10 rounded-full bg-white/[0.04] border border-gs-border flex items-center justify-center text-sm font-medium text-gs-text-main">
-                            {friend.avatar || 'ðŸ‘¤'}
+                            {friend.avatar || '👤'}
                           </div>
                           <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-gs-card ${
                             friend.status === 'online' ? 'bg-emerald-400' : 'bg-zinc-500'
@@ -378,25 +558,22 @@ export default function FriendsPage() {
                           </h3>
                           <p className="text-[11px] text-gs-text-muted truncate mt-0.5">{friend.course} · {friend.college}</p>
                           <p className="text-[10px] text-gs-text-muted mt-0.5">
-                            {friend.status === 'online' ? (
-                              <span className="text-emerald-400">Active now</span>
-                            ) : (
-                              'Offline'
-                            )}
+                            Connected {timeAgo(friend.since)}
                           </p>
                         </div>
                       </div>
 
-                      {/* Neutral skill tags */}
-                      <div className="mb-3">
+                      {/* Skills */}
+                      <div className="space-y-1 mb-3">
+                        <span className="text-[10px] text-gs-text-muted font-medium uppercase tracking-wider block">Tech Stack</span>
                         <div className="flex flex-wrap gap-1">
-                          {(friend.skills || []).slice(0, 3).map((s) => (
-                            <span key={s} className="tag-skill">
-                              {s}
+                          {(friend.skills || []).slice(0, 3).map((skill) => (
+                            <span key={skill} className="tag-skill">
+                              {skill}
                             </span>
                           ))}
                           {(friend.skills || []).length > 3 && (
-                            <span className="px-1.5 py-0.5 text-gs-text-muted text-[10px] bg-white/[0.02] border border-gs-border rounded-md">
+                            <span className="px-1.5 py-0.2 bg-white/[0.04] border border-gs-border text-gs-text-muted text-[10px] rounded">
                               +{friend.skills.length - 3}
                             </span>
                           )}
@@ -557,7 +734,7 @@ export default function FriendsPage() {
               >
                 <div>
                   <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/[0.04] border border-gs-border flex items-center justify-center text-xl mx-auto mb-2">
-                    {sugg.avatar || 'ðŸŽ“'}
+                    {sugg.avatar || '🎓'}
                   </div>
                   <h3 className="font-medium text-xs text-gs-text-main">{sugg.name}</h3>
                   <p className="text-[11px] text-gs-text-muted">{sugg.course}</p>
@@ -595,5 +772,3 @@ export default function FriendsPage() {
     </div>
   );
 }
-
-
