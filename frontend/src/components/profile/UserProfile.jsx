@@ -17,17 +17,17 @@ import { getCredibilityBreakdown, getEndorsements } from '@/lib/services/profile
 import { getUserBadges } from '@/lib/services/quizService';
 
 
-// â”€â”€â”€ Sub-components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Sub-components ─────────────────────────────────────────────────────────
 
 const StatCard = ({ value, label, color = 'text-gs-text-main' }) => (
-  <div className="bg-gs-card border border-gs-border rounded-xl p-4 text-left shadow-xs">
+  <div className="glass-card rounded-xl p-4 text-left shadow-xs">
     <div className="text-xs font-medium text-gs-text-muted">{label}</div>
     <div className={`text-2xl font-bold font-heading mt-1 ${color}`}>{value}</div>
   </div>
 );
 
 const HoloPanel = ({ children, className = '' }) => (
-  <div className={`bg-gs-card border border-gs-border rounded-xl p-5 shadow-xs ${className}`}>
+  <div className={`glass-card rounded-xl p-5 shadow-xs ${className}`}>
     {children}
   </div>
 );
@@ -39,7 +39,7 @@ const Toggle = ({ checked, onChange }) => (
   </button>
 );
 
-// â”€â”€â”€ Overview Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Overview Tab ──────────────────────────────────────────────────────────
 
 function OverviewTab({ user, factions, isEditing, formData, setFormData, onAddSkill }) {
   const { groups } = useAppContext();
@@ -62,7 +62,7 @@ function OverviewTab({ user, factions, isEditing, formData, setFormData, onAddSk
       {/* Quick Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard value={groupsJoined} label="Groups Joined" color="text-blue-500" />
-        <StatCard value={credibility ? `${credibility.total}%` : 'â€”'} label="Credibility Score" color="text-emerald-500" />
+        <StatCard value={credibility ? `${credibility.total}%` : '—'} label="Credibility Score" color="text-emerald-500" />
         <StatCard value={badges.length} label="Badges Earned" color="text-amber-500" />
         <StatCard value="#12" label="Campus Rank" color="text-gs-text-main" />
       </div>
@@ -217,7 +217,7 @@ function OverviewTab({ user, factions, isEditing, formData, setFormData, onAddSk
                     <span>{s}</span>
                     {endorseCount > 0 && (
                       <span className="text-[10px] font-semibold text-amber-500 bg-amber-500/10 px-1 rounded-sm" title={`${endorseCount} peer endorsement${endorseCount > 1 ? 's' : ''}`}>
-                        â˜… {endorseCount}
+                        ★ {endorseCount}
                       </span>
                     )}
                   </span>
@@ -362,12 +362,12 @@ function OverviewTab({ user, factions, isEditing, formData, setFormData, onAddSk
   );
 }
 
-// â”€â”€â”€ Events Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Events Tab ───────────────────────────────────────────────────────────────
 const MOCK_EVENTS = [
   { id: 1, name: 'Spring Hackathon 2025', date: 'Mar 15, 2025', type: 'Hackathon', status: 'attended', result: '2nd Place ðŸ¥ˆ' },
   { id: 2, name: 'AI Summit', date: 'Feb 10, 2025', type: 'Conference', status: 'attended', result: 'Participant' },
   { id: 3, name: '48h Game Jam', date: 'Jan 20, 2025', type: 'Game Jam', status: 'rsvpd', result: "RSVP'd" },
-  { id: 4, name: 'UI/UX Workshop', date: 'Dec 5, 2024', type: 'Workshop', status: 'attended', result: 'Completed âœ“' },
+  { id: 4, name: 'UI/UX Workshop', date: 'Dec 5, 2024', type: 'Workshop', status: 'attended', result: 'Completed ✓' },
   { id: 5, name: 'Web3 Weekend', date: 'Nov 12, 2024', type: 'Hackathon', status: 'past', result: 'Did not attend' },
 ];
 
@@ -394,7 +394,7 @@ function EventsTab() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-gs-text-main truncate">{event.name}</p>
-                <p className="text-xs text-gs-text-muted">{event.date} Â· {event.type}</p>
+                <p className="text-xs text-gs-text-muted">{event.date} · {event.type}</p>
               </div>
               <div className="text-right shrink-0">
                 <span className={`text-sm font-medium ${statusColors[event.status]}`}>{event.result}</span>
@@ -408,9 +408,9 @@ function EventsTab() {
   );
 }
 
-// â”€â”€â”€ Teams Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Teams Tab ────────────────────────────────────────────────────────────────
 const MOCK_TEAMS = [
-  { id: 1, name: 'Quantum Hackers', event: 'Spring Hackathon', members: 4, role: 'Frontend Lead', status: 'current', emoji: 'âš¡' },
+  { id: 1, name: 'Quantum Hackers', event: 'Spring Hackathon', members: 4, role: 'Frontend Lead', status: 'current', emoji: '⚡' },
   { id: 2, name: 'Design Wizards', event: 'UI/UX Challenge', members: 3, role: 'Member', status: 'past', emoji: 'ðŸŽ¨' },
 ];
 const MOCK_INVITES = [
@@ -434,7 +434,7 @@ function TeamsTab({ showToast }) {
               <div className="w-12 h-12 rounded-2xl bg-gs-bg border border-gs-border flex items-center justify-center text-2xl">{team.emoji}</div>
               <div className="flex-1">
                 <p className="font-bold text-gs-text-main">{team.name}</p>
-                <p className="text-sm text-gs-text-muted">{team.event} Â· {team.members} members</p>
+                <p className="text-sm text-gs-text-muted">{team.event} · {team.members} members</p>
               </div>
               <span className="px-3 py-1 bg-gs-primary/10 text-gs-primary border border-gs-primary/30 rounded-full text-xs font-medium">{team.role}</span>
             </HoloPanel>
@@ -450,7 +450,7 @@ function TeamsTab({ showToast }) {
               <div className="w-12 h-12 rounded-2xl bg-gs-bg border border-gs-border flex items-center justify-center text-2xl">{team.emoji}</div>
               <div className="flex-1">
                 <p className="font-bold text-gs-text-main">{team.name}</p>
-                <p className="text-sm text-gs-text-muted">{team.event} Â· {team.members} members</p>
+                <p className="text-sm text-gs-text-muted">{team.event} · {team.members} members</p>
               </div>
             </HoloPanel>
           ))}
@@ -466,7 +466,7 @@ function TeamsTab({ showToast }) {
                 <div className="w-12 h-12 rounded-2xl bg-gs-bg border border-gs-border flex items-center justify-center text-2xl">{invite.emoji}</div>
                 <div className="flex-1">
                   <p className="font-bold text-gs-text-main">{invite.team}</p>
-                  <p className="text-sm text-gs-text-muted">{invite.event} Â· Invited by {invite.from}</p>
+                  <p className="text-sm text-gs-text-muted">{invite.event} · Invited by {invite.from}</p>
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => showToast('Invitation accepted!')} className="px-4 py-2 bg-gs-green text-white rounded-xl text-sm font-bold hover:brightness-110 transition-all">Accept</button>
@@ -481,13 +481,13 @@ function TeamsTab({ showToast }) {
   );
 }
 
-// â”€â”€â”€ Achievements Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Achievements Tab ─────────────────────────────────────────────────────────
 const BADGES = [
   { emoji: 'ðŸ†', label: 'Hack Winner', desc: 'Won Spring Hackathon 2025', unlocked: true },
   { emoji: 'ðŸ¤', label: 'Team Player', desc: 'Joined 3 groups', unlocked: true },
   { emoji: 'ðŸ”¥', label: 'On Fire', desc: 'Active 7 days straight', unlocked: false },
   { emoji: 'ðŸš€', label: 'Launcher', desc: 'Submit first project', unlocked: false },
-  { emoji: 'â­', label: 'Star Contributor', desc: 'Top 10 leaderboard', unlocked: false },
+  { emoji: '⭐', label: 'Star Contributor', desc: 'Top 10 leaderboard', unlocked: false },
   { emoji: 'ðŸŽ¯', label: 'Sharp Focus', desc: 'Complete 5 events', unlocked: false },
 ];
 
@@ -537,7 +537,7 @@ function AchievementsTab() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-sm text-gs-text-main truncate">{cert.name}</p>
-                <p className="text-xs text-gs-text-muted">{cert.issuer} Â· {cert.date}</p>
+                <p className="text-xs text-gs-text-muted">{cert.issuer} · {cert.date}</p>
               </div>
               <ChevronRight size={16} className="text-gs-text-muted shrink-0" />
             </HoloPanel>
@@ -548,7 +548,7 @@ function AchievementsTab() {
   );
 }
 
-// â”€â”€â”€ Settings Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Settings Tab ─────────────────────────────────────────────────────────────
 function SettingsTab({ logout: handleLogout, showToast }) {
   const [notifs, setNotifs] = useState({ events: true, teams: true, messages: true, leaderboard: false });
   const [privacy, setPrivacy] = useState({ publicProfile: true, showSkills: true, showEmail: false });
@@ -641,7 +641,7 @@ function SettingsTab({ logout: handleLogout, showToast }) {
 
       {showLogoutModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="bg-gs-card border border-gs-border rounded-xl p-6 max-w-sm w-full shadow-xl">
+          <div className="glass-card rounded-xl p-6 max-w-sm w-full shadow-xl">
             <div className="text-center">
               <div className="w-12 h-12 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mx-auto mb-3">
                 <LogOut size={22} className="text-red-500" />
@@ -660,7 +660,7 @@ function SettingsTab({ logout: handleLogout, showToast }) {
   );
 }
 
-// â”€â”€â”€ Tabs Config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Tabs Config ──────────────────────────────────────────────────────────────
 const TABS = [
   { id: 'overview', label: 'Overview', icon: User },
   { id: 'events', label: 'Events', icon: Calendar },
@@ -669,7 +669,7 @@ const TABS = [
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
-// â”€â”€â”€ Main UserProfile Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Main UserProfile Component ───────────────────────────────────────────────
 export default function UserProfile() {
   const navigate = useNavigate();
   const { user, setUser, updateLocalUser, factions, showToast, logout } = useAppContext();
@@ -735,8 +735,8 @@ export default function UserProfile() {
 
   return (
     <div className="relative space-y-6 w-full pb-20">
-      {/* â”€â”€ Profile Hero â”€â”€ */}
-      <div className="bg-gs-card border border-gs-border rounded-xl p-6 md:p-8">
+      {/* ── Profile Hero ── */}
+      <div className="glass-card rounded-xl p-6 md:p-8">
         <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
           {/* Avatar */}
           <div className="shrink-0">
@@ -803,7 +803,7 @@ export default function UserProfile() {
               {isEditing ? (
                 <>
                   <button onClick={handleSaveProfile} disabled={isSaving}
-                    className="px-4 py-2 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium rounded-lg transition-colors flex items-center gap-1.5 text-xs shadow-xs disabled:opacity-50 btn-tactile">
+                    className="px-4 py-2 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium rounded-lg transition-colors flex items-center gap-1.5 text-xs shadow-xs disabled:opacity-50 btn-tactile">
                     {isSaving ? <Loader2 className="animate-spin" size={14} /> : <Save size={14} />}
                     {isSaving ? 'Saving...' : 'Save Changes'}
                   </button>
@@ -815,7 +815,7 @@ export default function UserProfile() {
               ) : (
                 <div className="flex gap-2">
                   <button onClick={() => navigate('/profile/edit')}
-                    className="px-4 py-2 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium rounded-lg transition-colors flex items-center gap-1.5 text-xs shadow-xs btn-tactile">
+                    className="px-4 py-2 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium rounded-lg transition-colors flex items-center gap-1.5 text-xs shadow-xs btn-tactile">
                     <Edit3 size={14} /> Edit Profile
                   </button>
                   <button onClick={() => setIsEditing(true)}
@@ -829,7 +829,7 @@ export default function UserProfile() {
         </div>
       </div>
 
-      {/* â”€â”€ Tab Navigation â”€â”€ */}
+      {/* ── Tab Navigation ── */}
       <div className="flex gap-6 border-b border-gs-border overflow-x-auto pb-px">
         {TABS.map(tab => {
           const Icon = tab.icon;
@@ -838,7 +838,7 @@ export default function UserProfile() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 py-3 text-xs font-medium transition-colors relative whitespace-nowrap ${isActive ? 'text-[#6D6AF6]' : 'text-gs-text-muted hover:text-gs-text-main'}`}
+              className={`flex items-center gap-2 py-3 text-xs font-medium transition-colors relative whitespace-nowrap ${isActive ? 'text-[#9182f8]' : 'text-gs-text-muted hover:text-gs-text-main'}`}
             >
               <Icon size={15} />
               <span>{tab.label}</span>
@@ -853,7 +853,7 @@ export default function UserProfile() {
         })}
       </div>
 
-      {/* â”€â”€ Tab Content â”€â”€ */}
+      {/* ── Tab Content ── */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeTab}
@@ -879,4 +879,5 @@ export default function UserProfile() {
     </div>
   );
 }
+
 

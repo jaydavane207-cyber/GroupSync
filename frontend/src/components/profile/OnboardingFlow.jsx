@@ -55,7 +55,7 @@ export default function OnboardingFlow({ onComplete }) {
                   type="text" 
                   value={profile.name} 
                   onChange={e => setProfile({...profile, name: e.target.value})} 
-                  className="w-full bg-black/5 dark:bg-white/5 border border-gs-border rounded-lg px-3.5 py-2 text-xs outline-none focus:border-[#6D6AF6] transition-colors text-gs-text-main placeholder-gs-text-muted" 
+                  className="w-full bg-black/5 dark:bg-white/5 border border-gs-border rounded-lg px-3.5 py-2 text-xs outline-none focus:border-[#7c6af6] transition-colors text-gs-text-main placeholder-gs-text-muted" 
                   placeholder="e.g. Alex Chen" 
                 />
               </div>
@@ -66,7 +66,7 @@ export default function OnboardingFlow({ onComplete }) {
                   type="text" 
                   value={profile.college} 
                   onChange={e => setProfile({...profile, college: e.target.value})} 
-                  className="w-full bg-black/5 dark:bg-white/5 border border-gs-border rounded-lg px-3.5 py-2 text-xs outline-none focus:border-[#6D6AF6] transition-colors text-gs-text-main placeholder-gs-text-muted" 
+                  className="w-full bg-black/5 dark:bg-white/5 border border-gs-border rounded-lg px-3.5 py-2 text-xs outline-none focus:border-[#7c6af6] transition-colors text-gs-text-main placeholder-gs-text-muted" 
                   placeholder="e.g. Stanford University" 
                 />
               </div>
@@ -77,7 +77,7 @@ export default function OnboardingFlow({ onComplete }) {
                   type="tel" 
                   value={profile.phone} 
                   onChange={e => setProfile({...profile, phone: e.target.value})} 
-                  className="w-full bg-black/5 dark:bg-white/5 border border-gs-border rounded-lg px-3.5 py-2 text-xs outline-none focus:border-[#6D6AF6] transition-colors text-gs-text-main placeholder-gs-text-muted" 
+                  className="w-full bg-black/5 dark:bg-white/5 border border-gs-border rounded-lg px-3.5 py-2 text-xs outline-none focus:border-[#7c6af6] transition-colors text-gs-text-main placeholder-gs-text-muted" 
                   placeholder="e.g. +1 234 567 8900" 
                 />
               </div>
@@ -90,7 +90,7 @@ export default function OnboardingFlow({ onComplete }) {
                       key={y} 
                       type="button"
                       onClick={() => setProfile({...profile, year: y})} 
-                      className={"px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors cursor-pointer " + (profile.year === y ? "bg-[#6D6AF6] text-white border-[#6D6AF6] shadow-xs" : "bg-black/5 dark:bg-white/5 border-gs-border text-gs-text-muted hover:text-gs-text-main hover:border-gs-border/80")}
+                      className={"px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors cursor-pointer " + (profile.year === y ? "bg-[#6D6AF6] text-white border-[#7c6af6] shadow-xs" : "bg-black/5 dark:bg-white/5 border-gs-border text-gs-text-muted hover:text-gs-text-main hover:border-gs-border/80")}
                     >
                       {y}
                     </button>
@@ -102,7 +102,7 @@ export default function OnboardingFlow({ onComplete }) {
             <button 
               disabled={!profile.name || !profile.college || !profile.phone} 
               onClick={handleNext} 
-              className="w-full py-2 mt-2 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium rounded-lg text-xs transition-colors shadow-xs disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer btn-tactile"
+              className="w-full py-2 mt-2 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium rounded-lg text-xs transition-colors shadow-xs disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer btn-tactile"
             >
               Continue
             </button>
@@ -133,7 +133,7 @@ export default function OnboardingFlow({ onComplete }) {
                     onClick={() => toggleItem(skills, setSkills, s)} 
                     className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors cursor-pointer ${
                       isSelected 
-                        ? "bg-[#6D6AF6]/10 border-[#6D6AF6]/40 text-[#6D6AF6]" 
+                        ? "bg-[#6D6AF6]/10 border-[#7c6af6]/40 text-[#9182f8]" 
                         : "bg-[var(--color-gs-bg)] border-[var(--color-gs-border)] text-[var(--color-gs-text-muted)] hover:text-[var(--color-gs-text-main)] hover:border-white/20"
                     }`}
                   >
@@ -146,7 +146,7 @@ export default function OnboardingFlow({ onComplete }) {
             <button 
               disabled={skills.length === 0} 
               onClick={handleNext} 
-              className="w-full py-2.5 mt-3 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium rounded-lg text-xs transition-colors shadow-xs disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 cursor-pointer btn-tactile"
+              className="w-full py-2.5 mt-3 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium rounded-lg text-xs transition-colors shadow-xs disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 cursor-pointer btn-tactile"
             >
               Next Step <ChevronRight size={15} />
             </button>
@@ -177,7 +177,7 @@ export default function OnboardingFlow({ onComplete }) {
                     onClick={() => toggleItem(interests, setInterests, i)} 
                     className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors cursor-pointer ${
                       isSelected 
-                        ? "bg-[#6D6AF6]/10 border-[#6D6AF6]/40 text-[#6D6AF6]" 
+                        ? "bg-[#6D6AF6]/10 border-[#7c6af6]/40 text-[#9182f8]" 
                         : "bg-[var(--color-gs-bg)] border-[var(--color-gs-border)] text-[var(--color-gs-text-muted)] hover:text-[var(--color-gs-text-main)] hover:border-white/20"
                     }`}
                   >
@@ -190,7 +190,7 @@ export default function OnboardingFlow({ onComplete }) {
             <button 
               disabled={interests.length === 0} 
               onClick={handleNext} 
-              className="w-full py-2.5 mt-3 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium rounded-lg text-xs transition-colors shadow-xs disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 cursor-pointer btn-tactile"
+              className="w-full py-2.5 mt-3 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium rounded-lg text-xs transition-colors shadow-xs disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 cursor-pointer btn-tactile"
             >
               Next Step <ChevronRight size={15} />
             </button>
@@ -232,12 +232,12 @@ export default function OnboardingFlow({ onComplete }) {
                           }} 
                           className={`p-3 text-left rounded-xl border transition-colors flex items-center justify-between text-xs cursor-pointer ${
                             isSelected 
-                              ? "bg-[#6D6AF6]/10 border-[#6D6AF6]/40 text-[var(--color-gs-text-main)] font-medium" 
+                              ? "bg-[#6D6AF6]/10 border-[#7c6af6]/40 text-[var(--color-gs-text-main)] font-medium" 
                               : "bg-[var(--color-gs-bg)] border-[var(--color-gs-border)] text-[var(--color-gs-text-muted)] hover:border-white/20 hover:text-[var(--color-gs-text-main)]"
                           }`}
                         >
                           <span>{opt.t}</span>
-                          {isSelected && <Check size={14} className="text-[#6D6AF6] shrink-0 ml-2" />}
+                          {isSelected && <Check size={14} className="text-[#9182f8] shrink-0 ml-2" />}
                         </button>
                       );
                     })}
@@ -249,7 +249,7 @@ export default function OnboardingFlow({ onComplete }) {
             <button 
               disabled={quizAnswers.includes(null)} 
               onClick={handleNext} 
-              className="w-full py-2.5 mt-3 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium rounded-lg text-xs transition-colors shadow-xs disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 cursor-pointer btn-tactile"
+              className="w-full py-2.5 mt-3 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium rounded-lg text-xs transition-colors shadow-xs disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 cursor-pointer btn-tactile"
             >
               Reveal House <ChevronRight size={15} />
             </button>
@@ -280,7 +280,7 @@ export default function OnboardingFlow({ onComplete }) {
                     onClick={() => setAvatar(av)} 
                     className={`text-3xl aspect-square flex items-center justify-center rounded-xl border transition-colors cursor-pointer ${
                       isSelected 
-                        ? "bg-[#6D6AF6]/10 border-[#6D6AF6] shadow-xs" 
+                        ? "bg-[#6D6AF6]/10 border-[#7c6af6] shadow-xs" 
                         : "bg-[var(--color-gs-bg)] border-[var(--color-gs-border)] hover:border-white/20"
                     }`}
                   >
@@ -292,7 +292,7 @@ export default function OnboardingFlow({ onComplete }) {
 
             <button 
               onClick={handleNext} 
-              className="w-full py-2.5 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium rounded-lg text-xs transition-colors shadow-xs flex items-center justify-center gap-1.5 cursor-pointer btn-tactile"
+              className="w-full py-2.5 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium rounded-lg text-xs transition-colors shadow-xs flex items-center justify-center gap-1.5 cursor-pointer btn-tactile"
             >
               Complete Setup <ChevronRight size={15} />
             </button>
@@ -314,7 +314,7 @@ export default function OnboardingFlow({ onComplete }) {
               <h1 className="text-2xl font-bold text-[var(--color-gs-text-main)] tracking-tight">{f.name}</h1>
             </div>
 
-            <div className="w-20 h-20 rounded-xl mx-auto flex items-center justify-center bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 text-[#6D6AF6]">
+            <div className="w-20 h-20 rounded-xl mx-auto flex items-center justify-center bg-[#7c6af6]/15 border border-[#7c6af6]/30 text-[#9182f8]">
               <FactionIcon size={38} />
             </div>
 
@@ -324,7 +324,7 @@ export default function OnboardingFlow({ onComplete }) {
 
             <button 
               onClick={() => onComplete({ ...profile, skills, interests, avatar, faction: assignedFaction })} 
-              className="w-full py-2.5 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium rounded-lg text-xs transition-colors shadow-xs flex items-center justify-center gap-1.5 cursor-pointer btn-tactile"
+              className="w-full py-2.5 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium rounded-lg text-xs transition-colors shadow-xs flex items-center justify-center gap-1.5 cursor-pointer btn-tactile"
             >
               Enter GroupSync <ChevronRight size={15} />
             </button>
@@ -358,4 +358,5 @@ export default function OnboardingFlow({ onComplete }) {
     </div>
   );
 }
+
 

@@ -21,7 +21,7 @@ function FriendSkeleton({ count = 4 }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="bg-gs-card border border-gs-border rounded-xl p-4 animate-pulse">
+        <div key={i} className="glass-card rounded-xl p-4 animate-pulse">
           <div className="flex items-start gap-3 mb-3">
             <div className="w-10 h-10 rounded-full bg-black/10 dark:bg-white/10 shrink-0" />
             <div className="flex-1">
@@ -295,14 +295,14 @@ export default function FriendsPage() {
         <button
           onClick={() => setRetry(r => r + 1)}
           title="Refresh"
-          className="p-2 bg-gs-card border border-gs-border rounded-lg text-gs-text-muted hover:text-gs-text-main hover:bg-black/5 dark:hover:bg-white/[0.04] transition-colors"
+          className="p-2 glass-card rounded-lg text-gs-text-muted hover:text-gs-text-main hover:bg-black/5 dark:hover:bg-white/[0.04] transition-colors"
         >
           <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
         </button>
       </div>
 
       {/* Segmented Control Tabs */}
-      <div className="segmented-control p-1 bg-gs-elevated border border-gs-border rounded-lg inline-flex gap-1">
+      <div className="segmented-control p-1 glass-elevated rounded-lg inline-flex gap-1">
         {[
           { id: 'friends', label: 'My friends', count: friends.length, icon: Users2 },
           { id: 'requests', label: 'Incoming requests', count: requests.length, icon: UserPlus, badge: requests.length },
@@ -317,7 +317,7 @@ export default function FriendsPage() {
                 : 'text-gs-text-muted hover:text-gs-text-main'
             }`}
           >
-            <t.icon size={13} className={tab === t.id ? 'text-[#6D6AF6]' : 'text-gs-text-muted'} />
+            <t.icon size={13} className={tab === t.id ? 'text-[#9182f8]' : 'text-gs-text-muted'} />
             <span>{t.label}</span>
             <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-semibold ${
               t.badge && t.badge > 0
@@ -338,7 +338,7 @@ export default function FriendsPage() {
       {/* Tab: Friends */}
       {tab === 'friends' && !error && (
         <div className="space-y-4">
-          <div className="flex items-center gap-2.5 bg-gs-card border border-gs-border rounded-lg px-3 py-1.5 focus-within:border-[#6D6AF6] focus-within:ring-1 focus-within:ring-[#6D6AF6] transition-colors">
+          <div className="flex items-center gap-2.5 glass-card rounded-lg px-3 py-1.5 focus-within:border-[#7c6af6] focus-within:ring-1 focus-within:ring-[#6D6AF6] transition-colors">
             <Search className="text-gs-text-muted shrink-0" size={14} />
             <input 
               type="text" 
@@ -360,7 +360,7 @@ export default function FriendsPage() {
                 {filteredFriends.map(friend => (
                   <div 
                     key={friend.id}
-                    className="bg-gs-card border border-gs-border rounded-xl p-4 shadow-xs flex flex-col justify-between hover:border-gs-border-hover transition-colors machined-edge"
+                    className="glass-card rounded-xl p-4 shadow-xs flex flex-col justify-between hover:border-gs-border-hover transition-colors machined-edge"
                   >
                     <div>
                       <div className="flex items-start gap-3 mb-2.5">
@@ -376,7 +376,7 @@ export default function FriendsPage() {
                           <h3 className="font-semibold text-xs text-gs-text-main truncate">
                             {friend.name}
                           </h3>
-                          <p className="text-[11px] text-gs-text-muted truncate mt-0.5">{friend.course} Â· {friend.college}</p>
+                          <p className="text-[11px] text-gs-text-muted truncate mt-0.5">{friend.course} · {friend.college}</p>
                           <p className="text-[10px] text-gs-text-muted mt-0.5">
                             {friend.status === 'online' ? (
                               <span className="text-emerald-400">Active now</span>
@@ -410,7 +410,7 @@ export default function FriendsPage() {
                         onClick={() => navigate(`/messages/${friend.id}`)}
                         className="flex-1 py-1.5 border border-gs-border hover:border-gs-border-hover rounded-lg font-medium text-xs text-gs-text-main hover:bg-white/[0.04] transition-colors flex items-center justify-center gap-1.5 btn-tactile"
                       >
-                        <MessageSquare size={13} className="text-[#6D6AF6]" /> Message
+                        <MessageSquare size={13} className="text-[#9182f8]" /> Message
                       </button>
                       <button 
                         onClick={() => navigate(`/public-profile`, { state: { profileId: friend.id } })}
@@ -432,7 +432,7 @@ export default function FriendsPage() {
               </div>
 
               {filteredFriends.length === 0 && (
-                <div className="text-center py-12 bg-gs-card border border-gs-border rounded-xl p-6">
+                <div className="text-center py-12 glass-card rounded-xl p-6">
                   <Users2 size={32} className="mx-auto text-gs-text-muted opacity-40 mb-2" />
                   <p className="text-sm font-semibold text-gs-text-main">
                     {friends.length === 0 ? 'No connections yet' : 'No friends match your search'}
@@ -463,7 +463,7 @@ export default function FriendsPage() {
           {loading ? (
             <FriendSkeleton count={2} />
           ) : requests.length === 0 ? (
-            <div className="text-center py-12 bg-gs-card border border-gs-border rounded-xl p-6">
+            <div className="text-center py-12 glass-card rounded-xl p-6">
               <UserCheck size={32} className="mx-auto text-gs-text-muted opacity-40 mb-2" />
               <p className="text-sm font-semibold text-gs-text-main">No pending requests</p>
               <p className="text-xs text-gs-text-muted mt-0.5">You are all caught up on invitations.</p>
@@ -472,7 +472,7 @@ export default function FriendsPage() {
             requests.map(req => (
               <div 
                 key={req.friendshipId}
-                className="bg-gs-card border border-gs-border rounded-xl p-4 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
+                className="glass-card rounded-xl p-4 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
               >
                 <div className="flex items-start gap-3 flex-1 min-w-0">
                   <div className="w-10 h-10 rounded-full bg-black/5 dark:bg-white/[0.04] border border-gs-border flex items-center justify-center text-lg shrink-0">
@@ -485,7 +485,7 @@ export default function FriendsPage() {
                         <Clock size={10} /> {timeAgo(req.createdAt)}
                       </span>
                     </div>
-                    <p className="text-[11px] text-gs-text-muted">{req.course} Â· {req.college}</p>
+                    <p className="text-[11px] text-gs-text-muted">{req.course} · {req.college}</p>
                     <div className="flex flex-wrap gap-1 mt-1.5">
                       {(req.skills || []).slice(0, 3).map(s => (
                         <span key={s} className="px-1.5 py-0.2 bg-black/5 dark:bg-white/[0.04] border border-gs-border text-gs-text-muted text-[10px] rounded">
@@ -505,7 +505,7 @@ export default function FriendsPage() {
                   <button
                     onClick={() => handleAcceptRequest(req)}
                     disabled={!!actionStates[req.friendshipId]}
-                    className="flex-1 sm:flex-none px-3 py-1.5 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium rounded-lg text-xs transition-colors flex items-center justify-center gap-1 shadow-xs disabled:opacity-60 btn-tactile"
+                    className="flex-1 sm:flex-none px-3 py-1.5 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium rounded-lg text-xs transition-colors flex items-center justify-center gap-1 shadow-xs disabled:opacity-60 btn-tactile"
                   >
                     {actionStates[req.friendshipId] === 'accepting'
                       ? <RefreshCw size={12} className="animate-spin" />
@@ -534,7 +534,7 @@ export default function FriendsPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {loading ? (
             Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="bg-gs-card border border-gs-border rounded-xl p-4 animate-pulse text-center">
+              <div key={i} className="glass-card rounded-xl p-4 animate-pulse text-center">
                 <div className="w-12 h-12 rounded-full bg-black/10 dark:bg-white/10 mx-auto mb-2" />
                 <div className="h-3.5 bg-black/10 dark:bg-white/10 rounded w-1/2 mx-auto mb-1.5" />
                 <div className="h-3 bg-black/10 dark:bg-white/10 rounded w-1/3 mx-auto mb-3" />
@@ -542,7 +542,7 @@ export default function FriendsPage() {
               </div>
             ))
           ) : suggestions.length === 0 ? (
-            <div className="col-span-3 text-center py-12 bg-gs-card border border-gs-border rounded-xl p-6">
+            <div className="col-span-3 text-center py-12 glass-card rounded-xl p-6">
               <Compass size={32} className="mx-auto text-gs-text-muted opacity-40 mb-2" />
               <p className="text-sm font-semibold text-gs-text-main">No suggestions right now</p>
               <p className="text-xs text-gs-text-muted mt-0.5">
@@ -553,7 +553,7 @@ export default function FriendsPage() {
             suggestions.map(sugg => (
               <div 
                 key={sugg.id}
-                className="bg-gs-card border border-gs-border rounded-xl p-4 shadow-sm flex flex-col justify-between text-center hover:border-blue-500/40 transition-colors"
+                className="glass-card rounded-xl p-4 shadow-sm flex flex-col justify-between text-center hover:border-blue-500/40 transition-colors"
               >
                 <div>
                   <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/[0.04] border border-gs-border flex items-center justify-center text-xl mx-auto mb-2">
@@ -564,7 +564,7 @@ export default function FriendsPage() {
                   <p className="text-[10px] text-gs-text-muted mt-0.5">{sugg.college}</p>
 
                   {sugg.skillOverlap?.length > 0 && (
-                    <p className="text-[10px] text-[#7E7BF8] bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 rounded-full py-0.5 px-2 mt-2 font-medium inline-block">
+                    <p className="text-[10px] text-[#7E7BF8] bg-[#7c6af6]/15 border border-[#7c6af6]/30 rounded-full py-0.5 px-2 mt-2 font-medium inline-block">
                       {sugg.skillOverlap.length} shared skill{sugg.skillOverlap.length > 1 ? 's' : ''}
                     </p>
                   )}
@@ -581,7 +581,7 @@ export default function FriendsPage() {
                 <button
                   onClick={() => handleAddFriend(sugg)}
                   disabled={!!actionStates[sugg.id]}
-                  className="mt-4 w-full py-2 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium rounded-lg text-xs transition-colors flex items-center justify-center gap-1 shadow-xs disabled:opacity-60 btn-tactile"
+                  className="mt-4 w-full py-2 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium rounded-lg text-xs transition-colors flex items-center justify-center gap-1 shadow-xs disabled:opacity-60 btn-tactile"
                 >
                   {actionStates[sugg.id] === 'sending'
                     ? <><RefreshCw size={12} className="animate-spin" /> Sending...</>
@@ -595,4 +595,5 @@ export default function FriendsPage() {
     </div>
   );
 }
+
 

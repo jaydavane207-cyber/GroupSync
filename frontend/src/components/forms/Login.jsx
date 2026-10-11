@@ -120,9 +120,9 @@ export default function Login({ onNavigate, onLogin }) {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-full bg-gs-bg p-4 relative">
-      <div className="w-full max-w-md rounded-xl p-6 sm:p-8 z-10 bg-gs-card border border-gs-border shadow-xs machined-edge">
+      <div className="w-full max-w-md rounded-xl p-6 sm:p-8 z-10 glass-card shadow-xs machined-edge">
         <div className="flex flex-col items-center mb-6">
-          <div className="w-10 h-10 rounded-lg bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 flex items-center justify-center text-[#6D6AF6] mb-3 shadow-xs">
+          <div className="w-10 h-10 rounded-lg bg-[#7c6af6]/15 border border-[#7c6af6]/30 flex items-center justify-center text-[#9182f8] mb-3 shadow-xs">
              <Layers size={18} />
           </div>
           <h2 className="text-xl font-bold font-heading text-gs-text-main text-center">Welcome Back</h2>
@@ -148,7 +148,7 @@ export default function Login({ onNavigate, onLogin }) {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full bg-black/5 dark:bg-white/5 border border-gs-border rounded-lg pl-9 pr-3 py-2 text-xs outline-none focus:border-[#6D6AF6] transition-colors text-gs-text-main placeholder-gs-text-muted" 
+                className="w-full rounded-lg pl-9 pr-3 py-2 text-xs outline-none focus:border-[#7c6af6] transition-colors text-gs-text-main placeholder-gs-text-muted" 
                 placeholder="student@university.edu" 
               />
             </div>
@@ -157,7 +157,7 @@ export default function Login({ onNavigate, onLogin }) {
           <div>
             <div className="flex justify-between items-center mb-1.5">
               <label className="block text-xs font-medium text-gs-text-main">Password</label>
-              <button type="button" onClick={() => setShowForgotPassword(true)} className="text-xs text-[#6D6AF6] hover:underline cursor-pointer">Forgot password?</button>
+              <button type="button" onClick={() => setShowForgotPassword(true)} className="text-xs text-[#9182f8] hover:underline cursor-pointer">Forgot password?</button>
             </div>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -169,13 +169,13 @@ export default function Login({ onNavigate, onLogin }) {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                className="w-full bg-black/5 dark:bg-white/5 border border-gs-border rounded-lg pl-9 pr-3 py-2 text-xs outline-none focus:border-[#6D6AF6] transition-colors text-gs-text-main placeholder-gs-text-muted" 
-                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" 
+                className="w-full rounded-lg pl-9 pr-3 py-2 text-xs outline-none focus:border-[#7c6af6] transition-colors text-gs-text-main placeholder-gs-text-muted" 
+                placeholder="••••••••" 
               />
             </div>
           </div>
 
-          <button type="submit" disabled={isSubmitting} className="w-full py-2.5 mt-6 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium text-xs rounded-lg transition-colors shadow-xs flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer btn-tactile">
+          <button type="submit" disabled={isSubmitting} className="w-full py-2.5 mt-6 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium text-xs rounded-lg transition-colors shadow-xs flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer btn-tactile">
             {isSubmitting ? 'Signing In...' : 'Sign In'} {!isSubmitting && <ArrowRight size={14} />}
           </button>
         </form>
@@ -189,7 +189,7 @@ export default function Login({ onNavigate, onLogin }) {
         <button 
           type="button"
           onClick={handleGoogleLogin} 
-          className="w-full py-2 bg-gs-card border border-gs-border text-gs-text-main font-medium rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex items-center justify-center gap-2.5 mb-4 text-xs shadow-xs cursor-pointer"
+          className="w-full py-2 glass-card text-gs-text-main font-medium rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex items-center justify-center gap-2.5 mb-4 text-xs shadow-xs cursor-pointer"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24">
             <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -202,7 +202,7 @@ export default function Login({ onNavigate, onLogin }) {
 
         <p className="text-center text-gs-text-muted mt-5 text-xs">
           Don't have an account?{' '}
-          <button onClick={() => onNavigate('signup')} className="text-[#6D6AF6] hover:underline font-medium transition-colors cursor-pointer">
+          <button onClick={() => onNavigate('signup')} className="text-[#9182f8] hover:underline font-medium transition-colors cursor-pointer">
             Sign up
           </button>
         </p>
@@ -211,7 +211,7 @@ export default function Login({ onNavigate, onLogin }) {
       {/* Forgot Password Modal */}
       {showForgotPassword && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="bg-gs-card border border-gs-border rounded-xl p-6 max-w-sm w-full shadow-2xl relative">
+          <div className="glass-card rounded-xl p-6 max-w-sm w-full shadow-2xl relative">
             <div className="flex justify-between items-center mb-3">
               <h3 className="text-base font-bold text-gs-text-main font-heading">Reset Password</h3>
               <button onClick={() => setShowForgotPassword(false)} className="text-gs-text-muted hover:text-gs-text-main transition-colors cursor-pointer"><X size={16} /></button>
@@ -224,7 +224,7 @@ export default function Login({ onNavigate, onLogin }) {
                 value={forgotEmail}
                 onChange={e => setForgotEmail(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleForgotPassword()}
-                className="w-full bg-black/5 dark:bg-white/5 border border-gs-border rounded-lg pl-9 pr-3 py-2 text-xs outline-none focus:border-[#6D6AF6] transition-colors text-gs-text-main placeholder-gs-text-muted"
+                className="w-full rounded-lg pl-9 pr-3 py-2 text-xs outline-none focus:border-[#7c6af6] transition-colors text-gs-text-main placeholder-gs-text-muted"
                 placeholder="your@university.edu"
                 autoFocus
               />
@@ -232,7 +232,7 @@ export default function Login({ onNavigate, onLogin }) {
             <button
               onClick={handleForgotPassword}
               disabled={isSendingReset}
-              className="w-full py-2 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium text-xs rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-xs cursor-pointer btn-tactile"
+              className="w-full py-2 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium text-xs rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_16px_rgba(124,106,246,0.28)] cursor-pointer btn-tactile"
             >
               {isSendingReset ? 'Sending...' : 'Send Reset Link'}
             </button>
@@ -242,4 +242,5 @@ export default function Login({ onNavigate, onLogin }) {
     </div>
   );
 }
+
 

@@ -23,7 +23,7 @@ export default function OnboardingPage() {
     if (success) {
       navigate('/dashboard', { replace: true });
     }
-    // If failed, setUser already shows an error toast â€” stay on page
+    // If failed, setUser already shows an error toast — stay on page
   };
 
   return (

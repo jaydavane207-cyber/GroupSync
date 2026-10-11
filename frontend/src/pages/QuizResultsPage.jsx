@@ -46,7 +46,7 @@ export default function QuizResultsPage() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
-      {/* â”€â”€ Score & Celebration Hero â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Score & Celebration Hero ─────────────────────────────── */}
       <div className="rounded-xl p-8 md:p-10 text-center border bg-[var(--color-gs-card)] border-[var(--color-gs-border)] shadow-sm">
         <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4 bg-black/5 dark:bg-white/5 border border-gs-border mx-auto">
           {passed ? (
@@ -68,7 +68,7 @@ export default function QuizResultsPage() {
         {/* Percentage & Stats */}
         <div className="flex justify-center items-center gap-4 mb-8 flex-wrap">
           <div className="bg-black/5 dark:bg-white/5 border border-gs-border rounded-xl px-5 py-3 text-center min-w-[110px]">
-            <div className="text-2xl font-semibold text-[#6D6AF6] font-heading tabular-nums">
+            <div className="text-2xl font-semibold text-[#9182f8] font-heading tabular-nums">
               {Math.round(percentage)}%
             </div>
             <div className="text-[11px] text-gs-text-muted font-medium mt-0.5">Final Score</div>
@@ -100,14 +100,14 @@ export default function QuizResultsPage() {
           {passed ? (
             <button
               onClick={() => navigate('/badges')}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#6D6AF6] hover:bg-[#5C59EC] text-white text-xs font-medium transition-colors shadow-xs cursor-pointer btn-tactile"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white text-xs font-medium transition-colors shadow-xs cursor-pointer btn-tactile"
             >
               <Award size={14} /> View Badges
             </button>
           ) : (
             <button
               onClick={() => navigate(`/quiz/${quizId}/take`)}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#6D6AF6] hover:bg-[#5C59EC] text-white text-xs font-medium transition-colors shadow-xs cursor-pointer btn-tactile"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white text-xs font-medium transition-colors shadow-xs cursor-pointer btn-tactile"
             >
               <RotateCcw size={14} /> Retake Quiz
             </button>
@@ -115,9 +115,9 @@ export default function QuizResultsPage() {
         </div>
       </div>
 
-      {/* â”€â”€ Verified Certificate Card (if passed) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Verified Certificate Card (if passed) ─────────────────── */}
       {passed && (
-        <div className="bg-gs-card border border-gs-border rounded-xl p-6 md:p-8 space-y-5 shadow-xs">
+        <div className="glass-card rounded-xl p-6 md:p-8 space-y-5 shadow-xs">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <h2 className="text-base font-semibold text-gs-text-main font-heading">Verified Skill Certificate</h2>
@@ -137,7 +137,7 @@ export default function QuizResultsPage() {
             className="p-8 rounded-xl border border-gs-border bg-black/5 dark:bg-white/5 shadow-xs relative overflow-hidden"
           >
             <div className="text-center space-y-4 relative z-10 py-4">
-              <div className="text-xs font-semibold tracking-wider text-[#6D6AF6] uppercase">
+              <div className="text-xs font-semibold tracking-wider text-[#9182f8] uppercase">
                 GroupSync Skill Certification
               </div>
               <h3 className="text-xl md:text-2xl font-semibold text-gs-text-main font-heading">
@@ -170,8 +170,8 @@ export default function QuizResultsPage() {
         </div>
       )}
 
-      {/* â”€â”€ Question Review â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-      <div className="bg-gs-card border border-gs-border rounded-xl p-6 md:p-8 space-y-5 shadow-xs">
+      {/* ── Question Review ──────────────────────────────────────── */}
+      <div className="glass-card rounded-xl p-6 md:p-8 space-y-5 shadow-xs">
         <h2 className="text-base font-semibold text-gs-text-main font-heading">
           Question Review
         </h2>
@@ -191,7 +191,7 @@ export default function QuizResultsPage() {
               >
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <span className="font-medium text-xs text-gs-text-main">
-                    <span className="text-[#6D6AF6] mr-2 font-semibold">Q{idx + 1}.</span>
+                    <span className="text-[#9182f8] mr-2 font-semibold">Q{idx + 1}.</span>
                     {q.question_text}
                   </span>
                   {isCorrect ? (
@@ -220,7 +220,7 @@ export default function QuizResultsPage() {
 
                 {q.explanation && (
                   <div className="mt-2.5 text-xs text-gs-text-muted bg-black/5 dark:bg-white/5 p-2.5 rounded-lg border border-gs-border">
-                    <span className="font-semibold text-[#6D6AF6] mr-1">Explanation:</span>
+                    <span className="font-semibold text-[#9182f8] mr-1">Explanation:</span>
                     {q.explanation}
                   </div>
                 )}
@@ -232,4 +232,5 @@ export default function QuizResultsPage() {
     </div>
   );
 }
+
 

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { CheckCircle, XCircle, AlertCircle, Info, X } from 'lucide-react';
 
 export const Toast = ({ message, type = 'success', onClose }) => {
@@ -6,14 +6,14 @@ export const Toast = ({ message, type = 'success', onClose }) => {
     success: <CheckCircle className="text-emerald-400 w-4 h-4 shrink-0" />,
     error: <XCircle className="text-rose-400 w-4 h-4 shrink-0" />,
     warning: <AlertCircle className="text-amber-400 w-4 h-4 shrink-0" />,
-    info: <Info className="text-[#6D6AF6] w-4 h-4 shrink-0" />,
+    info: <Info className="text-[#9182f8] w-4 h-4 shrink-0" />,
   };
 
   const borders = {
     success: 'border-emerald-500/20',
     error: 'border-rose-500/30 text-rose-300',
     warning: 'border-amber-500/30 text-amber-300',
-    info: 'border-[#6D6AF6]/30 text-gs-text-main',
+    info: 'border-[#7c6af6]/30 text-gs-text-main',
   };
 
   return (
@@ -34,3 +34,4 @@ export const Toast = ({ message, type = 'success', onClose }) => {
 };
 
 export default Toast;
+

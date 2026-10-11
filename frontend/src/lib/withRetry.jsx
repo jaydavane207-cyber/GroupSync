@@ -1,4 +1,4 @@
-/**
+﻿/**
  * withRetry — Supabase call wrapper with exponential backoff & error normalization
  *
  * Usage:
@@ -157,7 +157,7 @@ function sleep(ms) {
 export function ErrorCard({ message, onRetry, className = '' }) {
   return (
     <div className={`text-center py-16 bg-gs-card border border-rose-500/30 rounded-xl p-8 ${className}`}>
-      <div className="text-4xl mb-4">⚠️</div>
+      <div className="text-4xl mb-4">⚠️ï¸</div>
       <p className="text-lg font-bold text-gs-text-main mb-2">Something went wrong</p>
       <p className="text-sm text-gs-text-muted mb-6 max-w-xs mx-auto">{message}</p>
       {onRetry && (
@@ -181,7 +181,7 @@ export function SkeletonCard({ count = 6, className = '' }) {
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className={`bg-gs-card border border-gs-border rounded-xl p-6 animate-pulse ${className}`}
+          className={`glass-card rounded-xl p-6 animate-pulse ${className}`}
         >
           <div className="flex items-start justify-between mb-4">
             <div className="w-14 h-14 rounded-lg bg-gs-bg" />
@@ -203,3 +203,4 @@ export function SkeletonCard({ count = 6, className = '' }) {
     </>
   );
 }
+

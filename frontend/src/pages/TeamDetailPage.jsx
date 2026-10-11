@@ -244,7 +244,7 @@ export default function TeamDetailPage() {
       </button>
 
       {/* Team Header Card */}
-      <div className="bg-gs-card border border-gs-border rounded-xl p-5 md:p-6 shadow-sm">
+      <div className="glass-card rounded-xl p-5 md:p-6 shadow-sm">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 border-b border-gs-border">
           <div className="flex items-start gap-3.5">
             <div className="w-12 h-12 rounded-lg bg-black/5 dark:bg-white/[0.04] border border-gs-border flex items-center justify-center text-2xl shrink-0">
@@ -272,7 +272,7 @@ export default function TeamDetailPage() {
                 {team.name}
               </h1>
               <p className="text-xs text-gs-text-muted">
-                Organized by {team.leader?.name || 'Campus Student'} Â· Formed {new Date(team.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
+                Organized by {team.leader?.name || 'Campus Student'} · Formed {new Date(team.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
               </p>
             </div>
           </div>
@@ -315,7 +315,7 @@ export default function TeamDetailPage() {
                 <button
                   onClick={() => setShowApplyModal(true)}
                   disabled={spotsLeft === 0}
-                  className="px-4 py-2 rounded-lg bg-[#6D6AF6] hover:bg-[#5C59EC] text-white text-xs font-medium transition-colors flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed shadow-xs cursor-pointer btn-tactile"
+                  className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white text-xs font-medium transition-colors flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed shadow-xs cursor-pointer btn-tactile"
                 >
                   Apply to join
                 </button>
@@ -325,7 +325,7 @@ export default function TeamDetailPage() {
             {isMember && (
               <button
                 onClick={() => navigate('/chat')}
-                className="px-3.5 py-1.5 rounded-lg bg-[#6D6AF6] hover:bg-[#5C59EC] text-white text-xs font-medium transition-colors flex items-center gap-1.5 shadow-xs btn-tactile"
+                className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white text-xs font-medium transition-colors flex items-center gap-1.5 shadow-xs btn-tactile"
               >
                 <MessageSquare size={13} /> Team chat
               </button>
@@ -360,7 +360,7 @@ export default function TeamDetailPage() {
           onClick={() => setActiveTab('roster')}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
             activeTab === 'roster'
-              ? 'bg-[#6D6AF6]/10 text-[#6D6AF6] border-[#6D6AF6]/30'
+              ? 'bg-[#6D6AF6]/10 text-[#9182f8] border-[#7c6af6]/30'
               : 'border-transparent text-gs-text-muted hover:text-gs-text-main'
           }`}
         >
@@ -373,7 +373,7 @@ export default function TeamDetailPage() {
               onClick={() => setActiveTab('applications')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border relative ${
                 activeTab === 'applications'
-                  ? 'bg-[#6D6AF6]/10 text-[#6D6AF6] border-[#6D6AF6]/30'
+                  ? 'bg-[#6D6AF6]/10 text-[#9182f8] border-[#7c6af6]/30'
                   : 'border-transparent text-gs-text-muted hover:text-gs-text-main'
               }`}
             >
@@ -389,7 +389,7 @@ export default function TeamDetailPage() {
               onClick={() => setActiveTab('invite')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
                 activeTab === 'invite'
-                  ? 'bg-[#6D6AF6]/10 text-[#6D6AF6] border-[#6D6AF6]/30'
+                  ? 'bg-[#6D6AF6]/10 text-[#9182f8] border-[#7c6af6]/30'
                   : 'border-transparent text-gs-text-muted hover:text-gs-text-main'
               }`}
             >
@@ -410,7 +410,7 @@ export default function TeamDetailPage() {
             return (
               <div
                 key={m.id}
-                className="bg-gs-card border border-gs-border rounded-xl p-4 flex items-start justify-between gap-3 shadow-sm"
+                className="glass-card rounded-xl p-4 flex items-start justify-between gap-3 shadow-sm"
               >
                 <div className="flex items-start gap-3">
                   <div className="w-9 h-9 rounded-lg bg-black/5 dark:bg-white/[0.04] border border-gs-border flex items-center justify-center text-lg shrink-0">
@@ -463,7 +463,7 @@ export default function TeamDetailPage() {
       {activeTab === 'applications' && isLeader && (
         <div className="space-y-3">
           {applications.length === 0 ? (
-            <div className="p-8 text-center bg-gs-card border border-gs-border rounded-xl text-gs-text-muted text-xs">
+            <div className="p-8 text-center glass-card rounded-xl text-gs-text-muted text-xs">
               No applications submitted yet.
             </div>
           ) : (
@@ -475,7 +475,7 @@ export default function TeamDetailPage() {
               return (
                 <div
                   key={app.id}
-                  className="bg-gs-card border border-gs-border rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 shadow-sm"
+                  className="glass-card rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 shadow-sm"
                 >
                   <div className="flex items-start gap-3">
                     <div className="w-9 h-9 rounded-lg bg-black/5 dark:bg-white/[0.04] border border-gs-border flex items-center justify-center text-lg shrink-0">
@@ -497,7 +497,7 @@ export default function TeamDetailPage() {
                         <div className="flex gap-1 pt-1">
                           {badges.map(b => (
                             <span key={b.id} className="text-[10px] text-blue-500 font-medium">
-                              âœ“ {b.badge_name}
+                              ✓ {b.badge_name}
                             </span>
                           ))}
                         </div>
@@ -515,7 +515,7 @@ export default function TeamDetailPage() {
                       </button>
                       <button
                         onClick={() => handleReviewApp(app.id, app.applicant_id, 'accepted')}
-                        className="px-3 py-1 rounded-lg bg-[#6D6AF6] hover:bg-[#5C59EC] text-white text-xs font-medium transition-colors flex items-center gap-1 shadow-xs btn-tactile"
+                        className="px-3 py-1 rounded-lg bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white text-xs font-medium transition-colors flex items-center gap-1 shadow-xs btn-tactile"
                       >
                         <Check size={13} /> Accept
                       </button>
@@ -530,7 +530,7 @@ export default function TeamDetailPage() {
 
       {/* TAB 3: Invite Students */}
       {activeTab === 'invite' && isLeader && (
-        <div className="bg-gs-card border border-gs-border rounded-xl p-5 space-y-4 shadow-sm">
+        <div className="glass-card rounded-xl p-5 space-y-4 shadow-sm">
           <div>
             <h3 className="text-sm font-semibold text-gs-text-main">Invite campus peers</h3>
             <p className="text-xs text-gs-text-muted mt-0.5">Search verified students and send invitations.</p>
@@ -544,13 +544,13 @@ export default function TeamDetailPage() {
                 placeholder="Type name to search..."
                 value={inviteSearch}
                 onChange={e => setInviteSearch(e.target.value)}
-                className="w-full bg-gs-elevated border border-gs-border rounded-lg px-3 py-1.5 text-xs text-gs-text-main outline-none focus:border-[#6D6AF6]"
+                className="w-full glass-elevated rounded-lg px-3 py-1.5 text-xs text-gs-text-main outline-none focus:border-[#7c6af6]"
               />
             </div>
 
             {/* Matching students list */}
             {inviteSearch.trim() && (
-              <div className="max-h-40 overflow-y-auto bg-gs-elevated border border-gs-border rounded-lg p-1.5 space-y-1">
+              <div className="max-h-40 overflow-y-auto glass-elevated rounded-lg p-1.5 space-y-1">
                 {(students || [])
                   .filter(s => s.id !== user?.id && s.name.toLowerCase().includes(inviteSearch.toLowerCase()))
                   .map(s => {
@@ -560,7 +560,7 @@ export default function TeamDetailPage() {
                         key={s.id}
                         onClick={() => setSelectedStudent(s)}
                         className={`flex items-center gap-2.5 p-1.5 rounded cursor-pointer text-xs transition-colors ${
-                          isSelected ? 'bg-[#6D6AF6]/10 text-[#6D6AF6] font-medium' : 'text-gs-text-muted hover:text-gs-text-main hover:bg-white/[0.04]'
+                          isSelected ? 'bg-[#6D6AF6]/10 text-[#9182f8] font-medium' : 'text-gs-text-muted hover:text-gs-text-main hover:bg-white/[0.04]'
                         }`}
                       >
                         <span className="text-sm">{s.avatar || 'ðŸ‘¤'}</span>
@@ -568,7 +568,7 @@ export default function TeamDetailPage() {
                           <p className="font-medium text-gs-text-main">{s.name}</p>
                           <p className="text-[10px] text-gs-text-muted">{s.college || 'Student'}</p>
                         </div>
-                        {isSelected && <Check size={13} className="text-[#6D6AF6]" />}
+                        {isSelected && <Check size={13} className="text-[#9182f8]" />}
                       </div>
                     );
                   })}
@@ -576,9 +576,9 @@ export default function TeamDetailPage() {
             )}
 
             {selectedStudent && (
-              <div className="p-2.5 bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 rounded-lg text-xs text-[#6D6AF6] flex items-center justify-between">
+              <div className="p-2.5 bg-[#7c6af6]/15 border border-[#7c6af6]/30 rounded-lg text-xs text-[#9182f8] flex items-center justify-between">
                 <span>Selected: <strong>{selectedStudent.name}</strong></span>
-                <button type="button" onClick={() => setSelectedStudent(null)} className="text-gs-text-muted hover:text-gs-text-main">âœ•</button>
+                <button type="button" onClick={() => setSelectedStudent(null)} className="text-gs-text-muted hover:text-gs-text-main">✕</button>
               </div>
             )}
 
@@ -589,14 +589,14 @@ export default function TeamDetailPage() {
                 placeholder="We'd love to have your frontend expertise on our upcoming hackathon team..."
                 value={inviteMessage}
                 onChange={e => setInviteMessage(e.target.value)}
-                className="w-full bg-gs-elevated border border-gs-border rounded-lg p-2 text-xs text-gs-text-main outline-none focus:border-[#6D6AF6] resize-none"
+                className="w-full glass-elevated rounded-lg p-2 text-xs text-gs-text-main outline-none focus:border-[#7c6af6] resize-none"
               />
             </div>
 
             <button
               type="submit"
               disabled={!selectedStudent || isInviting}
-              className="px-4 py-2 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white text-xs font-medium rounded-lg transition-colors flex items-center gap-1.5 disabled:opacity-40 shadow-xs btn-tactile"
+              className="px-4 py-2 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white text-xs font-medium rounded-lg transition-colors flex items-center gap-1.5 disabled:opacity-40 shadow-xs btn-tactile"
             >
               {isInviting ? <Loader2 size={13} className="animate-spin" /> : <Send size={13} />}
               Send invitation
@@ -608,7 +608,7 @@ export default function TeamDetailPage() {
       {/* Modal: Apply to Team */}
       {showApplyModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
-          <div className="bg-gs-card border border-gs-border rounded-xl p-5 max-w-md w-full shadow-xl space-y-3.5">
+          <div className="glass-card rounded-xl p-5 max-w-md w-full shadow-xl space-y-3.5">
             <div className="border-b border-gs-border pb-2.5">
               <h3 className="text-base font-semibold text-gs-text-main">Apply to {team.name}</h3>
               <p className="text-xs text-gs-text-muted mt-0.5">Share how your skills and background fit this squad.</p>
@@ -623,7 +623,7 @@ export default function TeamDetailPage() {
                   placeholder="Explain why you're interested and what you can contribute..."
                   value={applyMessage}
                   onChange={e => setApplyMessage(e.target.value)}
-                  className="w-full bg-gs-elevated border border-gs-border rounded-lg p-2.5 text-xs text-gs-text-main outline-none focus:border-[#6D6AF6] resize-none"
+                  className="w-full glass-elevated rounded-lg p-2.5 text-xs text-gs-text-main outline-none focus:border-[#7c6af6] resize-none"
                 />
               </div>
 
@@ -638,7 +638,7 @@ export default function TeamDetailPage() {
                 <button
                   type="submit"
                   disabled={isApplying}
-                  className="flex-1 py-1.5 rounded-lg bg-[#6D6AF6] hover:bg-[#5C59EC] text-white text-xs font-medium transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50 shadow-xs btn-tactile"
+                  className="flex-1 py-1.5 rounded-lg bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white text-xs font-medium transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50 shadow-xs btn-tactile"
                 >
                   {isApplying ? <Loader2 size={13} className="animate-spin" /> : 'Send application'}
                 </button>
@@ -651,7 +651,7 @@ export default function TeamDetailPage() {
       {/* Modal: Edit Team */}
       {showEditModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
-          <div className="bg-gs-card border border-gs-border rounded-xl p-5 max-w-md w-full shadow-xl space-y-3.5">
+          <div className="glass-card rounded-xl p-5 max-w-md w-full shadow-xl space-y-3.5">
             <div className="border-b border-gs-border pb-2.5">
               <h3 className="text-base font-semibold text-gs-text-main">Edit squad details</h3>
               <p className="text-xs text-gs-text-muted mt-0.5">Update squad name, goals, and capacity.</p>
@@ -665,7 +665,7 @@ export default function TeamDetailPage() {
                   required
                   value={editForm.name}
                   onChange={e => setEditForm({ ...editForm, name: e.target.value })}
-                  className="w-full bg-gs-elevated border border-gs-border rounded-lg px-3 py-1.5 text-xs text-gs-text-main outline-none focus:border-[#6D6AF6]"
+                  className="w-full glass-elevated rounded-lg px-3 py-1.5 text-xs text-gs-text-main outline-none focus:border-[#7c6af6]"
                 />
               </div>
 
@@ -675,7 +675,7 @@ export default function TeamDetailPage() {
                   rows={3}
                   value={editForm.description}
                   onChange={e => setEditForm({ ...editForm, description: e.target.value })}
-                  className="w-full bg-gs-elevated border border-gs-border rounded-lg p-2.5 text-xs text-gs-text-main outline-none focus:border-[#6D6AF6] resize-none"
+                  className="w-full glass-elevated rounded-lg p-2.5 text-xs text-gs-text-main outline-none focus:border-[#7c6af6] resize-none"
                 />
               </div>
 
@@ -702,7 +702,7 @@ export default function TeamDetailPage() {
                 <button
                   type="submit"
                   disabled={isUpdating}
-                  className="flex-1 py-1.5 rounded-lg bg-[#6D6AF6] hover:bg-[#5C59EC] text-white text-xs font-medium transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50 shadow-xs btn-tactile"
+                  className="flex-1 py-1.5 rounded-lg bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white text-xs font-medium transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50 shadow-xs btn-tactile"
                 >
                   {isUpdating ? <Loader2 size={13} className="animate-spin" /> : 'Save changes'}
                 </button>
@@ -714,4 +714,5 @@ export default function TeamDetailPage() {
     </div>
   );
 }
+
 

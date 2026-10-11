@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layers, Menu, X, Sun, Moon } from 'lucide-react';
 import { useAppContext } from '@/context/AppContext';
 
@@ -36,13 +36,17 @@ export default function Navbar({ currentPage, onNavigate }) {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-200 ${scrolled ? 'bg-gs-card/95 backdrop-blur-md border-b border-gs-border shadow-xs' : 'bg-transparent border-transparent'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      scrolled
+        ? 'glass-navbar'
+        : 'bg-transparent border-transparent'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           
           {/* Logo */}
-          <button onClick={() => handleNav('home')} className="flex items-center gap-2.5 text-left cursor-pointer">
-            <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 flex items-center justify-center text-[#6D6AF6] shadow-xs">
+          <button onClick={() => handleNav('home')} className="flex items-center gap-2.5 text-left cursor-pointer group">
+            <div className="w-8 h-8 rounded-lg bg-[#7c6af6]/15 border border-[#7c6af6]/30 flex items-center justify-center text-[#9182f8] shadow-[0_0_12px_rgba(124,106,246,0.25)] transition-all duration-200 group-hover:shadow-[0_0_20px_rgba(124,106,246,0.40)] group-hover:bg-[#7c6af6]/20">
               <Layers size={17} />
             </div>
             <div>
@@ -50,7 +54,7 @@ export default function Navbar({ currentPage, onNavigate }) {
                 <span className="text-base font-bold tracking-tight text-gs-text-main font-heading leading-tight">
                   GroupSync
                 </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#6D6AF6]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#7c6af6] shadow-[0_0_6px_rgba(124,106,246,0.8)]" />
               </div>
               <p className="text-[10px] text-gs-text-muted font-medium tracking-wide uppercase hidden sm:block">
                 Campus Talent Hub
@@ -65,32 +69,37 @@ export default function Navbar({ currentPage, onNavigate }) {
                 <button
                   key={link.id}
                   onClick={() => handleNav(link.id)}
-                  className={`text-xs font-medium transition-colors hover:text-[#6D6AF6] cursor-pointer ${
-                    currentPage === link.id ? 'text-[#6D6AF6] font-semibold' : 'text-gs-text-muted'
+                  className={`text-xs font-medium transition-all duration-200 hover:text-[#9182f8] cursor-pointer relative ${
+                    currentPage === link.id
+                      ? 'text-[#9182f8] font-semibold'
+                      : 'text-gs-text-muted'
                   }`}
                 >
                   {link.label}
+                  {currentPage === link.id && (
+                    <span className="absolute -bottom-0.5 left-0 right-0 h-px bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] rounded-full" />
+                  )}
                 </button>
               ))}
             </div>
             
-            <div className="flex items-center space-x-4 pl-6 border-l border-gs-border">
+            <div className="flex items-center space-x-4 pl-6 border-l border-white/10">
               <button
                 onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-                className="text-gs-text-muted hover:text-gs-text-main transition-colors p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer"
+                className="text-gs-text-muted hover:text-gs-text-main transition-colors p-2 rounded-lg hover:bg-white/[0.06] cursor-pointer"
                 aria-label="Toggle Theme"
               >
                 {theme === 'light' ? <Moon size={15} /> : <Sun size={15} />}
               </button>
               <button 
                 onClick={() => handleNav('login')}
-                className="text-xs font-medium text-gs-text-main hover:text-[#6D6AF6] transition-colors cursor-pointer"
+                className="text-xs font-medium text-gs-text-main hover:text-[#9182f8] transition-colors cursor-pointer"
               >
                 Sign In
               </button>
               <button 
                 onClick={() => handleNav('signup')}
-                className="px-3.5 py-1.5 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white text-xs font-medium rounded-lg transition-colors shadow-xs cursor-pointer btn-tactile"
+                className="px-3.5 py-1.5 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white text-xs font-medium rounded-lg transition-all shadow-[0_0_16px_rgba(124,106,246,0.35)] hover:shadow-[0_0_24px_rgba(124,106,246,0.50)] cursor-pointer btn-tactile"
               >
                 Get Started
               </button>
@@ -118,28 +127,28 @@ export default function Navbar({ currentPage, onNavigate }) {
 
       {/* Mobile Menu Dropdown */}
       {isOpen && (
-        <div className="md:hidden bg-gs-card border-b border-gs-border px-4 pt-2 pb-6 space-y-3 backdrop-blur-xl">
+        <div className="md:hidden glass-navbar px-4 pt-2 pb-6 space-y-3">
           {links.map((link) => (
             <button
               key={link.id}
               onClick={() => handleNav(link.id)}
               className={`block w-full text-left py-2 text-sm font-medium ${
-                currentPage === link.id ? 'text-[#6D6AF6] font-semibold' : 'text-gs-text-muted'
+                currentPage === link.id ? 'text-[#9182f8] font-semibold' : 'text-gs-text-muted'
               }`}
             >
               {link.label}
             </button>
           ))}
-          <div className="pt-4 border-t border-gs-border flex flex-col gap-2">
+          <div className="pt-4 border-t border-white/10 flex flex-col gap-2">
             <button
               onClick={() => handleNav('login')}
-              className="w-full py-2 text-center text-xs font-medium text-gs-text-main border border-gs-border rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+              className="w-full py-2 text-center text-xs font-medium text-gs-text-main glass-card rounded-lg hover:border-white/20 transition-colors cursor-pointer"
             >
               Sign In
             </button>
             <button
               onClick={() => handleNav('signup')}
-              className="w-full py-2 text-center text-xs font-medium text-white bg-[#6D6AF6] hover:bg-[#5C59EC] rounded-lg transition-colors shadow-xs cursor-pointer btn-tactile"
+              className="w-full py-2 text-center text-xs font-medium text-white bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] rounded-lg shadow-[0_0_16px_rgba(124,106,246,0.35)] cursor-pointer btn-tactile"
             >
               Get Started
             </button>
@@ -149,4 +158,3 @@ export default function Navbar({ currentPage, onNavigate }) {
     </nav>
   );
 }
-

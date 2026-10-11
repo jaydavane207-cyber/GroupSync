@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Users, CheckCircle, Clock } from 'lucide-react';
 
 export const TeamStats = ({ totalMembers = 1, maxMembers = 6, tasksCompleted = 0 }) => {
@@ -14,10 +14,11 @@ export const TeamStats = ({ totalMembers = 1, maxMembers = 6, tasksCompleted = 0
       </div>
       <div className="glass-card p-4 text-center">
         <span className="text-[10px] text-gs-text-muted uppercase tracking-wider block mb-1">Open Slots</span>
-        <span className="text-base font-bold text-[#6D6AF6]">{Math.max(0, maxMembers - totalMembers)}</span>
+        <span className="text-base font-bold text-[#9182f8]">{Math.max(0, maxMembers - totalMembers)}</span>
       </div>
     </div>
   );
 };
 
 export default TeamStats;
+

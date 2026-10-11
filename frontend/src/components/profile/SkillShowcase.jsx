@@ -7,7 +7,7 @@ export const SkillShowcase = ({ skills = [], onAddSkill }) => {
       <div className="flex items-center justify-between mb-4">
         <h4 className="text-xs font-semibold text-gs-text-main">Verified Skills</h4>
         {onAddSkill && (
-          <button onClick={onAddSkill} className="text-xs text-[#6D6AF6] hover:underline">
+          <button onClick={onAddSkill} className="text-xs text-[#9182f8] hover:underline">
             + Verify Skill
           </button>
         )}
@@ -26,4 +26,5 @@ export const SkillShowcase = ({ skills = [], onAddSkill }) => {
 };
 
 export default SkillShowcase;
+
 

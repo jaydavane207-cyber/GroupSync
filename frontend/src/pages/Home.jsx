@@ -86,7 +86,7 @@ export default function Home({ onNavigate }) {
         
         {/* --- Hero Section --- */}
         <section className="pt-24 pb-8 md:pt-36 md:pb-16 flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-[#6D6AF6]/10 text-[#6D6AF6] border border-[#6D6AF6]/20 mb-6">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-[#6D6AF6]/10 text-[#9182f8] border border-[#7c6af6]/20 mb-6">
             <GraduationCap size={13} />
             Collegiate Collaboration Network
           </div>
@@ -102,7 +102,7 @@ export default function Home({ onNavigate }) {
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <button 
               onClick={() => onNavigate('signup')}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white text-xs font-medium rounded-lg transition-colors shadow-xs cursor-pointer btn-tactile"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white text-xs font-medium rounded-lg transition-colors shadow-xs cursor-pointer btn-tactile"
             >
               Explore Campus Squads <ArrowRight size={14} />
             </button>
@@ -115,15 +115,15 @@ export default function Home({ onNavigate }) {
           </div>
 
           {/* Realistic Teammate Preview Card */}
-          <div className="mt-14 w-full max-w-3xl bg-gs-card border border-gs-border rounded-xl p-6 text-left shadow-xs machined-edge">
+          <div className="mt-14 w-full max-w-3xl glass-card rounded-xl p-6 text-left shadow-xs machined-edge">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-gs-border/60">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 flex items-center justify-center text-[#6D6AF6]">
+                <div className="w-10 h-10 rounded-lg bg-[#7c6af6]/15 border border-[#7c6af6]/30 flex items-center justify-center text-[#9182f8]">
                   <Cpu size={20} />
                 </div>
                 <div>
                   <h3 className="font-semibold text-sm text-gs-text-main font-heading">Autonomous Greenhouse Rover</h3>
-                  <p className="text-xs text-gs-text-muted">Interdisciplinary Engineering Capstone Â· Fall 2026</p>
+                  <p className="text-xs text-gs-text-muted">Interdisciplinary Engineering Capstone · Fall 2026</p>
                 </div>
               </div>
               <span className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
@@ -139,7 +139,7 @@ export default function Home({ onNavigate }) {
                 <span className="tag-skill font-mono">React Native</span>
               </div>
 
-              <span className="text-[#6D6AF6] font-medium flex items-center gap-1">
+              <span className="text-[#9182f8] font-medium flex items-center gap-1">
                 94% Technical Synergy <ChevronRight size={13} />
               </span>
             </div>
@@ -148,7 +148,7 @@ export default function Home({ onNavigate }) {
 
         {/* --- Stats Counter Grid --- */}
         <section>
-          <div className="bg-gs-card border border-gs-border rounded-xl p-6 sm:p-8 shadow-xs">
+          <div className="glass-card rounded-xl p-6 sm:p-8 shadow-xs">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-gs-border/60">
               {stats.map((s, i) => (
                 <div key={i} className={`text-center ${i > 0 ? 'pt-4 sm:pt-0' : ''}`}>
@@ -181,9 +181,9 @@ export default function Home({ onNavigate }) {
               return (
                 <div 
                   key={i} 
-                  className="bg-gs-card border border-gs-border rounded-xl p-6 shadow-xs hover:border-gs-border/80 transition-colors"
+                  className="glass-card rounded-xl p-6 shadow-xs hover:border-gs-border/80 transition-colors"
                 >
-                  <div className="w-9 h-9 rounded-lg bg-[#6D6AF6]/10 text-[#6D6AF6] flex items-center justify-center mb-4">
+                  <div className="w-9 h-9 rounded-lg bg-[#6D6AF6]/10 text-[#9182f8] flex items-center justify-center mb-4">
                     <Icon size={18} />
                   </div>
                   <h3 className="text-sm font-semibold text-gs-text-main mb-1.5 font-heading">{feature.title}</h3>
@@ -196,7 +196,7 @@ export default function Home({ onNavigate }) {
 
         {/* --- How it Works --- */}
         <section id="how-it-works" className="space-y-8">
-          <div className="bg-gs-card border border-gs-border rounded-xl p-8 sm:p-12 shadow-xs space-y-8">
+          <div className="glass-card rounded-xl p-8 sm:p-12 shadow-xs space-y-8">
             <div className="text-center max-w-xl mx-auto space-y-1.5">
               <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gs-text-main font-heading">
                 How It Works
@@ -209,7 +209,7 @@ export default function Home({ onNavigate }) {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {steps.map((step, i) => (
                 <div key={i} className="p-5 bg-black/5 dark:bg-white/5 border border-gs-border rounded-xl space-y-2">
-                  <span className="text-xs font-bold text-[#6D6AF6] font-mono">
+                  <span className="text-xs font-bold text-[#9182f8] font-mono">
                     Step {step.step}
                   </span>
                   <h3 className="text-sm font-semibold text-gs-text-main font-heading">{step.title}</h3>
@@ -231,7 +231,7 @@ export default function Home({ onNavigate }) {
           <div className="pt-2">
             <button 
               onClick={() => onNavigate('signup')}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white text-xs font-medium rounded-lg transition-colors shadow-xs cursor-pointer btn-tactile"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white text-xs font-medium rounded-lg transition-colors shadow-xs cursor-pointer btn-tactile"
             >
               Get Started for Free <ArrowRight size={14} />
             </button>
@@ -242,4 +242,5 @@ export default function Home({ onNavigate }) {
     </div>
   );
 }
+
 

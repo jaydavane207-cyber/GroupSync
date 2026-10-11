@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { 
   Target, 
   Rocket, 
@@ -92,7 +92,7 @@ export default function About() {
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-[#6D6AF6]/10 text-[#6D6AF6] border border-[#6D6AF6]/20">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-[#6D6AF6]/10 text-[#9182f8] border border-[#7c6af6]/20">
             <GraduationCap size={13} />
             About GroupSync
           </div>
@@ -106,8 +106,8 @@ export default function About() {
 
         {/* Mission & Vision */}
         <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-gs-card border border-gs-border rounded-xl p-7 shadow-xs space-y-3 machined-edge">
-            <div className="w-9 h-9 rounded-lg bg-[#6D6AF6]/10 text-[#6D6AF6] flex items-center justify-center">
+          <div className="glass-card rounded-xl p-7 shadow-xs space-y-3 machined-edge">
+            <div className="w-9 h-9 rounded-lg bg-[#6D6AF6]/10 text-[#9182f8] flex items-center justify-center">
               <Target size={18} />
             </div>
             <h2 className="text-base font-bold text-gs-text-main font-heading">Our Mission</h2>
@@ -116,8 +116,8 @@ export default function About() {
             </p>
           </div>
 
-          <div className="bg-gs-card border border-gs-border rounded-xl p-7 shadow-xs space-y-3 machined-edge">
-            <div className="w-9 h-9 rounded-lg bg-[#6D6AF6]/10 text-[#6D6AF6] flex items-center justify-center">
+          <div className="glass-card rounded-xl p-7 shadow-xs space-y-3 machined-edge">
+            <div className="w-9 h-9 rounded-lg bg-[#6D6AF6]/10 text-[#9182f8] flex items-center justify-center">
               <Rocket size={18} />
             </div>
             <h2 className="text-base font-bold text-gs-text-main font-heading">Our Vision</h2>
@@ -128,7 +128,7 @@ export default function About() {
         </div>
 
         {/* Impact by Numbers */}
-        <div className="bg-gs-card border border-gs-border rounded-xl p-6 sm:p-8 shadow-xs">
+        <div className="glass-card rounded-xl p-6 sm:p-8 shadow-xs">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-gs-border/60">
             <div className="text-center">
               <div className="text-3xl sm:text-4xl font-bold text-gs-text-main mb-1 font-heading tabular-nums">5,000+</div>
@@ -159,8 +159,8 @@ export default function About() {
             {values.map((v, i) => {
               const Icon = v.icon;
               return (
-                <div key={i} className="bg-gs-card border border-gs-border rounded-xl p-5 shadow-xs space-y-2 hover:border-gs-border/80 transition-colors">
-                  <div className="w-9 h-9 rounded-lg bg-[#6D6AF6]/10 text-[#6D6AF6] flex items-center justify-center">
+                <div key={i} className="glass-card rounded-xl p-5 shadow-xs space-y-2 hover:border-gs-border/80 transition-colors">
+                  <div className="w-9 h-9 rounded-lg bg-[#6D6AF6]/10 text-[#9182f8] flex items-center justify-center">
                     <Icon size={17} />
                   </div>
                   <h3 className="text-sm font-semibold text-gs-text-main font-heading">{v.title}</h3>
@@ -172,7 +172,7 @@ export default function About() {
         </div>
 
         {/* What Makes GroupSync Different */}
-        <div className="bg-gs-card border border-gs-border rounded-xl p-6 sm:p-10 shadow-xs space-y-6">
+        <div className="glass-card rounded-xl p-6 sm:p-10 shadow-xs space-y-6">
           <div className="text-center max-w-xl mx-auto space-y-1.5">
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gs-text-main font-heading">
               What Makes GroupSync Distinct
@@ -187,7 +187,7 @@ export default function About() {
               const Icon = d.icon;
               return (
                 <div key={i} className="flex gap-3.5 p-4 bg-black/5 dark:bg-white/5 border border-gs-border rounded-xl">
-                  <div className="w-9 h-9 rounded-lg bg-[#6D6AF6]/10 text-[#6D6AF6] flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 rounded-lg bg-[#6D6AF6]/10 text-[#9182f8] flex items-center justify-center shrink-0">
                     <Icon size={17} />
                   </div>
                   <div className="space-y-0.5">
@@ -211,7 +211,7 @@ export default function About() {
           <div className="pt-2">
             <button
               onClick={() => navigate('/signup')}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium text-xs rounded-lg transition-colors shadow-xs cursor-pointer btn-tactile"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium text-xs rounded-lg transition-colors shadow-xs cursor-pointer btn-tactile"
             >
               Get Started Free <ArrowRight size={14} />
             </button>
@@ -222,3 +222,4 @@ export default function About() {
     </div>
   );
 }
+

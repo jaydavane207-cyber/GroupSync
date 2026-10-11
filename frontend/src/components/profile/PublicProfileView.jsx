@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import supabase from '@/lib/supabase';
 
-// â”€â”€â”€ Mock Data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Mock Data ────────────────────────────────────────────────────────────────
 const MOCK_USER_PROFILE = {
   name: 'Aarav Sharma',
   avatarUrl: 'https://api.dicebear.com/9.x/notionists/svg?seed=Aarav&backgroundColor=0a0e1a',
@@ -30,7 +30,7 @@ const MOCK_USER_PROFILE = {
       name: 'UI/UX',
       is_verified: true,
       certificate_url: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800',
-      is_certificate_public: false, // Private â€” button must NOT render
+      is_certificate_public: false, // Private — button must NOT render
     },
     {
       name: 'Node.js',
@@ -46,7 +46,7 @@ const MOCK_USER_PROFILE = {
     },
     {
       name: 'Machine Learning',
-      is_verified: false, // Not verified â€” must be completely hidden
+      is_verified: false, // Not verified — must be completely hidden
       certificate_url: null,
       is_certificate_public: false,
     },
@@ -59,7 +59,7 @@ const MOCK_USER_PROFILE = {
   ],
 };
 
-// â”€â”€â”€ Skill color palette â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Skill color palette ──────────────────────────────────────────────────────
 const SKILL_COLORS = {
   'React':            { bg: 'rgba(59, 130, 246, 0.08)',  border: 'rgba(59, 130, 246, 0.25)',  text: '#3b82f6' },
   'Python':           { bg: 'rgba(59, 130, 246, 0.08)',  border: 'rgba(59, 130, 246, 0.25)',  text: '#3b82f6' },
@@ -79,7 +79,7 @@ const getSkillColor = (name) =>
     text: '#7c3aed',
   };
 
-// â”€â”€â”€ Helper: normalise a Supabase skill row â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Helper: normalise a Supabase skill row ───────────────────────────────────
 // Supabase relational queries (select with joins) can return nested objects.
 // e.g.  { skills: { name, is_verified, ... } }  or flat  { name, is_verified, ... }
 // This function always returns a flat, reliable skill object.
@@ -97,7 +97,7 @@ function normaliseSkill(raw) {
   };
 }
 
-// â”€â”€â”€ Certificate Lightbox (nested modal) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Certificate Lightbox (nested modal) ──────────────────────────────────────
 // Receives a raw URL string and renders image or PDF iframe accordingly.
 function CertificateLightbox({ url, skillName, onClose }) {
   // Close on Escape
@@ -201,7 +201,7 @@ function CertificateLightbox({ url, skillName, onClose }) {
   );
 }
 
-// â”€â”€â”€ Verified Skill Badge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Verified Skill Badge ─────────────────────────────────────────────────────
 function SkillBadge({ skill, onViewCert, index }) {
   const canViewCert = skill.certificate_url && skill.is_certificate_public;
 
@@ -227,14 +227,14 @@ function SkillBadge({ skill, onViewCert, index }) {
   );
 }
 
-// â”€â”€â”€ Main Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Main Component ───────────────────────────────────────────────────────────
 export default function PublicProfileView({ userProfile = MOCK_USER_PROFILE }) {
   const [viewingCertificate, setViewingCertificate] = useState(null);
   const [viewingSkillName, setViewingSkillName]     = useState('');
   const [eventHistory, setEventHistory]             = useState([]);
   const [xpRank, setXpRank]                         = useState(null); // rank among all users
 
-  // â”€â”€ Fetch real event results for this user â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Fetch real event results for this user ────────────────────────────────
   useEffect(() => {
     if (!userProfile?.id) return;
 
@@ -249,7 +249,7 @@ export default function PublicProfileView({ userProfile = MOCK_USER_PROFILE }) {
     };
 
     const fetchRank = async () => {
-      // Count how many users have more XP â†’ rank = count + 1
+      // Count how many users have more XP → rank = count + 1
       if (!userProfile.xp && userProfile.xp !== 0) return;
       const { count } = await supabase
         .from('profiles')
@@ -277,14 +277,14 @@ export default function PublicProfileView({ userProfile = MOCK_USER_PROFILE }) {
     handleViewCert(skill.certificate_url, skill.name);
   };
 
-  const placementEmoji = (p) => p === '1st' ? 'ðŸ¥‡' : p === '2nd' ? 'ðŸ¥ˆ' : p === '3rd' ? 'ðŸ¥‰' : 'âš¡';
+  const placementEmoji = (p) => p === '1st' ? 'ðŸ¥‡' : p === '2nd' ? 'ðŸ¥ˆ' : p === '3rd' ? 'ðŸ¥‰' : '⚡';
 
   return (
     <div className="relative w-full text-gs-text-main py-8">
       <div className="max-w-2xl mx-auto">
-        <div className="bg-gs-card border border-gs-border rounded-xl overflow-hidden shadow-xs">
+        <div className="glass-card rounded-xl overflow-hidden shadow-xs">
 
-          {/* â”€â”€ Header Banner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Header Banner ──────────────────────────── */}
           <div className="h-24 bg-black/[0.02] dark:bg-white/[0.02] border-b border-gs-border relative">
             <div className="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-gs-card border border-gs-border text-xs font-medium text-gs-text-muted">
               <Eye size={13} className="text-blue-500" />
@@ -292,7 +292,7 @@ export default function PublicProfileView({ userProfile = MOCK_USER_PROFILE }) {
             </div>
           </div>
 
-          {/* â”€â”€ Avatar (overlapping header) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Avatar (overlapping header) ────────────────────────── */}
           <div className="px-6 -mt-10 pb-0 flex items-end justify-between">
             <div className="relative">
               <div className="w-20 h-20 rounded-xl bg-gs-bg border-2 border-gs-card overflow-hidden shadow-xs">
@@ -309,7 +309,7 @@ export default function PublicProfileView({ userProfile = MOCK_USER_PROFILE }) {
             </div>
           </div>
 
-          {/* â”€â”€ Identity Block â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Identity Block ─────────────────────────────────────── */}
           <div className="px-6 pt-4 pb-6">
             <h1 className="text-2xl font-bold tracking-tight text-gs-text-main mb-1.5">
               {userProfile.name}
@@ -320,7 +320,7 @@ export default function PublicProfileView({ userProfile = MOCK_USER_PROFILE }) {
                 <GraduationCap size={14} className="text-blue-500" />
                 {userProfile.department}
               </span>
-              <span className="text-gs-border">â€¢</span>
+              <span className="text-gs-border">•</span>
               <span className="inline-flex items-center gap-1.5 font-medium">
                 <Clock size={14} className="text-indigo-500" />
                 {userProfile.year}
@@ -328,7 +328,7 @@ export default function PublicProfileView({ userProfile = MOCK_USER_PROFILE }) {
             </div>
           </div>
 
-          {/* â”€â”€ About Me â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── About Me ───────────────────────────────────────────── */}
           <div className="px-6 py-5 border-t border-gs-border">
             <h2 className="text-xs font-semibold uppercase tracking-wider text-gs-text-muted mb-2">
               About
@@ -338,7 +338,7 @@ export default function PublicProfileView({ userProfile = MOCK_USER_PROFILE }) {
             </p>
           </div>
 
-          {/* â”€â”€ Skills Showcase â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Skills Showcase ─────────────────────────────────────── */}
           <div className="px-6 py-5 border-t border-gs-border">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xs font-semibold uppercase tracking-wider text-gs-text-muted flex items-center gap-1.5">
@@ -376,7 +376,7 @@ export default function PublicProfileView({ userProfile = MOCK_USER_PROFILE }) {
             )}
           </div>
 
-          {/* â”€â”€ XP Rank + Event History â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── XP Rank + Event History ───────────────────────────── */}
           {(userProfile?.xp > 0 || eventHistory.length > 0) && (
             <div className="px-6 py-5 border-t border-gs-border">
               <div className="flex items-center justify-between mb-4">
@@ -402,7 +402,7 @@ export default function PublicProfileView({ userProfile = MOCK_USER_PROFILE }) {
               ) : (
                 <div className="space-y-2">
                   {eventHistory.map((result, i) => {
-                    const medalColor = result.placement === '1st' ? 'text-amber-400' : result.placement === '2nd' ? 'text-zinc-300' : result.placement === '3rd' ? 'text-amber-600' : 'text-[#6D6AF6]';
+                    const medalColor = result.placement === '1st' ? 'text-amber-400' : result.placement === '2nd' ? 'text-zinc-300' : result.placement === '3rd' ? 'text-amber-600' : 'text-[#9182f8]';
                     return (
                       <div
                         key={i}
@@ -414,11 +414,11 @@ export default function PublicProfileView({ userProfile = MOCK_USER_PROFILE }) {
                         <div className="flex-1 min-w-0">
                           <p className="font-medium text-gs-text-main text-xs truncate">{result.groups?.name || 'Event'}</p>
                           <p className="text-[11px] text-gs-text-muted">
-                            {result.groups?.type} Â· {new Date(result.awarded_at).toLocaleDateString()}
+                            {result.groups?.type} · {new Date(result.awarded_at).toLocaleDateString()}
                           </p>
                         </div>
                         <div className="text-right shrink-0">
-                          <span className="font-semibold text-[#6D6AF6] tabular-nums text-xs">+{result.xp_awarded} XP</span>
+                          <span className="font-semibold text-[#9182f8] tabular-nums text-xs">+{result.xp_awarded} XP</span>
                         </div>
                         <span className="text-[10px] font-semibold px-2 py-0.5 rounded border border-gs-border text-gs-text-muted bg-gs-card">
                           {result.placement}
@@ -433,7 +433,7 @@ export default function PublicProfileView({ userProfile = MOCK_USER_PROFILE }) {
         </div>
       </div>
 
-      {/* â”€â”€ Certificate Lightbox (nested modal, z-[100]) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Certificate Lightbox (nested modal, z-[100]) ──────────── */}
       <AnimatePresence>
         {viewingCertificate && (
           <CertificateLightbox
@@ -446,4 +446,5 @@ export default function PublicProfileView({ userProfile = MOCK_USER_PROFILE }) {
     </div>
   );
 }
+
 

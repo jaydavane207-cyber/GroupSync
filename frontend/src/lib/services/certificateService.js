@@ -1,5 +1,5 @@
 ﻿/**
- * certificateService.js â€” GroupSync Certificate Management
+ * certificateService.js — GroupSync Certificate Management
  * Upload, store, and display professional certificates with verification status.
  */
 import supabase from '@/lib/supabase';
@@ -8,7 +8,7 @@ import { withRetry } from '@/lib/withRetry';
 const CERT_BUCKET = 'certificates';
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
-// â”€â”€â”€ UPLOAD CERTIFICATE FILE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── UPLOAD CERTIFICATE FILE ──────────────────────────────────────────────────
 
 /**
  * Upload a certificate file (PDF/image) to Supabase Storage.
@@ -48,7 +48,7 @@ export async function uploadCertificateFile(userId, file, onProgress) {
   }
 }
 
-// â”€â”€â”€ SAVE CERTIFICATE METADATA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── SAVE CERTIFICATE METADATA ────────────────────────────────────────────────
 
 /**
  * Save certificate metadata to the database.
@@ -89,7 +89,7 @@ export async function saveCertificate(metadata) {
   );
 }
 
-// â”€â”€â”€ GET CERTIFICATES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── GET CERTIFICATES ─────────────────────────────────────────────────────────
 
 /** Get all certificates for a user */
 export async function getCertificates(userId) {
@@ -115,13 +115,13 @@ export async function deleteCertificate(certId, userId, storagePath) {
   return { error: null };
 }
 
-// â”€â”€â”€ VERIFICATION STATUS HELPERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── VERIFICATION STATUS HELPERS ─────────────────────────────────────────────
 
 export function getVerificationBadge(status) {
   switch (status) {
-    case 'verified':  return { emoji: 'âœ…', label: 'Verified',       color: 'text-emerald-400', bg: 'bg-emerald-400/10 border-emerald-400/30' };
-    case 'rejected':  return { emoji: 'âŒ', label: 'Rejected',       color: 'text-red-400',     bg: 'bg-red-400/10 border-red-400/30' };
-    default:          return { emoji: 'â³', label: 'Pending Review',  color: 'text-amber-400',   bg: 'bg-amber-400/10 border-amber-400/30' };
+    case 'verified':  return { emoji: '✅', label: 'Verified',       color: 'text-emerald-400', bg: 'bg-emerald-400/10 border-emerald-400/30' };
+    case 'rejected':  return { emoji: '❌', label: 'Rejected',       color: 'text-red-400',     bg: 'bg-red-400/10 border-red-400/30' };
+    default:          return { emoji: '⏳', label: 'Pending Review',  color: 'text-amber-400',   bg: 'bg-amber-400/10 border-amber-400/30' };
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Send } from 'lucide-react';
 
 export const ChatInput = ({ onSend, placeholder = 'Type a message...' }) => {
@@ -18,12 +18,12 @@ export const ChatInput = ({ onSend, placeholder = 'Type a message...' }) => {
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder={placeholder}
-        className="flex-1 bg-white/5 border border-gs-border focus:border-[#6D6AF6] rounded-xl px-4 py-2 text-xs text-gs-text-main placeholder-gs-text-muted outline-hidden transition-colors"
+        className="flex-1 bg-white/5 border border-gs-border focus:border-[#7c6af6] rounded-xl px-4 py-2 text-xs text-gs-text-main placeholder-gs-text-muted outline-hidden transition-colors"
       />
       <button
         type="submit"
         disabled={!content.trim()}
-        className="p-2 rounded-xl bg-[#6D6AF6] hover:bg-[#5C59EC] text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="p-2 rounded-xl bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
       >
         <Send className="w-4 h-4" />
       </button>
@@ -32,3 +32,4 @@ export const ChatInput = ({ onSend, placeholder = 'Type a message...' }) => {
 };
 
 export default ChatInput;
+

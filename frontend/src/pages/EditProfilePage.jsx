@@ -155,7 +155,7 @@ export default function EditProfilePage() {
         <ArrowLeft size={16} /> Back to Profile
       </button>
 
-      <div className="bg-gs-card border border-gs-border rounded-xl p-6 md:p-8 space-y-6 shadow-xs">
+      <div className="glass-card rounded-xl p-6 md:p-8 space-y-6 shadow-xs">
         <div>
           <h1 className="text-2xl font-bold font-heading text-gs-text-main tracking-tight">
             Edit Profile
@@ -166,7 +166,7 @@ export default function EditProfilePage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* â”€â”€ Avatar Upload Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Avatar Upload Section ───────────────────────────── */}
           <div className="flex flex-col sm:flex-row items-center gap-5 p-5 rounded-xl bg-gs-bg border border-gs-border">
             <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
               <div className="w-20 h-20 rounded-xl overflow-hidden border border-gs-border flex items-center justify-center bg-gs-card text-3xl shadow-xs">
@@ -212,7 +212,7 @@ export default function EditProfilePage() {
             )}
           </div>
 
-          {/* â”€â”€ Basic Info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Basic Info ──────────────────────────────────────── */}
           <div className="space-y-4">
             <h3 className="text-xs font-semibold text-gs-text-muted uppercase tracking-wider">
               Basic Details
@@ -255,7 +255,7 @@ export default function EditProfilePage() {
             </div>
           </div>
 
-          {/* â”€â”€ Status & Personality â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Status & Personality ────────────────────────────── */}
           <div className="space-y-4">
             <h3 className="text-xs font-semibold text-gs-text-muted uppercase tracking-wider">
               Collaboration Preferences
@@ -290,7 +290,7 @@ export default function EditProfilePage() {
             </div>
           </div>
 
-          {/* â”€â”€ Skills Manager â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Skills Manager ──────────────────────────────────── */}
           <div className="space-y-3">
             <h3 className="text-xs font-semibold text-gs-text-muted uppercase tracking-wider">
               Technical Skills ({formData.skills.length})
@@ -334,7 +334,7 @@ export default function EditProfilePage() {
             </div>
           </div>
 
-          {/* â”€â”€ Social Profiles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Social Profiles ─────────────────────────────────── */}
           <div className="space-y-4">
             <h3 className="text-xs font-semibold text-gs-text-muted uppercase tracking-wider">
               Social Links & Portfolio
@@ -348,7 +348,7 @@ export default function EditProfilePage() {
                   placeholder="https://github.com/..."
                   value={formData.social_links?.github || ''}
                   onChange={e => handleSocialChange('github', e.target.value)}
-                  className="w-full bg-gs-bg border border-gs-border rounded-lg pl-9 pr-3 py-2 text-sm text-gs-text-main outline-none focus:border-[#6D6AF6]"
+                  className="w-full bg-gs-bg border border-gs-border rounded-lg pl-9 pr-3 py-2 text-sm text-gs-text-main outline-none focus:border-[#7c6af6]"
                 />
               </div>
 
@@ -359,7 +359,7 @@ export default function EditProfilePage() {
                   placeholder="https://linkedin.com/in/..."
                   value={formData.social_links?.linkedin || ''}
                   onChange={e => handleSocialChange('linkedin', e.target.value)}
-                  className="w-full bg-gs-bg border border-gs-border rounded-lg pl-9 pr-3 py-2 text-sm text-gs-text-main outline-none focus:border-[#6D6AF6]"
+                  className="w-full bg-gs-bg border border-gs-border rounded-lg pl-9 pr-3 py-2 text-sm text-gs-text-main outline-none focus:border-[#7c6af6]"
                 />
               </div>
 
@@ -370,7 +370,7 @@ export default function EditProfilePage() {
                   placeholder="https://x.com/..."
                   value={formData.social_links?.twitter || ''}
                   onChange={e => handleSocialChange('twitter', e.target.value)}
-                  className="w-full bg-gs-bg border border-gs-border rounded-lg pl-9 pr-3 py-2 text-sm text-gs-text-main outline-none focus:border-[#6D6AF6]"
+                  className="w-full bg-gs-bg border border-gs-border rounded-lg pl-9 pr-3 py-2 text-sm text-gs-text-main outline-none focus:border-[#7c6af6]"
                 />
               </div>
 
@@ -381,13 +381,13 @@ export default function EditProfilePage() {
                   placeholder="https://portfolio.me"
                   value={formData.social_links?.portfolio || ''}
                   onChange={e => handleSocialChange('portfolio', e.target.value)}
-                  className="w-full bg-gs-bg border border-gs-border rounded-lg pl-9 pr-3 py-2 text-sm text-gs-text-main outline-none focus:border-[#6D6AF6]"
+                  className="w-full bg-gs-bg border border-gs-border rounded-lg pl-9 pr-3 py-2 text-sm text-gs-text-main outline-none focus:border-[#7c6af6]"
                 />
               </div>
             </div>
           </div>
 
-          {/* â”€â”€ Submit Buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Submit Buttons ──────────────────────────────────── */}
           <div className="pt-4 border-t border-gs-border flex gap-3">
             <button
               type="button"
@@ -399,7 +399,7 @@ export default function EditProfilePage() {
             <button
               type="submit"
               disabled={isSaving}
-              className="flex-1 py-2.5 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white text-xs font-medium rounded-lg transition-colors shadow-xs flex items-center justify-center gap-2 disabled:opacity-50 btn-tactile"
+              className="flex-1 py-2.5 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white text-xs font-medium rounded-lg transition-colors shadow-xs flex items-center justify-center gap-2 disabled:opacity-50 btn-tactile"
             >
               {isSaving ? (
                 <>
@@ -415,4 +415,5 @@ export default function EditProfilePage() {
     </div>
   );
 }
+
 

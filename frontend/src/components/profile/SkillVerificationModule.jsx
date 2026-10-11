@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import {
   Shield, BookOpen, Award, Upload, CheckCircle, XCircle,
   ChevronRight, ChevronLeft, RotateCcw, X, Eye, EyeOff,
@@ -9,18 +9,18 @@ import {
 import supabase from '@/lib/supabase';
 import { useAppContext } from '@/context/AppContext';
 
-// â”€â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Constants ────────────────────────────────────────────────────────────────
 
 const SKILLS = [
-  { id: 'react',       label: 'React',            icon: Code2,     color: 'text-[#6D6AF6]',    bg: 'bg-[#6D6AF6]/10',    border: 'border-[#6D6AF6]/20' },
+  { id: 'react',       label: 'React',            icon: Code2,     color: 'text-[#9182f8]',    bg: 'bg-[#7c6af6]/12',    border: 'border-[#7c6af6]/20' },
   { id: 'python',      label: 'Python',            icon: Cpu,       color: 'text-amber-500',   bg: 'bg-amber-500/10',   border: 'border-amber-500/20' },
   { id: 'uiux',        label: 'UI / UX',           icon: Palette,   color: 'text-purple-500',  bg: 'bg-purple-500/10',  border: 'border-purple-500/20' },
   { id: 'sql',         label: 'SQL',               icon: Database,  color: 'text-emerald-500', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20' },
   { id: 'javascript',  label: 'JavaScript',        icon: Globe,     color: 'text-amber-500',   bg: 'bg-amber-500/10',   border: 'border-amber-500/20' },
-  { id: 'ml',          label: 'Machine Learning',  icon: BarChart2, color: 'text-[#6D6AF6]',    bg: 'bg-[#6D6AF6]/10',    border: 'border-[#6D6AF6]/20' },
+  { id: 'ml',          label: 'Machine Learning',  icon: BarChart2, color: 'text-[#9182f8]',    bg: 'bg-[#7c6af6]/12',    border: 'border-[#7c6af6]/20' },
 ];
 
-// â”€â”€â”€ Question Bank â€” exactly 10 questions per skill â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Question Bank — exactly 10 questions per skill ───────────────────────────
 const QUESTION_BANK = {
   react: [
     { q: 'Which hook is used to manage side-effects in React?',               opts: ['useState', 'useEffect', 'useRef', 'useMemo'],                                          answer: 1 },
@@ -100,7 +100,7 @@ const QUESTION_BANK = {
 const PASSING_SCORE  = 8;
 const TOTAL_QUESTIONS = 10;
 
-// â”€â”€â”€ Supabase Integration Stubs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Supabase Integration Stubs ───────────────────────────────────────────────
 
 /**
  * Adds a verified skill to the user's Supabase profile.
@@ -113,7 +113,7 @@ const TOTAL_QUESTIONS = 10;
  * @param {string} skillLabel  - Human-readable name (e.g. 'React')
  */
 async function addVerifiedSkillToProfile(userId, skillId, skillLabel) {
-  // â”€â”€ Step 1: upsert into verified_skills table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Step 1: upsert into verified_skills table ──────────────────────────────
   // const { error: vsError } = await supabase
   //   .from('verified_skills')
   //   .upsert(
@@ -129,7 +129,7 @@ async function addVerifiedSkillToProfile(userId, skillId, skillLabel) {
   //   );
   // if (vsError) throw vsError;
   //
-  // â”€â”€ Step 2: append to the profiles.skills array (deduplicated) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Step 2: append to the profiles.skills array (deduplicated) ─────────────
   // const { data: profile, error: fetchErr } = await supabase
   //   .from('profiles')
   //   .select('skills')
@@ -160,7 +160,7 @@ async function addVerifiedSkillToProfile(userId, skillId, skillLabel) {
  * @returns {{ publicUrl: string }}
  */
 async function uploadCertificateToSupabase(file, userId, skillId, skillLabel, isPublic) {
-  // â”€â”€ Step 1: Upload file to Storage â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Step 1: Upload file to Storage ─────────────────────────────────────────
   // const filePath = `certificates/${userId}/${skillId}/${Date.now()}_${file.name}`;
   // const { error: storageErr } = await supabase.storage
   //   .from('certificates') // bucket must exist & have appropriate RLS
@@ -171,7 +171,7 @@ async function uploadCertificateToSupabase(file, userId, skillId, skillLabel, is
   //   .from('certificates')
   //   .getPublicUrl(filePath);
   //
-  // â”€â”€ Step 2: Record in verified_skills â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Step 2: Record in verified_skills ──────────────────────────────────────
   // const { error: dbErr } = await supabase
   //   .from('verified_skills')
   //   .upsert(
@@ -189,7 +189,7 @@ async function uploadCertificateToSupabase(file, userId, skillId, skillLabel, is
   //   );
   // if (dbErr) throw dbErr;
   //
-  // â”€â”€ Step 3: Append skill label to profiles.skills â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Step 3: Append skill label to profiles.skills ──────────────────────────
   // const { data: profile } = await supabase
   //   .from('profiles').select('skills').eq('id', userId).single();
   // const updatedSkills = [...new Set([...(profile?.skills ?? []), skillLabel])];
@@ -206,7 +206,7 @@ async function uploadCertificateToSupabase(file, userId, skillId, skillLabel, is
   return { publicUrl: `https://supabase.co/storage/v1/object/public/certificates/${userId}/${skillId}/cert` };
 }
 
-// â”€â”€â”€ Shared UI helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Shared UI helpers ────────────────────────────────────────────────────────
 
 /** Animated "..." loading indicator */
 function LoadingDots() {
@@ -240,7 +240,7 @@ function ProgressBar({ current, total, color = '#3b82f6' }) {
 }
 
 /**
- * Toggle switch â€” matches the project's existing Toggle style.
+ * Toggle switch — matches the project's existing Toggle style.
  * Includes optional label + description.
  */
 function Toggle({ checked, onChange, label, description }) {
@@ -275,22 +275,22 @@ function Toggle({ checked, onChange, label, description }) {
   );
 }
 
-// â”€â”€â”€ Step 1: Skill Selector â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Step 1: Skill Selector ───────────────────────────────────────────────────
 function SkillSelector({ onSelect }) {
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 text-[#6D6AF6] text-xs font-medium tracking-wide">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#7c6af6]/15 border border-[#7c6af6]/30 text-[#9182f8] text-xs font-medium tracking-wide">
           <Shield size={12} /> Skill Verification
         </div>
         <h2 className="text-xl font-semibold text-[var(--color-gs-text-main)] tracking-tight">
           Verify a Skill
         </h2>
         <p className="text-[var(--color-gs-text-muted)] text-xs max-w-md mx-auto leading-relaxed">
-          Verified skills are highlighted in AI team matches â€” boosting your chances of being
+          Verified skills are highlighted in squad matches — boosting your chances of being
           selected for high-demand groups by up to{' '}
-          <span className="text-[#6D6AF6] font-semibold">3Ã—</span>.
+          <span className="text-[#9182f8] font-semibold">3×</span>.
         </p>
       </div>
 
@@ -306,7 +306,7 @@ function SkillSelector({ onSelect }) {
               className={`
                 group relative flex flex-col items-center gap-3 p-4 rounded-xl border
                 transition-colors duration-150 text-center cursor-pointer
-                ${skill.bg} ${skill.border} hover:border-[#6D6AF6]/40
+                ${skill.bg} ${skill.border} hover:border-[#7c6af6]/40
               `}
             >
               <div className={`p-2.5 rounded-lg ${skill.bg} border ${skill.border}`}>
@@ -323,8 +323,8 @@ function SkillSelector({ onSelect }) {
       </div>
 
       {/* Tip banner */}
-      <div className="flex items-start gap-3 p-3.5 rounded-xl bg-[#6D6AF6]/5 border border-[#6D6AF6]/20">
-        <Shield size={15} className="text-[#6D6AF6] mt-0.5 shrink-0" />
+      <div className="flex items-start gap-3 p-3.5 rounded-xl bg-[#6D6AF6]/5 border border-[#7c6af6]/20">
+        <Shield size={15} className="text-[#9182f8] mt-0.5 shrink-0" />
         <p className="text-xs text-[var(--color-gs-text-muted)] leading-relaxed">
           Verification is optional but recommended. Verify via a quick quiz or upload a certificate
           from Coursera, Udemy, or freeCodeCamp.
@@ -334,7 +334,7 @@ function SkillSelector({ onSelect }) {
   );
 }
 
-// â”€â”€â”€ Step 2: Method Selector â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Step 2: Method Selector ──────────────────────────────────────────────────
 function MethodSelector({ skill, onSelectMethod, onBack }) {
   const Icon = skill.icon;
   return (
@@ -364,36 +364,36 @@ function MethodSelector({ skill, onSelectMethod, onBack }) {
 
       {/* Method Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* Path A â€” Quiz */}
+        {/* Path A — Quiz */}
         <button
           id="method-quiz-btn"
           onClick={() => onSelectMethod('quiz')}
-          className="group flex flex-col gap-3.5 p-5 rounded-xl border border-gs-border bg-gs-card hover:border-[#6D6AF6]/40 hover:bg-[#6D6AF6]/[0.02] transition-colors duration-150 text-left cursor-pointer"
+          className="group flex flex-col gap-3.5 p-5 rounded-xl border border-gs-border bg-gs-card hover:border-[#7c6af6]/40 hover:bg-[#6D6AF6]/[0.02] transition-colors duration-150 text-left cursor-pointer"
         >
-          <div className="w-10 h-10 rounded-lg bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 flex items-center justify-center">
-            <BookOpen size={20} className="text-[#6D6AF6]" />
+          <div className="w-10 h-10 rounded-lg bg-[#7c6af6]/15 border border-[#7c6af6]/30 flex items-center justify-center">
+            <BookOpen size={20} className="text-[#9182f8]" />
           </div>
           <div>
             <p className="font-semibold text-sm text-[var(--color-gs-text-main)] mb-1">Take the Quiz</p>
             <p className="text-xs text-[var(--color-gs-text-muted)] leading-relaxed">
-              Answer 10 multiple-choice questions. Score <strong className="text-[#6D6AF6]">8 or higher</strong> to earn your verified badge.
+              Answer 10 multiple-choice questions. Score <strong className="text-[#9182f8]">8 or higher</strong> to earn your verified badge.
             </p>
           </div>
           <div className="flex flex-wrap gap-1.5 mt-auto pt-1">
-            {['10 Questions', 'â‰¥ 8/10 to Pass', 'Instant Result'].map(tag => (
-              <span key={tag} className="text-xs px-2 py-0.5 rounded-md bg-[#6D6AF6]/10 text-[#6D6AF6] border border-[#6D6AF6]/20">{tag}</span>
+            {['10 Questions', '≥ 8/10 to Pass', 'Instant Result'].map(tag => (
+              <span key={tag} className="text-xs px-2 py-0.5 rounded-md bg-[#6D6AF6]/10 text-[#9182f8] border border-[#7c6af6]/20">{tag}</span>
             ))}
           </div>
         </button>
 
-        {/* Path B â€” Certificate */}
+        {/* Path B — Certificate */}
         <button
           id="method-certificate-btn"
           onClick={() => onSelectMethod('certificate')}
-          className="group flex flex-col gap-3.5 p-5 rounded-xl border border-gs-border bg-gs-card hover:border-[#6D6AF6]/40 hover:bg-[#6D6AF6]/[0.02] transition-colors duration-150 text-left cursor-pointer"
+          className="group flex flex-col gap-3.5 p-5 rounded-xl border border-gs-border bg-gs-card hover:border-[#7c6af6]/40 hover:bg-[#6D6AF6]/[0.02] transition-colors duration-150 text-left cursor-pointer"
         >
-          <div className="w-10 h-10 rounded-lg bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 flex items-center justify-center">
-            <Award size={20} className="text-[#6D6AF6]" />
+          <div className="w-10 h-10 rounded-lg bg-[#7c6af6]/15 border border-[#7c6af6]/30 flex items-center justify-center">
+            <Award size={20} className="text-[#9182f8]" />
           </div>
           <div>
             <p className="font-semibold text-sm text-[var(--color-gs-text-main)] mb-1">Upload Certificate</p>
@@ -412,7 +412,7 @@ function MethodSelector({ skill, onSelectMethod, onBack }) {
   );
 }
 
-// â”€â”€â”€ Path A: Quiz Flow â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Path A: Quiz Flow ────────────────────────────────────────────────────────
 function QuizFlow({ skill, onComplete, onCancel }) {
   const questions = QUESTION_BANK[skill.id];
 
@@ -429,7 +429,7 @@ function QuizFlow({ skill, onComplete, onCancel }) {
   const currentQ     = questions[currentIndex];
   const isLastQuestion = currentIndex === TOTAL_QUESTIONS - 1;
 
-  // â”€â”€ Handle moving to next question / submitting â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Handle moving to next question / submitting ──────────────────────────────
   const handleNext = () => {
     const newAnswers = [...answers, selectedOption];
 
@@ -456,13 +456,13 @@ function QuizFlow({ skill, onComplete, onCancel }) {
     }
   };
 
-  // â”€â”€ Supabase call â€” only reached when score >= PASSING_SCORE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Supabase call — only reached when score >= PASSING_SCORE ────────────────
   const handlePassQuiz = async (finalScore) => {
     setIsSaving(true);
     try {
       await addVerifiedSkillToProfile(user?.id, skill.id, skill.label);
 
-      // Optimistic local update â€” keeps UI in sync without a refetch
+      // Optimistic local update — keeps UI in sync without a refetch
       if (user && updateLocalUser) {
         const existing = user.skills || [];
         if (!existing.includes(skill.label)) {
@@ -488,7 +488,7 @@ function QuizFlow({ skill, onComplete, onCancel }) {
     setIsSaving(false);
   };
 
-  // â”€â”€ PASSED state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── PASSED state ─────────────────────────────────────────────────────────────
   if (quizStatus === 'passed') {
     return (
       <div className="text-center space-y-5 py-2">
@@ -501,7 +501,7 @@ function QuizFlow({ skill, onComplete, onCancel }) {
           <h3 className="text-xl font-semibold text-[var(--color-gs-text-main)]">Skill Verified</h3>
           <p className="text-[var(--color-gs-text-muted)] text-sm max-w-sm mx-auto leading-relaxed">
             You scored{' '}
-            <span className="font-semibold text-emerald-500">{score}/{TOTAL_QUESTIONS}</span> â€” your{' '}
+            <span className="font-semibold text-emerald-500">{score}/{TOTAL_QUESTIONS}</span> — your{' '}
             <span className={`font-semibold ${skill.color}`}>{skill.label}</span>{' '}
             skill is now marked as <strong className="text-emerald-500">verified</strong> on your profile.
           </p>
@@ -516,12 +516,12 @@ function QuizFlow({ skill, onComplete, onCancel }) {
           <ProgressBar current={score} total={TOTAL_QUESTIONS} color="#10b981" />
           <div className="flex justify-between text-xs text-[var(--color-gs-text-muted)] mt-1.5">
             <span>0</span>
-            <span className="text-emerald-500 font-medium">Pass â‰¥ {PASSING_SCORE}</span>
+            <span className="text-emerald-500 font-medium">Pass ≥ {PASSING_SCORE}</span>
             <span>{TOTAL_QUESTIONS}</span>
           </div>
         </div>
 
-        {/* Answer review â€” shows which questions were right/wrong */}
+        {/* Answer review — shows which questions were right/wrong */}
         <div className="bg-[var(--color-gs-bg)] border border-[var(--color-gs-border)] rounded-2xl p-5 max-w-sm mx-auto text-left space-y-2">
           <p className="text-xs font-semibold text-[var(--color-gs-text-muted)] uppercase tracking-wide mb-3">Answer Review</p>
           {questions.map((q, i) => {
@@ -540,7 +540,7 @@ function QuizFlow({ skill, onComplete, onCancel }) {
 
         {isSaving ? (
           <div className="flex items-center justify-center gap-2 text-[var(--color-gs-text-muted)] text-sm">
-            <Loader2 size={16} className="animate-spin" /> Saving to profileâ€¦
+            <Loader2 size={16} className="animate-spin" /> Saving to profile...
           </div>
         ) : (
           <button
@@ -548,14 +548,14 @@ function QuizFlow({ skill, onComplete, onCancel }) {
             onClick={() => onComplete({ method: 'quiz', score, passed: true })}
             className="px-6 py-2.5 bg-[#6D6AF6] hover:bg-[#7E7BF8] text-white font-medium rounded-lg transition-colors text-sm shadow-xs"
           >
-            Done â€” View Profile
+            Done — View Profile
           </button>
         )}
       </div>
     );
   }
 
-  // â”€â”€ FAILED state â€” skill is NOT added to profile â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── FAILED state — skill is NOT added to profile ──────────────────────────
   if (quizStatus === 'failed') {
     return (
       <div className="text-center space-y-5 py-2">
@@ -629,14 +629,14 @@ function QuizFlow({ skill, onComplete, onCancel }) {
     );
   }
 
-  // â”€â”€ IN PROGRESS state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── IN PROGRESS state ─────────────────────────────────────────────────────
   return (
     <div className="space-y-5">
       {/* Progress header */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <BookOpen size={15} className="text-[#6D6AF6]" />
+            <BookOpen size={15} className="text-[#9182f8]" />
             <span className="text-sm font-semibold text-[var(--color-gs-text-main)]">
               {skill.label} Quiz
             </span>
@@ -647,7 +647,7 @@ function QuizFlow({ skill, onComplete, onCancel }) {
         </div>
         <ProgressBar current={currentIndex + 1} total={TOTAL_QUESTIONS} />
         <p className="text-xs text-[var(--color-gs-text-muted)]">
-          Score <strong>{PASSING_SCORE}</strong> or more to earn the verified badge â€” your profile won't be updated unless you pass.
+          Score <strong>{PASSING_SCORE}</strong> or more to earn the verified badge — your profile won't be updated unless you pass.
         </p>
       </div>
 
@@ -657,7 +657,7 @@ function QuizFlow({ skill, onComplete, onCancel }) {
         className="bg-[var(--color-gs-bg)] border border-[var(--color-gs-border)] rounded-xl p-5 space-y-4"
       >
         <div className="flex items-start gap-3">
-          <span className="shrink-0 w-7 h-7 rounded-lg bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 flex items-center justify-center text-[#6D6AF6] text-xs font-semibold">
+          <span className="shrink-0 w-7 h-7 rounded-lg bg-[#7c6af6]/15 border border-[#7c6af6]/30 flex items-center justify-center text-[#9182f8] text-xs font-semibold">
             {currentIndex + 1}
           </span>
           <p className="text-[var(--color-gs-text-main)] font-medium leading-relaxed pt-0.5 text-sm">
@@ -665,7 +665,7 @@ function QuizFlow({ skill, onComplete, onCancel }) {
           </p>
         </div>
 
-        {/* Options â€” styled radio buttons */}
+        {/* Options — styled radio buttons */}
         <div className="space-y-2">
           {currentQ.opts.map((opt, i) => {
             const isSelected = selectedOption === i;
@@ -677,15 +677,15 @@ function QuizFlow({ skill, onComplete, onCancel }) {
                 className={`
                   w-full flex items-center gap-3 p-3.5 rounded-lg border text-left transition-colors duration-150
                   ${isSelected
-                    ? 'border-[#6D6AF6] bg-[#6D6AF6]/10 text-[var(--color-gs-text-main)] font-medium'
-                    : 'border-[var(--color-gs-border)] hover:border-[#6D6AF6]/30 hover:bg-black/[0.02] dark:hover:bg-white/[0.02] text-[var(--color-gs-text-muted)] hover:text-[var(--color-gs-text-main)]'
+                    ? 'border-[#7c6af6] bg-[#6D6AF6]/10 text-[var(--color-gs-text-main)] font-medium'
+                    : 'border-[var(--color-gs-border)] hover:border-[#7c6af6]/30 hover:bg-black/[0.02] dark:hover:bg-white/[0.02] text-[var(--color-gs-text-muted)] hover:text-[var(--color-gs-text-main)]'
                   }
                 `}
               >
                 {/* Custom radio indicator */}
                 <div className={`
                   shrink-0 w-4 h-4 rounded-full border flex items-center justify-center transition-colors
-                  ${isSelected ? 'border-[#6D6AF6] bg-[#6D6AF6]' : 'border-[var(--color-gs-border)]'}
+                  ${isSelected ? 'border-[#7c6af6] bg-[#6D6AF6]' : 'border-[var(--color-gs-border)]'}
                 `}>
                   {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                 </div>
@@ -725,7 +725,7 @@ function QuizFlow({ skill, onComplete, onCancel }) {
   );
 }
 
-// â”€â”€â”€ Path B: Certificate Upload Flow â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Path B: Certificate Upload Flow ─────────────────────────────────────────
 function CertificateFlow({ skill, onComplete, onCancel }) {
   const [certificateFile, setCertificateFile]       = useState(null);
   const [isCertificatePublic, setIsCertificatePublic] = useState(false);
@@ -795,15 +795,15 @@ function CertificateFlow({ skill, onComplete, onCancel }) {
   const getFileIcon = () => {
     if (!certificateFile) return null;
     return certificateFile.type === 'application/pdf'
-      ? <FileText size={26} className="text-[#6D6AF6]" />
-      : <ImageIcon size={26} className="text-[#6D6AF6]" />;
+      ? <FileText size={26} className="text-[#9182f8]" />
+      : <ImageIcon size={26} className="text-[#9182f8]" />;
   };
 
-  // â”€â”€ SUCCESS state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── SUCCESS state ─────────────────────────────────────────────────────────
   if (verificationStatus === 'success') {
     return (
       <div className="text-center space-y-5 py-2">
-        <div className="w-14 h-14 rounded-full bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 flex items-center justify-center mx-auto text-[#6D6AF6]">
+        <div className="w-14 h-14 rounded-full bg-[#7c6af6]/15 border border-[#7c6af6]/30 flex items-center justify-center mx-auto text-[#9182f8]">
           <Award size={28} />
         </div>
 
@@ -823,7 +823,7 @@ function CertificateFlow({ skill, onComplete, onCancel }) {
             {
               label: 'Visibility',
               value: isCertificatePublic ? 'Public' : 'Private',
-              color: isCertificatePublic ? 'text-[#6D6AF6]' : 'text-[var(--color-gs-text-muted)]',
+              color: isCertificatePublic ? 'text-[#9182f8]' : 'text-[var(--color-gs-text-muted)]',
             },
           ].map(({ label, value, color }) => (
             <div key={label} className="flex items-center justify-between text-xs">
@@ -838,13 +838,13 @@ function CertificateFlow({ skill, onComplete, onCancel }) {
           onClick={() => onComplete({ method: 'certificate', isPublic: isCertificatePublic })}
           className="px-6 py-2.5 bg-[#6D6AF6] hover:bg-[#7E7BF8] text-white font-medium rounded-lg transition-colors text-sm shadow-xs"
         >
-          Done â€” Back to Profile
+          Done — Back to Profile
         </button>
       </div>
     );
   }
 
-  // â”€â”€ UPLOAD form â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── UPLOAD form ───────────────────────────────────────────────────────────
   return (
     <div className="space-y-5">
       {/* Header */}
@@ -875,10 +875,10 @@ function CertificateFlow({ skill, onComplete, onCancel }) {
           relative flex flex-col items-center gap-3.5 p-6 rounded-xl border-2 border-dashed cursor-pointer
           transition-colors duration-150 select-none
           ${isDragOver
-            ? 'border-[#6D6AF6] bg-[#6D6AF6]/10'
+            ? 'border-[#7c6af6] bg-[#7c6af6]/12'
             : certificateFile
-              ? 'border-[#6D6AF6]/40 bg-[#6D6AF6]/[0.03]'
-              : 'border-[var(--color-gs-border)] hover:border-[#6D6AF6]/40 hover:bg-black/[0.01] dark:hover:bg-white/[0.01]'
+              ? 'border-[#7c6af6]/40 bg-[#6D6AF6]/[0.03]'
+              : 'border-[var(--color-gs-border)] hover:border-[#7c6af6]/40 hover:bg-black/[0.01] dark:hover:bg-white/[0.01]'
           }
         `}
       >
@@ -893,13 +893,13 @@ function CertificateFlow({ skill, onComplete, onCancel }) {
 
         {certificateFile ? (
           <>
-            <div className="w-12 h-12 rounded-xl bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-[#7c6af6]/15 border border-[#7c6af6]/30 flex items-center justify-center">
               {getFileIcon()}
             </div>
             <div className="text-center">
               <p className="font-semibold text-[var(--color-gs-text-main)] text-sm">{certificateFile.name}</p>
               <p className="text-xs text-[var(--color-gs-text-muted)] mt-0.5">
-                {(certificateFile.size / 1024).toFixed(1)} KB Â· Click to change
+                {(certificateFile.size / 1024).toFixed(1)} KB · Click to change
               </p>
             </div>
             <button
@@ -914,22 +914,22 @@ function CertificateFlow({ skill, onComplete, onCancel }) {
         ) : (
           <>
             <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${isDragOver ? 'bg-[#6D6AF6]/20' : 'bg-black/5 dark:bg-white/5 border border-[var(--color-gs-border)]'}`}>
-              <Upload size={22} className={isDragOver ? 'text-[#6D6AF6]' : 'text-[var(--color-gs-text-muted)]'} />
+              <Upload size={22} className={isDragOver ? 'text-[#9182f8]' : 'text-[var(--color-gs-text-muted)]'} />
             </div>
             <div className="text-center">
               <p className="font-medium text-[var(--color-gs-text-main)] text-sm">
                 Drop your certificate here
               </p>
               <p className="text-xs text-[var(--color-gs-text-muted)] mt-1">
-                or <span className="text-[#6D6AF6] underline underline-offset-2">browse files</span>
+                or <span className="text-[#9182f8] underline underline-offset-2">browse files</span>
               </p>
-              <p className="text-[11px] text-[var(--color-gs-text-muted)] mt-1.5">PDF, JPG, PNG or WebP Â· Max {MAX_SIZE_MB} MB</p>
+              <p className="text-[11px] text-[var(--color-gs-text-muted)] mt-1.5">PDF, JPG, PNG or WebP · Max {MAX_SIZE_MB} MB</p>
             </div>
           </>
         )}
       </div>
 
-      {/* â”€â”€ Privacy Toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Privacy Toggle ─────────────────────────────── */}
       <div className="p-4 rounded-xl bg-[var(--color-gs-bg)] border border-[var(--color-gs-border)] space-y-3">
         <Toggle
           checked={isCertificatePublic}
@@ -943,8 +943,8 @@ function CertificateFlow({ skill, onComplete, onCancel }) {
         />
         <div className="flex items-center gap-2 pt-2.5 border-t border-[var(--color-gs-border)]">
           {isCertificatePublic
-            ? <><Eye size={13} className="text-[#6D6AF6] shrink-0" /><span className="text-xs text-[#6D6AF6]">This certificate will be publicly visible on your profile</span></>
-            : <><Lock size={13} className="text-[var(--color-gs-text-muted)] shrink-0" /><span className="text-xs text-[var(--color-gs-text-muted)]">This certificate is private â€” only visible to you and admins</span></>
+            ? <><Eye size={13} className="text-[#9182f8] shrink-0" /><span className="text-xs text-[#9182f8]">This certificate will be publicly visible on your profile</span></>
+            : <><Lock size={13} className="text-[var(--color-gs-text-muted)] shrink-0" /><span className="text-xs text-[var(--color-gs-text-muted)]">This certificate is private — only visible to you and admins</span></>
           }
         </div>
       </div>
@@ -979,7 +979,7 @@ function CertificateFlow({ skill, onComplete, onCancel }) {
   );
 }
 
-// â”€â”€â”€ Step Dots Tracker â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Step Dots Tracker ────────────────────────────────────────────────────────
 const STEP_ORDER = ['select_skill', 'select_method', 'active']; // 3-dot indicator
 
 function StepDots({ step }) {
@@ -1004,16 +1004,16 @@ function StepDots({ step }) {
   );
 }
 
-// â”€â”€â”€ Main SkillVerificationModule â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Main SkillVerificationModule ─────────────────────────────────────────────
 /**
  * SkillVerificationModule
  *
  * Props
- * â”€â”€â”€â”€â”€
- * @param {() => void}  onClose          â€” dismiss the module
- * @param {(result) => void} onVerified  â€” called after a successful verify
+ * ─────
+ * @param {() => void}  onClose          — dismiss the module
+ * @param {(result) => void} onVerified  — called after a successful verify
  *   result shape: { skillId, skillLabel, method, score?, passed?, isPublic? }
- * @param {{ id, label, ... } | null} preselectedSkill â€” skip skill-selection step
+ * @param {{ id, label, ... } | null} preselectedSkill — skip skill-selection step
  */
 export default function SkillVerificationModule({
   onClose,
@@ -1038,7 +1038,7 @@ export default function SkillVerificationModule({
     onClose?.();
   };
 
-  // Cancel from quiz/cert â†’ go back to method selector
+  // Cancel from quiz/cert → go back to method selector
   const handleCancel = () => {
     if (step === 'quiz' || step === 'certificate') {
       setStep('select_method');
@@ -1066,7 +1066,7 @@ export default function SkillVerificationModule({
       {/* 3-step progress indicator */}
       <StepDots step={step} />
 
-      {/* â”€â”€ Step content â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Step content ──────────────────────────────────────────────── */}
       {step === 'select_skill' && (
         <SkillSelector onSelect={handleSelectSkill} />
       )}
@@ -1097,4 +1097,6 @@ export default function SkillVerificationModule({
     </div>
   );
 }
+
+
 

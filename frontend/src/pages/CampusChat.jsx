@@ -15,24 +15,24 @@ import {
   loadOfflineQueue
 } from '@/lib/services/chatService';
 
-// â”€â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Constants ────────────────────────────────────────────────────────────────
 const MESSAGES_PAGE_SIZE = 50;
 const MAX_MESSAGE_LENGTH = 5000;
-const QUICK_REACTIONS = ['ðŸ‘', 'â¤ï¸', 'ðŸ˜‚', 'ðŸŽ‰', 'ðŸ˜¢', 'ðŸ”¥'];
+const QUICK_REACTIONS = ['👍', '❤️', '😂', '🎉', '😢', '🔥'];
 
-// â”€â”€â”€ Temp ID helper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Temp ID helper ────────────────────────────────────────────────────────────
 const tempId = () => `temp-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
-// â”€â”€â”€ Emoji Categories â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Emoji Categories ─────────────────────────────────────────────────────────
 const EMOJI_CATEGORIES = {
-  'ðŸ˜€ Smileys': ['ðŸ˜€','ðŸ˜ƒ','ðŸ˜„','ðŸ˜','ðŸ˜†','ðŸ˜…','ðŸ¤£','ðŸ˜‚','ðŸ™‚','ðŸ˜Š','ðŸ˜‡','ðŸ¥°','ðŸ˜','ðŸ¤©','ðŸ˜˜','ðŸ˜—','ðŸ˜™','ðŸ˜š','ðŸ˜‹','ðŸ˜›','ðŸ˜œ','ðŸ¤ª','ðŸ˜','ðŸ¤‘','ðŸ¤—','ðŸ¤”','ðŸ¤','ðŸ˜','ðŸ˜‘','ðŸ˜¶','ðŸ˜','ðŸ˜’','ðŸ˜ž','ðŸ˜”','ðŸ˜Ÿ','ðŸ˜•','ðŸ™','â˜¹ï¸','ðŸ˜£','ðŸ˜–','ðŸ˜«','ðŸ˜©','ðŸ¥º','ðŸ˜¢','ðŸ˜­','ðŸ˜¤','ðŸ˜ ','ðŸ˜¡','ðŸ¤¬','ðŸ˜ˆ'],
-  'ðŸ‘‹ Gestures': ['ðŸ‘‹','ðŸ¤š','ðŸ–ï¸','âœ‹','ðŸ––','ðŸ‘Œ','âœŒï¸','ðŸ¤ž','ðŸ¤Ÿ','ðŸ¤˜','ðŸ¤™','ðŸ‘ˆ','ðŸ‘‰','ðŸ‘†','ðŸ‘‡','â˜ï¸','ðŸ‘','ðŸ‘Ž','âœŠ','ðŸ‘Š','ðŸ¤›','ðŸ¤œ','ðŸ‘','ðŸ™Œ','ðŸ¤','ðŸ™'],
-  'â¤ï¸ Hearts': ['â¤ï¸','ðŸ§¡','ðŸ’›','ðŸ’š','ðŸ’™','ðŸ’œ','ðŸ–¤','ðŸ¤','ðŸ¤Ž','ðŸ’”','â£ï¸','ðŸ’•','ðŸ’ž','ðŸ’“','ðŸ’—','ðŸ’–','ðŸ’˜','ðŸ’'],
-  'ðŸŽ‰ Celebration': ['ðŸŽ‰','ðŸŽŠ','ðŸŽˆ','ðŸŽ','ðŸŽ€','ðŸ†','ðŸ¥‡','ðŸ¥ˆ','ðŸ¥‰','ðŸŽ–ï¸','ðŸ…','ðŸŽ­','ðŸŽ¨','ðŸŽ¬','ðŸŽ¤'],
-  'ðŸ’» Tech': ['ðŸ’»','ðŸ–¥ï¸','ðŸ“±','âŒ¨ï¸','ðŸ–±ï¸','ðŸ’¾','ðŸ“€','ðŸ“Š','ðŸ“ˆ','ðŸ“‰','ðŸ”­','ðŸ”¬','ðŸ’¡','ðŸ”‹','ðŸ”Œ'],
+  '😀 Smileys': ['😀','😃','😄','😁','😆','😅','🤣','😂','🙂','😊','😇','🥰','😍','🤩','😘','😗','😙','😚','😋','😛','😜','🤪','😝','🤑','🤗','🤔','🤐','🤨','😐','😑','😶','😏','😒','🙄','😬','🤥','😌','😔','😪','🤤','😴','😷','🤒','🤕','🤢','🤮','🤧','🥵','🥶','🥴'],
+  '👋 Gestures': ['👋','🤚','🖐️','✋','🖖','👌','✌️','🤞','🤟','🤘','🤙','👈','👉','👆','🖕','👇','☝️','👍','👎','✊','👊','🤛','🤜','👏','🙌','👐','🤲','🤝','🙏'],
+  '❤️ Hearts': ['❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','❣️','💕','💞','💓','💗','💖','💘','💝'],
+  '🎉 Celebration': ['🎉','🎊','🎈','🎂','🎀','🎁','🏆','🥇','🥈','🥉','🏅','🎖️','🎫','🎟️','🎭'],
+  '💻 Tech': ['💻','🖥️','📱','⌨️','🖱️','💾','💿','📀','📊','📈','📉','🔍','🔎','💡','🔋','🔌'],
 };
 
-// â”€â”€â”€ Emoji Picker â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Emoji Picker ─────────────────────────────────────────────────────────────
 function EmojiPicker({ onSelect, onClose }) {
   const [activeCategory, setActiveCategory] = useState(Object.keys(EMOJI_CATEGORIES)[0]);
   const [search, setSearch] = useState('');
@@ -78,7 +78,7 @@ function EmojiPicker({ onSelect, onClose }) {
   );
 }
 
-// â”€â”€â”€ Read Receipt Ticks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Read Receipt Ticks ────────────────────────────────────────────────────────
 function ReadTicks({ msgId, senderId, currentUserId, readReceipts, isOptimistic }) {
   if (senderId !== currentUserId) return null; // Only show for own messages
   if (isOptimistic) return <Check size={12} className="text-[var(--color-gs-text-muted)]" />;
@@ -97,7 +97,7 @@ function ReadTicks({ msgId, senderId, currentUserId, readReceipts, isOptimistic 
   return <CheckCheck size={12} className="text-[var(--color-gs-text-muted)]" />;
 }
 
-// â”€â”€â”€ Message Context Menu â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Message Context Menu ──────────────────────────────────────────────────────
 function MessageMenu({ msg, currentUserId, onEdit, onDelete, onReply, onClose }) {
   const isOwn = msg.senderId === currentUserId;
   const ageMs = Date.now() - new Date(msg.createdAt).getTime();
@@ -134,7 +134,7 @@ function MessageMenu({ msg, currentUserId, onEdit, onDelete, onReply, onClose })
   );
 }
 
-// â”€â”€â”€ File Upload Progress â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── File Upload Progress ─────────────────────────────────────────────────────
 function UploadProgress({ progress, error, onRetry }) {
   return (
     <div className="mb-2 px-3 py-2 bg-[var(--color-gs-bg)] border border-[var(--color-gs-border)] rounded-xl text-xs">
@@ -160,7 +160,7 @@ function UploadProgress({ progress, error, onRetry }) {
   );
 }
 
-// â”€â”€â”€ Search Results Panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Search Results Panel ─────────────────────────────────────────────────────
 function SearchPanel({ results, query, onJumpTo, onClose, isLoading }) {
   const highlight = (text) => {
     if (!query || !text) return text;
@@ -202,7 +202,7 @@ function SearchPanel({ results, query, onJumpTo, onClose, isLoading }) {
   );
 }
 
-// â”€â”€â”€ Offline Banner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Offline Banner ────────────────────────────────────────────────────────────
 function OfflineBanner({ queuedCount }) {
   return (
     <div className="flex items-center gap-2 px-4 py-2 bg-amber-500/10 border-t border-amber-500/20 text-amber-400 text-xs">
@@ -212,7 +212,7 @@ function OfflineBanner({ queuedCount }) {
   );
 }
 
-// â”€â”€â”€ Main CampusChat â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Main CampusChat ───────────────────────────────────────────────────────────
 export default function CampusChat() {
   const { user, students, factions, showToast, groups, refreshGroups } = useAppContext();
   const [activeChat, setActiveChat] = useState('general');
@@ -231,31 +231,31 @@ export default function CampusChat() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [profileViewUser, setProfileViewUser] = useState(null);
 
-  // â”€â”€ Message state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Message state ────────────────────────────────────────────────────────────
   const [generalMessages, setGeneralMessages] = useState([]);
   const [dmMessages, setDmMessages] = useState({});
   const [dmGroupMap, setDmGroupMap] = useState({}); // { groupId: otherUserId }
 
-  // â”€â”€ Pagination â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Pagination ───────────────────────────────────────────────────────────────
   const [hasMoreMessages, setHasMoreMessages] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(false);
 
-  // â”€â”€ Edit state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Edit state ───────────────────────────────────────────────────────────────
   const [editingMsgId, setEditingMsgId] = useState(null);
   const [editText, setEditText] = useState('');
   const [contextMenuMsgId, setContextMenuMsgId] = useState(null);
 
-  // â”€â”€ Reactions (DB-backed) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Reactions (DB-backed) ─────────────────────────────────────────────────────
   const [reactions, setReactions] = useState({}); // { messageId: { emoji: [{ userId, reactor }] } }
 
-  // â”€â”€ Read receipts â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Read receipts ────────────────────────────────────────────────────────────
   const [readReceipts, setReadReceipts] = useState([]); // [{ userId, lastReadMessageId, lastReadAt }]
 
-  // â”€â”€ File upload â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── File upload ──────────────────────────────────────────────────────────────
   const [uploadProgress, setUploadProgress] = useState(null); // null | { progress, error }
 
-  // â”€â”€ Search â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Search ───────────────────────────────────────────────────────────────────
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -263,11 +263,11 @@ export default function CampusChat() {
   const [highlightedMsgId, setHighlightedMsgId] = useState(null);
   const searchDebounceRef = useRef(null);
 
-  // â”€â”€ Offline â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Offline ──────────────────────────────────────────────────────────────────
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [offlineQueue, setOfflineQueue] = useState(loadOfflineQueue());
 
-  // â”€â”€ Refs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Refs ─────────────────────────────────────────────────────────────────────
   const chatEndRef = useRef(null);
   const chatAreaRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -276,7 +276,7 @@ export default function CampusChat() {
   const messageRefs = useRef({}); // { msgId: DOM element }
   const oldestMsgCreatedAtRef = useRef(null);
 
-  // â”€â”€â”€ Online/Offline detection â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Online/Offline detection ──────────────────────────────────────────────
   useEffect(() => {
     const handleOnline = () => {
       setIsOffline(false);
@@ -304,7 +304,7 @@ export default function CampusChat() {
     };
   }, [activeGroupId, user?.id]);
 
-  // â”€â”€â”€ Resolve general group ID â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Resolve general group ID ────────────────────────────────────────────────
   useEffect(() => {
     let isMounted = true;
     const resolveGeneralGroupId = async () => {
@@ -338,7 +338,7 @@ export default function CampusChat() {
     return () => { isMounted = false; };
   }, [activeChat, groups, user]);
 
-  // â”€â”€â”€ Handle selecting a DM chat â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Handle selecting a DM chat ───────────────────────────────────────────────
   const handleSelectChat = async (targetId) => {
     setActiveChat(targetId);
     setShowSearch(false);
@@ -387,7 +387,7 @@ export default function CampusChat() {
     }
   };
 
-  // â”€â”€â”€ Typing Presence Channel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Typing Presence Channel ──────────────────────────────────────────────────
   useEffect(() => {
     if (!activeGroupId || !user?.id) return;
     if (presenceChannelRef.current) {
@@ -424,7 +424,7 @@ export default function CampusChat() {
     presenceChannelRef.current.track({ typing: isTyping, name: user?.name || 'Someone' });
   }, [user?.name]);
 
-  // â”€â”€â”€ DM Group Map Builder â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── DM Group Map Builder ─────────────────────────────────────────────────────
   useEffect(() => {
     if (!user?.id) return;
     let isMounted = true;
@@ -449,7 +449,7 @@ export default function CampusChat() {
     return () => { isMounted = false; };
   }, [user?.id, groups]);
 
-  // â”€â”€â”€ Subscribe to DM messages globally â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Subscribe to DM messages globally ───────────────────────────────────────
   useEffect(() => {
     if (!user?.id || Object.keys(dmGroupMap).length === 0) return;
     const groupIds = Object.keys(dmGroupMap).map(Number);
@@ -479,7 +479,7 @@ export default function CampusChat() {
     return () => { supabase.removeChannel(channel); };
   }, [user?.id, dmGroupMap]);
 
-  // â”€â”€â”€ Load initial messages + reactions + read receipts â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Load initial messages + reactions + read receipts ────────────────────────
   const doFetchMessages = useCallback(async (groupId, replace = true) => {
     if (!groupId) return;
     if (replace) setIsInitialLoading(true);
@@ -542,7 +542,7 @@ export default function CampusChat() {
     doFetchMessages(activeGroupId, true);
   }, [activeGroupId]);
 
-  // â”€â”€â”€ Load more (infinite scroll) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Load more (infinite scroll) ─────────────────────────────────────────────
   const handleLoadMore = useCallback(async () => {
     if (!activeGroupId || isLoadingMore || !hasMoreMessages) return;
     const scrollEl = chatAreaRef.current;
@@ -557,7 +557,7 @@ export default function CampusChat() {
     }
   }, [activeGroupId, isLoadingMore, hasMoreMessages, doFetchMessages]);
 
-  // â”€â”€â”€ General Chat Realtime subscription â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── General Chat Realtime subscription ──────────────────────────────────────
   useEffect(() => {
     if (activeChat !== 'general' || !activeGroupId) return;
 
@@ -629,7 +629,7 @@ export default function CampusChat() {
     return () => { supabase.removeChannel(channel); };
   }, [activeChat, activeGroupId, showScrollBtn, user?.id]);
 
-  // â”€â”€â”€ Auto-scroll to bottom â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Auto-scroll to bottom ────────────────────────────────────────────────────
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [generalMessages, dmMessages, activeChat]);
@@ -649,7 +649,7 @@ export default function CampusChat() {
     setShowScrollBtn(false);
   };
 
-  // â”€â”€â”€ Jump to message (from search) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Jump to message (from search) ──────────────────────────────────────────
   const jumpToMessage = useCallback((msgId) => {
     setHighlightedMsgId(msgId);
     setShowSearch(false);
@@ -662,7 +662,7 @@ export default function CampusChat() {
     setTimeout(() => setHighlightedMsgId(null), 2500);
   }, []);
 
-  // â”€â”€â”€ Search â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Search ───────────────────────────────────────────────────────────────────
   useEffect(() => {
     if (!searchQuery.trim() || !activeGroupId) {
       setSearchResults([]);
@@ -678,7 +678,7 @@ export default function CampusChat() {
     return () => clearTimeout(searchDebounceRef.current);
   }, [searchQuery, activeGroupId]);
 
-  // â”€â”€â”€ Send Message â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Send Message ─────────────────────────────────────────────────────────────
   const handleSend = async (e) => {
     e?.preventDefault();
     if (!inputVal.trim() && !pendingFile) return;
@@ -792,7 +792,7 @@ export default function CampusChat() {
     }
   };
 
-  // â”€â”€â”€ Edit Message â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Edit Message ─────────────────────────────────────────────────────────────
   const startEdit = (msg) => {
     setEditingMsgId(msg.id);
     setEditText(msg.text || '');
@@ -820,7 +820,7 @@ export default function CampusChat() {
     }
   };
 
-  // â”€â”€â”€ Delete Message â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Delete Message ───────────────────────────────────────────────────────────
   const handleDelete = async (msg) => {
     // Optimistic soft-delete
     const patchMsg = (prev) => prev.map(m => m.id === msg.id ? { ...m, isDeleted: true } : m);
@@ -837,7 +837,7 @@ export default function CampusChat() {
     }
   };
 
-  // â”€â”€â”€ Toggle Reaction (DB-backed) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Toggle Reaction (DB-backed) ──────────────────────────────────────────────
   const toggleReaction = async (msgId, emoji) => {
     if (!user?.id) return;
     const existingReactors = reactions[msgId]?.[emoji] || [];
@@ -866,7 +866,7 @@ export default function CampusChat() {
     }
   };
 
-  // â”€â”€â”€ Input handling â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Input handling ───────────────────────────────────────────────────────────
   const handleInputChange = (e) => {
     setInputVal(e.target.value);
     broadcastTyping(true);
@@ -875,7 +875,7 @@ export default function CampusChat() {
     setTypingTimer(t);
   };
 
-  // â”€â”€â”€ File select â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── File select ──────────────────────────────────────────────────────────────
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -892,7 +892,7 @@ export default function CampusChat() {
     e.target.value = '';
   };
 
-  // â”€â”€â”€ Derived state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Derived state ────────────────────────────────────────────────────────────
   const getMessages = () => activeChat === 'general' ? generalMessages : (dmMessages[activeChat] || []);
   const activeUser = activeChat !== 'general' ? students.find(s => s.id === activeChat) : null;
   const onlineStudents = students.filter(s => s.online);
@@ -934,11 +934,11 @@ export default function CampusChat() {
     setIsProfileModalOpen(true);
   };
 
-  // â”€â”€â”€ Render â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Render ───────────────────────────────────────────────────────────────────
   return (
-    <div className="flex h-[85vh] bg-gs-card border border-gs-border rounded-xl overflow-hidden shadow-sm">
+    <div className="flex h-[85vh] glass-card rounded-xl overflow-hidden shadow-sm">
 
-      {/* â”€â”€ Flat Sidebar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Flat Sidebar ───────────────────────────────────────────────────── */}
       <div className="w-64 border-r border-gs-border flex flex-col bg-[#09090b] shrink-0">
         <div className="p-3 border-b border-gs-border space-y-2">
           <h2 className="text-xs font-semibold text-gs-text-main uppercase tracking-wider px-1">Channels & DMs</h2>
@@ -946,19 +946,19 @@ export default function CampusChat() {
             <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gs-text-muted" />
             <input type="text" value={userSearch} onChange={e => setUserSearch(e.target.value)}
               placeholder="Search chat or peers..."
-              className="w-full bg-gs-elevated border border-gs-border rounded-lg pl-8 pr-2.5 py-1.5 text-xs outline-none focus:border-[#6D6AF6] text-gs-text-main placeholder-gs-text-muted transition-colors" />
+              className="w-full glass-elevated rounded-lg pl-8 pr-2.5 py-1.5 text-xs outline-none focus:border-[#7c6af6] text-gs-text-main placeholder-gs-text-muted transition-colors" />
           </div>
         </div>
         <div className="flex-1 overflow-y-auto p-2 space-y-1">
           {/* General Channel */}
           <button onClick={() => handleSelectChat('general')}
-            className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg transition-colors text-left ${activeChat === 'general' ? 'bg-[#6D6AF6]/10 text-[#6D6AF6] font-medium' : 'hover:bg-white/[0.04] text-gs-text-muted'}`}>
-            <div className={`w-7 h-7 rounded-md border flex items-center justify-center shrink-0 ${activeChat === 'general' ? 'bg-[#6D6AF6]/20 border-[#6D6AF6]/30 text-[#6D6AF6]' : 'bg-white/[0.04] border-gs-border text-gs-text-muted'}`}>
+            className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg transition-colors text-left ${activeChat === 'general' ? 'bg-[#6D6AF6]/10 text-[#9182f8] font-medium' : 'hover:bg-white/[0.04] text-gs-text-muted'}`}>
+            <div className={`w-7 h-7 rounded-md border flex items-center justify-center shrink-0 ${activeChat === 'general' ? 'bg-[#6D6AF6]/20 border-[#7c6af6]/30 text-[#9182f8]' : 'bg-white/[0.04] border-gs-border text-gs-text-muted'}`}>
               <Hash size={14} />
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between">
-                <span className={`text-xs truncate ${activeChat === 'general' ? 'text-[#6D6AF6] font-semibold' : 'text-gs-text-main font-medium'}`}>campus-general</span>
+                <span className={`text-xs truncate ${activeChat === 'general' ? 'text-[#9182f8] font-semibold' : 'text-gs-text-main font-medium'}`}>campus-general</span>
                 {unreadCounts.general > 0 && (
                   <span className="w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] flex items-center justify-center font-semibold">{unreadCounts.general}</span>
                 )}
@@ -971,7 +971,7 @@ export default function CampusChat() {
 
           {sidebarStudents.map(student => (
             <button key={student.id} onClick={() => handleSelectChat(student.id)}
-              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-colors text-left group ${activeChat === student.id ? 'bg-[#6D6AF6]/10 text-[#6D6AF6]' : 'hover:bg-white/[0.04] text-gs-text-muted'}`}>
+              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-colors text-left group ${activeChat === student.id ? 'bg-[#6D6AF6]/10 text-[#9182f8]' : 'hover:bg-white/[0.04] text-gs-text-muted'}`}>
               <div className="relative shrink-0 cursor-pointer"
                 onClick={(e) => { e.stopPropagation(); handleUserProfileClick(student); }}>
                 <div className="w-6 h-6 rounded-md border border-gs-border flex items-center justify-center text-xs bg-white/[0.04] font-medium text-gs-text-main">
@@ -981,7 +981,7 @@ export default function CampusChat() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-baseline">
-                  <h3 className={`text-xs truncate ${activeChat === student.id ? 'text-[#6D6AF6] font-semibold' : 'text-gs-text-main font-medium'}`}>
+                  <h3 className={`text-xs truncate ${activeChat === student.id ? 'text-[#9182f8] font-semibold' : 'text-gs-text-main font-medium'}`}>
                     {student.name}
                   </h3>
                   <span className="text-[9px] text-gs-text-muted shrink-0 ml-1">{student.online ? 'Online' : 'Offline'}</span>
@@ -995,13 +995,13 @@ export default function CampusChat() {
         </div>
       </div>
 
-      {/* â”€â”€ Main Chat Area â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Main Chat Area ────────────────────────────────────────────────────── */}
       <div className="flex-1 flex flex-col min-w-0 bg-gs-card relative">
         {/* Header */}
         <header className="h-14 border-b border-gs-border flex items-center justify-between px-4 shrink-0 bg-gs-card">
           {activeChat === 'general' ? (
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-md bg-[#6D6AF6]/10 flex items-center justify-center text-[#6D6AF6]">
+              <div className="w-7 h-7 rounded-md bg-[#6D6AF6]/10 flex items-center justify-center text-[#9182f8]">
                 <Hash size={15} />
               </div>
               <div>
@@ -1016,7 +1016,7 @@ export default function CampusChat() {
                 {activeUser.avatar || 'ðŸ‘¤'}
               </div>
               <div>
-                <h1 className="font-semibold text-xs text-gs-text-main hover:text-[#6D6AF6] transition-colors">{activeUser.name}</h1>
+                <h1 className="font-semibold text-xs text-gs-text-main hover:text-[#9182f8] transition-colors">{activeUser.name}</h1>
                 <p className="text-[10px] text-gs-text-muted flex items-center gap-1">
                   <span className={`w-1.5 h-1.5 rounded-full ${activeUser.online ? 'bg-emerald-400' : 'bg-zinc-500'}`} />
                   {activeUser.online ? 'Online' : 'Offline'}
@@ -1029,7 +1029,7 @@ export default function CampusChat() {
           <div className="flex items-center gap-1">
             {/* Search toggle */}
             <button onClick={() => setShowSearch(prev => !prev)}
-              className={`p-1.5 rounded-lg transition-colors ${showSearch ? 'text-[#6D6AF6] bg-[#6D6AF6]/10' : 'text-gs-text-muted hover:text-gs-text-main hover:bg-white/[0.04]'}`}
+              className={`p-1.5 rounded-lg transition-colors ${showSearch ? 'text-[#9182f8] bg-[#7c6af6]/12' : 'text-gs-text-muted hover:text-gs-text-main hover:bg-white/[0.04]'}`}
               title="Search messages">
               <Search size={16} />
             </button>
@@ -1080,7 +1080,7 @@ export default function CampusChat() {
           {/* Load more button */}
           {hasMoreMessages && !isInitialLoading && (
             <button onClick={handleLoadMore} disabled={isLoadingMore}
-              className="self-center flex items-center gap-2 px-3 py-1.5 text-xs text-gs-text-muted hover:text-blue-500 bg-gs-card border border-gs-border rounded-lg transition-colors disabled:opacity-50">
+              className="self-center flex items-center gap-2 px-3 py-1.5 text-xs text-gs-text-muted hover:text-blue-500 glass-card rounded-lg transition-colors disabled:opacity-50">
               {isLoadingMore ? <Loader2 size={12} className="animate-spin" /> : <ChevronUp size={12} />}
               {isLoadingMore ? 'Loading...' : 'Load older messages'}
             </button>
@@ -1145,7 +1145,7 @@ export default function CampusChat() {
                   {msg.replyToId && (
                     <div className="mb-1.5 px-3 py-1.5 bg-[var(--color-gs-bg)] border-l-2 border-blue-600 rounded-r-lg text-xs text-[var(--color-gs-text-muted)] max-w-xs truncate cursor-pointer hover:text-[var(--color-gs-text-main)]"
                       onClick={() => jumpToMessage(msg.replyToId)}>
-                      â†© Reply
+                      ↩ Reply
                     </div>
                   )}
 
@@ -1195,7 +1195,7 @@ export default function CampusChat() {
                               if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitEdit(msg); }
                               if (e.key === 'Escape') cancelEdit();
                             }}
-                            className="flex-1 bg-gs-elevated border border-[#6D6AF6] rounded-lg px-3 py-2 text-xs outline-none resize-none text-gs-text-main"
+                            className="flex-1 bg-gs-elevated border border-[#7c6af6] rounded-lg px-3 py-2 text-xs outline-none resize-none text-gs-text-main"
                             rows={2}
                           />
                           <div className="flex flex-col gap-1">
@@ -1239,7 +1239,7 @@ export default function CampusChat() {
                       {QUICK_REACTIONS.map(emoji => (
                         <button key={emoji} onClick={() => toggleReaction(msg.id, emoji)}
                           className={"text-xs w-6 h-6 rounded-md hover:bg-white/[0.08] transition-colors flex items-center justify-center " +
-                            ((msgReactions[emoji] || []).some(r => r.userId === user?.id) ? 'bg-[#6D6AF6]/20 text-[#6D6AF6]' : '')}>
+                            ((msgReactions[emoji] || []).some(r => r.userId === user?.id) ? 'bg-[#6D6AF6]/20 text-[#9182f8]' : '')}>
                           {emoji}
                         </button>
                       ))}
@@ -1277,7 +1277,7 @@ export default function CampusChat() {
                           <button key={emoji} onClick={() => toggleReaction(msg.id, emoji)}
                             title={names}
                             className={"flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] border transition-colors " +
-                              (hasReacted ? 'bg-[#6D6AF6]/15 border-[#6D6AF6]/30 text-[#6D6AF6] font-medium' : 'bg-gs-elevated border-gs-border text-gs-text-muted hover:text-gs-text-main')}>
+                              (hasReacted ? 'bg-[#6D6AF6]/15 border-[#7c6af6]/30 text-[#9182f8] font-medium' : 'bg-gs-elevated border-gs-border text-gs-text-muted hover:text-gs-text-main')}>
                             {emoji} {reactors.length}
                           </button>
                         );
@@ -1296,7 +1296,7 @@ export default function CampusChat() {
                 {typingUsers[0] ? (students.find(s => s.id === typingUsers[0].userId)?.avatar || 'ðŸ‘¤') : 'ðŸ‘¤'}
               </div>
               <div>
-                <div className="px-3 py-2 bg-gs-elevated border border-gs-border rounded-xl rounded-tl-none flex items-center gap-1.5 mb-1">
+                <div className="px-3 py-2 glass-elevated rounded-xl rounded-tl-none flex items-center gap-1.5 mb-1">
                   <span className="w-1.5 h-1.5 bg-gs-text-muted rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                   <span className="w-1.5 h-1.5 bg-gs-text-muted rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                   <span className="w-1.5 h-1.5 bg-gs-text-muted rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
@@ -1309,7 +1309,7 @@ export default function CampusChat() {
           {/* Empty state */}
           {messages.length === 0 && !typingLabel && !isInitialLoading && (
             <div className="flex-1 flex flex-col items-center justify-center text-gs-text-muted py-20">
-              <div className="w-10 h-10 rounded-xl bg-[#6D6AF6]/10 text-[#6D6AF6] flex items-center justify-center mb-3">
+              <div className="w-10 h-10 rounded-xl bg-[#6D6AF6]/10 text-[#9182f8] flex items-center justify-center mb-3">
                 <MessageSquare size={20} />
               </div>
               <p className="text-xs">No messages yet. Send a message to start the conversation.</p>
@@ -1329,7 +1329,7 @@ export default function CampusChat() {
         {/* Offline banner */}
         {isOffline && <OfflineBanner queuedCount={offlineQueue.length} />}
 
-        {/* â”€â”€ Input Area â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── Input Area ──────────────────────────────────────────────────────── */}
         <div className="p-3 border-t border-gs-border bg-gs-card shrink-0">
           {/* Upload progress */}
           {uploadProgress && (
@@ -1338,8 +1338,8 @@ export default function CampusChat() {
 
           {/* Reply Preview */}
           {replyTo && (
-            <div className="flex items-center gap-2 mb-2 px-3 py-1.5 bg-gs-elevated border border-gs-border rounded-lg text-xs">
-              <Reply size={12} className="text-[#6D6AF6] shrink-0" />
+            <div className="flex items-center gap-2 mb-2 px-3 py-1.5 glass-elevated rounded-lg text-xs">
+              <Reply size={12} className="text-[#9182f8] shrink-0" />
               <span className="text-gs-text-muted flex-1 truncate">Replying to: {replyTo.text}</span>
               <button onClick={() => setReplyTo(null)} className="text-gs-text-muted hover:text-rose-400 transition-colors"><X size={13} /></button>
             </div>
@@ -1347,11 +1347,11 @@ export default function CampusChat() {
 
           {/* Media Preview */}
           {mediaPreview && (
-            <div className="flex items-center gap-3 mb-2 p-2 bg-gs-elevated border border-gs-border rounded-lg">
+            <div className="flex items-center gap-3 mb-2 p-2 glass-elevated rounded-lg">
               {mediaPreview.type === 'image' ? (
                 <img src={mediaPreview.url} alt="preview" className="w-14 h-14 rounded-md object-cover" />
               ) : (
-                <div className="w-9 h-9 rounded-md bg-[#6D6AF6]/10 flex items-center justify-center text-[#6D6AF6]"><File size={18} /></div>
+                <div className="w-9 h-9 rounded-md bg-[#6D6AF6]/10 flex items-center justify-center text-[#9182f8]"><File size={18} /></div>
               )}
               <div className="flex-1 min-w-0">
                 <p className="text-xs text-gs-text-main truncate">{mediaPreview.name}</p>
@@ -1372,7 +1372,7 @@ export default function CampusChat() {
           <div className="relative">
             {showEmoji && <EmojiPicker onSelect={e => setInputVal(prev => prev + e)} onClose={() => setShowEmoji(false)} />}
 
-            <form onSubmit={handleSend} className="flex gap-2 items-center bg-gs-elevated border border-gs-border rounded-xl p-1.5 focus-within:border-[#6D6AF6] transition-colors">
+            <form onSubmit={handleSend} className="flex gap-2 items-center glass-elevated rounded-xl p-1.5 focus-within:border-[#7c6af6] transition-colors">
               <input ref={fileInputRef} type="file"
                 accept="image/*,video/*,.pdf,.doc,.docx,.ppt,.pptx,.txt,.zip"
                 className="hidden" onChange={handleFileSelect} />
@@ -1402,7 +1402,7 @@ export default function CampusChat() {
         </div>
       </div>
 
-      {/* â”€â”€ Public Profile Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Public Profile Modal ────────────────────────────────────────────── */}
       {isProfileModalOpen && profileViewUser && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
           onClick={() => setIsProfileModalOpen(false)}>
@@ -1419,5 +1419,6 @@ export default function CampusChat() {
     </div>
   );
 }
+
 
 

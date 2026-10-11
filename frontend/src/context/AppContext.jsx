@@ -144,7 +144,7 @@ export const AppProvider = ({ children }) => {
             .eq('read', false);
           setUnreadNotificationCount(unreadData?.length ?? 0);
         } else {
-          // Either no profile row, or profile exists but essential fields are missing â†’ needs onboarding
+          // Either no profile row, or profile exists but essential fields are missing → needs onboarding
           setUserState({ 
             ...(profileData || {}), 
             id: authUser.id, 
@@ -212,7 +212,7 @@ export const AppProvider = ({ children }) => {
       year: userData.year || '',
       phone: userData.phone || '',
       email: user?.email || userData.email || '',
-      // Dynamic/optional fields â€” preserve whatever was passed in
+      // Dynamic/optional fields — preserve whatever was passed in
       bio: userData.bio || '',
       cgpa: userData.cgpa || null,
       dob: userData.dob || null,
@@ -294,7 +294,7 @@ export const AppProvider = ({ children }) => {
   return (
     <AppContext.Provider value={{
       user,
-      // setUser: used only by onboarding â€” does a full profile upsert
+      // setUser: used only by onboarding — does a full profile upsert
       setUser: handleSetUser,
       // updateLocalUser: used by UserProfile for instant UI updates without
       // triggering a secondary DB write. Merges partial data into user state.

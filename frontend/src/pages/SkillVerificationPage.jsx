@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import SkillVerificationModule from '../components/profile/SkillVerificationModule';
 import { Award } from 'lucide-react';
 
@@ -6,7 +6,7 @@ export const SkillVerificationPage = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-6 animate-page-load">
       <div className="flex items-center gap-3">
-        <div className="p-3 rounded-2xl bg-[#6D6AF6]/15 text-[#6D6AF6]">
+        <div className="p-3 rounded-2xl bg-[#6D6AF6]/15 text-[#9182f8]">
           <Award className="w-6 h-6" />
         </div>
         <div>
@@ -23,3 +23,4 @@ export const SkillVerificationPage = () => {
 };
 
 export default SkillVerificationPage;
+

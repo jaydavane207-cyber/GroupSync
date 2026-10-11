@@ -9,7 +9,7 @@ import {
 import { useAppContext } from '@/context/AppContext';
 import supabase from '@/lib/supabase';
 
-// â”€â”€â”€ Skill Catalogue â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Skill Catalogue ─────────────────────────────────────────────────────────
 // Grouped by category for a richer UI. Each entry: { label, color, bg, border }
 const SKILL_GROUPS = [
   {
@@ -57,7 +57,7 @@ const SKILL_GROUPS = [
 const ALL_SKILLS = SKILL_GROUPS.flatMap(g => g.skills);
 const getSkillMeta = (label) => ALL_SKILLS.find(s => s.label === label) || { label, color: '#6D6AF6', bg: 'rgba(109,106,246,0.08)', border: 'rgba(109,106,246,0.35)' };
 
-// â”€â”€â”€ Event types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Event types ──────────────────────────────────────────────────────────────
 const EVENT_TYPES = [
   { value: 'Hackathon',    label: 'Hackathon' },
   { value: 'Mini-Project', label: 'Mini-Project' },
@@ -65,13 +65,13 @@ const EVENT_TYPES = [
   { value: 'Competition',  label: 'Competition' },
 ];
 
-// â”€â”€â”€ Privacy options â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Privacy options ──────────────────────────────────────────────────────────
 const PRIVACY_OPTIONS = [
   { value: 'public',   label: 'Public',   icon: Globe,       desc: 'Anyone can request to join'  },
   { value: 'private',  label: 'Private',  icon: Lock,        desc: 'Invite-only, hidden from browse' },
 ];
 
-// â”€â”€â”€ Input field wrapper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Input field wrapper ──────────────────────────────────────────────────────
 function Field({ label, required, hint, children }) {
   return (
     <div className="space-y-1.5">
@@ -87,7 +87,7 @@ function Field({ label, required, hint, children }) {
   );
 }
 
-// â”€â”€â”€ Section divider â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Section divider ──────────────────────────────────────────────────────────
 function SectionDivider({ icon: Icon, label }) {
   return (
     <div className="flex items-center gap-3 py-1">
@@ -101,19 +101,19 @@ function SectionDivider({ icon: Icon, label }) {
   );
 }
 
-// â”€â”€â”€ Main Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Main Component ───────────────────────────────────────────────────────────
 /**
  * CreateGroupModal
  *
  * Props:
- *   isOpen    (boolean)  â€” controls visibility
- *   onClose   (fn)       â€” called when the modal should close
- *   onSuccess (fn?)      â€” optional callback after successful creation
+ *   isOpen    (boolean)  — controls visibility
+ *   onClose   (fn)       — called when the modal should close
+ *   onSuccess (fn?)      — optional callback after successful creation
  */
 export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
   const { user, showToast, refreshGroups } = useAppContext();
 
-  // â”€â”€ Form state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Form state ───────────────────────────────────────────────────────────────
   const [groupName,           setGroupName]           = useState('');
   const [projectDescription,  setProjectDescription]  = useState('');
   const [eventType,           setEventType]           = useState('Hackathon');
@@ -124,7 +124,7 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
   const [skillSearch,         setSkillSearch]         = useState('');
   const [error,               setError]               = useState('');
 
-  // â”€â”€ Close on Escape â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Close on Escape ───────────────────────────────────────────────────────────
   useEffect(() => {
     if (!isOpen) return;
     const handler = (e) => { if (e.key === 'Escape') onClose(); };
@@ -132,7 +132,7 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
     return () => window.removeEventListener('keydown', handler);
   }, [isOpen, onClose]);
 
-  // â”€â”€ Reset form when modal opens â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Reset form when modal opens ───────────────────────────────────────────────
   useEffect(() => {
     if (isOpen) {
       setGroupName('');
@@ -147,7 +147,7 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
     }
   }, [isOpen]);
 
-  // â”€â”€ Skill toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Skill toggle ──────────────────────────────────────────────────────────────
   const MAX_SKILLS = 8;
   const toggleSkill = useCallback((label) => {
     setRequiredSkills(prev => {
@@ -157,15 +157,15 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
     });
   }, []);
 
-  // â”€â”€ Filtered skill list for search â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Filtered skill list for search ────────────────────────────────────────────
   const filteredGroups = skillSearch.trim()
     ? [{ category: 'Search results', skills: ALL_SKILLS.filter(s => s.label.toLowerCase().includes(skillSearch.toLowerCase())) }]
     : SKILL_GROUPS;
 
-  // â”€â”€ Can submit? â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Can submit? ───────────────────────────────────────────────────────────────
   const canSubmit = groupName.trim().length > 0 && requiredSkills.length > 0 && !isSubmitting;
 
-  // â”€â”€ Submit handler â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Submit handler ────────────────────────────────────────────────────────────
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!canSubmit) return;
@@ -173,7 +173,7 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
     setIsSubmitting(true);
 
     try {
-      // â”€â”€ Build the group record matching the real `groups` table schema â”€â”€â”€â”€â”€â”€â”€
+      // ── Build the group record matching the real `groups` table schema ───────
       const dbGroup = {
         name:        groupName.trim(),
         // `event` column stores the event name; we use eventType as the event label
@@ -188,7 +188,7 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
         admin_id:    user?.id || null,
       };
 
-      // â”€â”€ TODO: Uncomment and wire up the Supabase insert â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── TODO: Uncomment and wire up the Supabase insert ──────────────────────
       // const { data: insertedGroup, error: groupError } = await supabase
       //   .from('groups')
       //   .insert([dbGroup])
@@ -203,9 +203,9 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
       //     .from('group_members')
       //     .insert({ group_id: insertedGroup.id, profile_id: user.id });
       // }
-      // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ─────────────────────────────────────────────────────────────────────────
 
-      // â”€â”€ Live Supabase insert (mirrors BrowseGroups.handleCreateGroup) â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Live Supabase insert (mirrors BrowseGroups.handleCreateGroup) ────────
       const { data: insertedGroup, error: groupError } = await supabase
         .from('groups')
         .insert([dbGroup])
@@ -221,7 +221,7 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
           .insert({ group_id: insertedGroup.id, profile_id: user.id });
 
         if (memberError) {
-          // Non-fatal â€” group was created, but log it
+          // Non-fatal — group was created, but log it
           console.warn('[CreateGroupModal] Could not add creator to group_members:', memberError.message);
         }
       }
@@ -242,13 +242,13 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
     }
   };
 
-  // â”€â”€ Portal target â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Portal target ─────────────────────────────────────────────────────────────
   if (typeof document === 'undefined') return null;
 
   return ReactDOM.createPortal(
     <AnimatePresence>
       {isOpen && (
-        /* â”€â”€ Backdrop â”€â”€ */
+        /* ── Backdrop ── */
         <motion.div
           key="cgm-backdrop"
           initial={{ opacity: 0 }}
@@ -258,21 +258,21 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
           className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md flex items-center justify-center p-4"
           onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
         >
-          {/* â”€â”€ Modal panel â”€â”€ */}
+          {/* ── Modal panel ── */}
           <motion.div
             key="cgm-panel"
             initial={{ opacity: 0, scale: 0.98, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98, y: 10 }}
             transition={{ duration: 0.15 }}
-            className="relative w-full max-w-xl bg-gs-card border border-gs-border rounded-xl shadow-xl overflow-hidden max-h-[92vh] flex flex-col"
+            className="relative w-full max-w-xl glass-card rounded-xl shadow-xl overflow-hidden max-h-[92vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* â”€â”€ Header â”€â”€ */}
+            {/* ── Header ── */}
             <div className="flex items-center justify-between px-6 py-4 shrink-0 border-b border-gs-border">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 flex items-center justify-center">
-                  <Users size={16} className="text-[#6D6AF6]" />
+                <div className="w-8 h-8 rounded-lg bg-[#7c6af6]/15 border border-[#7c6af6]/30 flex items-center justify-center">
+                  <Users size={16} className="text-[#9182f8]" />
                 </div>
                 <div>
                   <h2 className="text-base font-semibold text-gs-text-main leading-none">
@@ -292,14 +292,14 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
               </button>
             </div>
 
-            {/* â”€â”€ Scrollable form body â”€â”€ */}
+            {/* ── Scrollable form body ── */}
             <form
               id="create-group-form"
               onSubmit={handleSubmit}
               className="flex-1 overflow-y-auto px-7 py-6 space-y-6"
               style={{ scrollbarWidth: 'thin' }}
             >
-              {/* â”€â”€ Error banner â”€â”€ */}
+              {/* ── Error banner ── */}
               <AnimatePresence>
                 {error && (
                   <motion.div
@@ -314,7 +314,7 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
                 )}
               </AnimatePresence>
 
-              {/* â”€â”€ SECTION 1: Basic Info â”€â”€ */}
+              {/* ── SECTION 1: Basic Info ── */}
               <SectionDivider icon={FileText} label="Basic Info" />
 
               {/* Group Name */}
@@ -324,10 +324,10 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
                   type="text"
                   value={groupName}
                   onChange={(e) => setGroupName(e.target.value.slice(0, 60))}
-                  placeholder="e.g. Neural Ninjas, Code Crusadersâ€¦"
+                  placeholder="e.g. Neural Ninjas, Code Crusaders..."
                   className="w-full bg-[var(--color-gs-bg)] border border-[var(--color-gs-border)] rounded-xl px-4 py-2.5 text-xs
                     text-[var(--color-gs-text-main)] placeholder-[var(--color-gs-text-muted)]/60
-                    outline-none focus:border-[#6D6AF6] focus:ring-1 focus:ring-[#6D6AF6]
+                    outline-none focus:border-[#7c6af6] focus:ring-1 focus:ring-[#6D6AF6]
                     transition-colors duration-150"
                   autoFocus
                 />
@@ -339,16 +339,16 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
                   id="cgm-description"
                   value={projectDescription}
                   onChange={(e) => setProjectDescription(e.target.value.slice(0, 300))}
-                  placeholder="Describe what you're building, the problem you're solving, and what makes it excitingâ€¦"
+                  placeholder="Describe what you're building, the problem you're solving, and what makes it exciting..."
                   rows={3}
                   className="w-full bg-[var(--color-gs-bg)] border border-[var(--color-gs-border)] rounded-xl px-4 py-2.5 text-xs
                     text-[var(--color-gs-text-main)] placeholder-[var(--color-gs-text-muted)]/60
-                    outline-none focus:border-[#6D6AF6] focus:ring-1 focus:ring-[#6D6AF6]
+                    outline-none focus:border-[#7c6af6] focus:ring-1 focus:ring-[#6D6AF6]
                     transition-colors duration-150 resize-none"
                 />
               </Field>
 
-              {/* â”€â”€ SECTION 2: Event & Team Settings â”€â”€ */}
+              {/* ── SECTION 2: Event & Team Settings ── */}
               <SectionDivider icon={Layers} label="Team Settings" />
 
               <div className="grid grid-cols-2 gap-4">
@@ -361,7 +361,7 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
                       onChange={(e) => setEventType(e.target.value)}
                       className="w-full appearance-none bg-[var(--color-gs-bg)] border border-[var(--color-gs-border)] rounded-xl
                         px-4 py-2.5 text-xs text-[var(--color-gs-text-main)]
-                        outline-none focus:border-[#6D6AF6] focus:ring-1 focus:ring-[#6D6AF6]
+                        outline-none focus:border-[#7c6af6] focus:ring-1 focus:ring-[#6D6AF6]
                         transition-colors cursor-pointer pr-10"
                     >
                       {EVENT_TYPES.map(et => (
@@ -381,7 +381,7 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
                       onChange={(e) => setPrivacy(e.target.value)}
                       className="w-full appearance-none bg-[var(--color-gs-bg)] border border-[var(--color-gs-border)] rounded-xl
                         px-4 py-2.5 text-xs text-[var(--color-gs-text-main)]
-                        outline-none focus:border-[#6D6AF6] focus:ring-1 focus:ring-[#6D6AF6]
+                        outline-none focus:border-[#7c6af6] focus:ring-1 focus:ring-[#6D6AF6]
                         transition-colors cursor-pointer pr-10"
                     >
                       {PRIVACY_OPTIONS.map(p => (
@@ -408,13 +408,13 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
                   {/* Tick marks */}
                   <div className="flex justify-between text-[10px] text-gs-text-muted/60 px-0.5">
                     {[2,3,4,5,6,7,8,9,10].map(n => (
-                      <span key={n} className={n === maxMembers ? 'text-[#6D6AF6] font-semibold' : ''}>{n}</span>
+                      <span key={n} className={n === maxMembers ? 'text-[#9182f8] font-semibold' : ''}>{n}</span>
                     ))}
                   </div>
                 </div>
               </Field>
 
-              {/* â”€â”€ SECTION 3: Required Skills â”€â”€ */}
+              {/* ── SECTION 3: Required Skills ── */}
               <SectionDivider icon={Tag} label="Required Skills" />
 
               <div className="space-y-3">
@@ -442,7 +442,7 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
                     type="text"
                     value={skillSearch}
                     onChange={(e) => setSkillSearch(e.target.value)}
-                    placeholder="Search skillsâ€¦"
+                    placeholder="Search skills..."
                     className="w-full bg-black/5 dark:bg-white/[0.03] border border-gs-border rounded-lg
                       pl-8 pr-4 py-1.5 text-xs text-gs-text-main placeholder-gs-text-muted
                       outline-none focus:border-blue-500 transition-colors"
@@ -481,7 +481,7 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
                   )}
                 </AnimatePresence>
 
-                {/* Skill badge grid â€” grouped by category */}
+                {/* Skill badge grid — grouped by category */}
                 <div className="space-y-4 max-h-52 overflow-y-auto pr-1" style={{ scrollbarWidth: 'thin' }}>
                   {filteredGroups.map(group => (
                     <div key={group.category}>
@@ -548,7 +548,7 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
               </div>
             </form>
 
-            {/* â”€â”€ Sticky footer â”€â”€ */}
+            {/* ── Sticky footer ── */}
             <div className="shrink-0 px-7 py-4 border-t border-gs-border bg-gs-card/80 backdrop-blur-xs">
               <div className="flex items-center gap-3">
                 {/* Cancel */}
@@ -574,7 +574,7 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
                     flex-[2] py-2.5 rounded-lg text-xs font-medium flex items-center justify-center gap-2
                     transition-colors duration-150 cursor-pointer
                     ${canSubmit
-                      ? 'bg-[#6D6AF6] hover:bg-[#5C59EC] text-white shadow-xs btn-tactile'
+                      ? 'bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white shadow-xs btn-tactile'
                       : 'bg-gs-border text-gs-text-muted cursor-not-allowed opacity-50'
                     }
                   `}
@@ -582,7 +582,7 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
                   {isSubmitting ? (
                     <>
                       <Loader2 size={14} className="animate-spin" />
-                      Creating Teamâ€¦
+                      Creating Team...
                     </>
                   ) : (
                     <>
@@ -610,4 +610,5 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
     document.body
   );
 }
+
 

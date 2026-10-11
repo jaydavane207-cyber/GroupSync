@@ -192,7 +192,7 @@ export default function BrowseGroups() {
                 onClick={() => setFilterType(type)}
                 className={`px-3 py-1.5 rounded-md text-xs transition-colors whitespace-nowrap border ${
                   filterType === type 
-                    ? 'bg-[#6D6AF6]/10 text-[#6D6AF6] border-[#6D6AF6]/30 font-medium' 
+                    ? 'bg-[#6D6AF6]/10 text-[#9182f8] border-[#7c6af6]/30 font-medium' 
                     : 'bg-white/[0.02] border-gs-border text-gs-text-muted hover:text-gs-text-main'
                 }`}
               >
@@ -224,7 +224,7 @@ export default function BrowseGroups() {
                   setSelectedGroupId(group.id);
                   navigate(`/group/${group.id}`);
                 }}
-                className="bg-gs-card border border-gs-border rounded-xl p-5 flex flex-col justify-between gap-4 hover:border-gs-border-hover transition-colors shadow-xs cursor-pointer group machined-edge"
+                className="glass-card rounded-xl p-5 flex flex-col justify-between gap-4 hover:border-gs-border-hover transition-colors shadow-xs cursor-pointer group machined-edge"
               >
                 <div>
                   <div className="flex justify-between items-start gap-4 mb-2.5">
@@ -233,18 +233,18 @@ export default function BrowseGroups() {
                         <span className="text-[10px] font-medium text-gs-text-muted">
                           {group.event || 'Campus Initiative'}
                         </span>
-                        <span className="text-gs-border">Â·</span>
+                        <span className="text-gs-border">·</span>
                         <span className="text-[10px] font-medium text-gs-text-muted bg-white/[0.04] px-1.5 py-0.5 rounded border border-gs-border">
                           {group.type}
                         </span>
                       </div>
-                      <h3 className="text-base font-semibold text-gs-text-main group-hover:text-[#6D6AF6] transition-colors line-clamp-1">
+                      <h3 className="text-base font-semibold text-gs-text-main group-hover:text-[#9182f8] transition-colors line-clamp-1">
                         {group.name}
                       </h3>
                     </div>
 
                     <div className="flex items-center gap-1.5 shrink-0">
-                      <span className="text-[10px] font-medium text-[#7E7BF8] bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 px-2 py-0.5 rounded-full">
+                      <span className="text-[10px] font-medium text-[#7E7BF8] bg-[#7c6af6]/15 border border-[#7c6af6]/30 px-2 py-0.5 rounded-full">
                         {matchScore}% match
                       </span>
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium border ${statusColor}`}>
@@ -273,7 +273,7 @@ export default function BrowseGroups() {
                     <span className="text-xs text-gs-text-muted">
                       {group.members || 1} of {group.maxMembers || 4} members
                     </span>
-                    <span className="font-medium text-[#6D6AF6] group-hover:underline flex items-center gap-1 text-xs">
+                    <span className="font-medium text-[#9182f8] group-hover:underline flex items-center gap-1 text-xs">
                       View & Apply <ArrowRight size={12} />
                     </span>
                   </div>
@@ -312,7 +312,7 @@ export default function BrowseGroups() {
           className="fixed inset-0 bg-black/60 z-[9999] flex items-center justify-center p-4"
           onClick={(e) => { if (e.target === e.currentTarget) setIsModalOpen(false); }}
         >
-          <div className="bg-gs-card border border-gs-border rounded-xl p-5 max-w-lg w-full max-h-[90vh] overflow-y-auto relative shadow-xl space-y-3.5">
+          <div className="glass-card rounded-xl p-5 max-w-lg w-full max-h-[90vh] overflow-y-auto relative shadow-xl space-y-3.5">
             <div className="flex justify-between items-center border-b border-gs-border pb-3">
               <div>
                 <h2 className="text-base font-semibold text-gs-text-main">Create group</h2>
@@ -435,4 +435,5 @@ export default function BrowseGroups() {
     </>
   );
 }
+
 

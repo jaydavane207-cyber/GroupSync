@@ -7,7 +7,7 @@ export default function SignupPage() {
   const navigate = useNavigate();
   const { user, isInitializingAuth } = useAppContext();
 
-  // Still loading auth state â€” show nothing briefly
+  // Still loading auth state — show nothing briefly
   if (isInitializingAuth) return null;
 
   // Already fully signed up? Go to dashboard
@@ -16,7 +16,7 @@ export default function SignupPage() {
   }
 
   // user exists but onboardingComplete is false = they just verified email,
-  // /onboarding will handle the rest â€” redirect there
+  // /onboarding will handle the rest — redirect there
   if (user && !user.onboardingComplete) {
     return <Navigate to="/onboarding" replace />;
   }

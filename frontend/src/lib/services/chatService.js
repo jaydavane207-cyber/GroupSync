@@ -1,8 +1,8 @@
 ﻿/**
- * chatService.js â€” GroupSync Chat Operations
+ * chatService.js — GroupSync Chat Operations
  * All chat DB operations with auto-retry, error normalization, and offline support.
  *
- * Retry strategy: 3 attempts, exponential backoff (400ms â†’ 800ms â†’ 1600ms)
+ * Retry strategy: 3 attempts, exponential backoff (400ms → 800ms → 1600ms)
  * Optimistic updates: callers are responsible for immediate UI updates
  */
 import supabase from '@/lib/supabase';
@@ -11,7 +11,7 @@ import { withRetry } from '@/lib/withRetry';
 const MESSAGES_PAGE_SIZE = 50;
 const OFFLINE_QUEUE_KEY = 'groupsync_offline_message_queue';
 
-// â”€â”€â”€ OFFLINE QUEUE HELPERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── OFFLINE QUEUE HELPERS ────────────────────────────────────────────────────
 
 /** Load queued offline messages from localStorage */
 export function loadOfflineQueue() {
@@ -40,11 +40,11 @@ export function clearOfflineQueue() {
   localStorage.removeItem(OFFLINE_QUEUE_KEY);
 }
 
-// â”€â”€â”€ MESSAGE LOADING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── MESSAGE LOADING ──────────────────────────────────────────────────────────
 
 /**
  * Load a page of messages for a chat group.
- * Returns messages in ascending order (oldest â†’ newest).
+ * Returns messages in ascending order (oldest → newest).
  * For page > 1, pass `before` (the created_at of the oldest currently loaded message)
  * to load older messages.
  *
@@ -85,13 +85,13 @@ export async function loadMessages(groupId, { before, limit = MESSAGES_PAGE_SIZE
     const result = await query;
     if (result.error) return result;
 
-    // Reverse so messages display oldest â†’ newest
+    // Reverse so messages display oldest → newest
     const messages = (result.data || []).reverse();
     return { data: messages, error: null };
   });
 }
 
-// â”€â”€â”€ SEND MESSAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── SEND MESSAGE ─────────────────────────────────────────────────────────────
 
 /**
  * Send a text or file message to a group chat.
@@ -126,7 +126,7 @@ export async function sendMessage(payload) {
   );
 }
 
-// â”€â”€â”€ FILE UPLOAD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── FILE UPLOAD ──────────────────────────────────────────────────────────────
 
 /**
  * Upload a file to Supabase Storage for chat.
@@ -180,7 +180,7 @@ export async function uploadChatFile(chatId, userId, file, onProgress) {
   }
 }
 
-// â”€â”€â”€ EDIT MESSAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── EDIT MESSAGE ─────────────────────────────────────────────────────────────
 
 /**
  * Edit a message's text content.
@@ -215,7 +215,7 @@ export async function editMessage(messageId, senderId, newText, createdAt) {
   );
 }
 
-// â”€â”€â”€ DELETE MESSAGE (soft) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── DELETE MESSAGE (soft) ────────────────────────────────────────────────────
 
 /**
  * Soft-delete a message (sets is_deleted=true).
@@ -234,7 +234,7 @@ export async function deleteMessage(messageId, senderId) {
   );
 }
 
-// â”€â”€â”€ REACTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── REACTIONS ────────────────────────────────────────────────────────────────
 
 /**
  * Fetch all reactions for a list of message IDs.
@@ -252,7 +252,7 @@ export async function fetchReactions(messageIds) {
 
   if (error) return { data: {}, error };
 
-  // Group by messageId â†’ emoji â†’ array of reactors
+  // Group by messageId → emoji → array of reactors
   const map = {};
   for (const row of (data || [])) {
     if (!map[row.message_id]) map[row.message_id] = {};
@@ -287,7 +287,7 @@ export async function removeReaction(messageId, userId, emoji) {
   );
 }
 
-// â”€â”€â”€ READ RECEIPTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── READ RECEIPTS ────────────────────────────────────────────────────────────
 
 /**
  * Mark a chat as read by a user.
@@ -333,7 +333,7 @@ export async function getReadReceipts(chatId) {
   };
 }
 
-// â”€â”€â”€ MESSAGE SEARCH â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── MESSAGE SEARCH ───────────────────────────────────────────────────────────
 
 /**
  * Search messages in a chat by keyword (case-insensitive).
@@ -359,7 +359,7 @@ export async function searchMessages(groupId, query) {
   });
 }
 
-// â”€â”€â”€ NORMALIZE MESSAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── NORMALIZE MESSAGE ────────────────────────────────────────────────────────
 
 /**
  * Normalize a raw Supabase message row to the UI message object shape.

@@ -61,7 +61,7 @@ const getPasswordStrength = (password) => {
   return { score, ...map[score] };
 };
 
-// â”€â”€â”€ Step 1: Account Creation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Step 1: Account Creation ────────────────────────────────────────────────
 function Step1({ data, onChange, onNext }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -102,14 +102,14 @@ function Step1({ data, onChange, onNext }) {
       if (signUpData?.user && !signUpData?.session) {
         setIsVerifying(true);
       } else if (signUpData?.user && signUpData?.session) {
-        // Email confirmation disabled â€” go straight to next step
+        // Email confirmation disabled — go straight to next step
         onNext();
       } else {
         setIsVerifying(true);
       }
     } catch (err) {
       if (err.message?.toLowerCase().includes('failed to fetch') || err.name === 'TypeError') {
-        setError('Network error: Unable to connect to Supabase. The project may be paused or inactive â€” please restore it from your Supabase dashboard.');
+        setError('Network error: Unable to connect to Supabase. The project may be paused or inactive — please restore it from your Supabase dashboard.');
       } else {
         setError(err.message || 'Registration failed. Please check your details.');
       }
@@ -256,7 +256,7 @@ function Step1({ data, onChange, onNext }) {
         <button
           onClick={handleVerifyCode}
           disabled={otp.join('').length !== 6 || loading}
-          className="w-full py-2.5 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium text-xs rounded-lg transition-colors shadow-xs flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer btn-tactile"
+          className="w-full py-2.5 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium text-xs rounded-lg transition-colors shadow-xs flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer btn-tactile"
         >
           {loading ? 'Verifying...' : 'Verify & Continue'} {!loading && <Check size={15} />}
         </button>
@@ -282,9 +282,9 @@ function Step1({ data, onChange, onNext }) {
               }
             }}
             disabled={loading}
-            className="text-xs text-[#6D6AF6] hover:underline disabled:opacity-50 cursor-pointer"
+            className="text-xs text-[#9182f8] hover:underline disabled:opacity-50 cursor-pointer"
           >
-            {loading ? 'Checking...' : 'I already clicked the link â†’ Continue'}
+            {loading ? 'Checking...' : 'I already clicked the link → Continue'}
           </button>
         </div>
 
@@ -292,7 +292,7 @@ function Step1({ data, onChange, onNext }) {
           <button
             type="button"
             onClick={handleResendOtp}
-            className="text-xs text-[#6D6AF6] hover:underline cursor-pointer"
+            className="text-xs text-[#9182f8] hover:underline cursor-pointer"
           >
             Resend verification email
           </button>
@@ -300,7 +300,7 @@ function Step1({ data, onChange, onNext }) {
             onClick={() => setIsVerifying(false)}
             className="text-xs text-gs-text-muted hover:text-gs-text-main transition-colors cursor-pointer"
           >
-            â† Use a different email
+            ← Use a different email
           </button>
         </div>
       </div>
@@ -350,7 +350,7 @@ function Step1({ data, onChange, onNext }) {
             value={data.password}
             onChange={e => onChange('password', e.target.value)}
             className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl pl-9 pr-10 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors text-slate-900 dark:text-white placeholder-slate-400"
-            placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+            placeholder="••••••••"
           />
           <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
             {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -380,7 +380,7 @@ function Step1({ data, onChange, onNext }) {
             value={data.confirmPassword}
             onChange={e => onChange('confirmPassword', e.target.value)}
             className={"w-full bg-slate-50 dark:bg-slate-800/80 border rounded-xl pl-9 pr-10 py-2.5 text-sm outline-none transition-colors text-slate-900 dark:text-white placeholder-slate-400 " + (data.confirmPassword ? (passwordsMatch ? 'border-emerald-500 ring-1 ring-emerald-500' : 'border-rose-500 ring-1 ring-rose-500') : 'border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500')}
-            placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+            placeholder="••••••••"
           />
           <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-3 top-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
             {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -398,7 +398,7 @@ function Step1({ data, onChange, onNext }) {
         <button
           onClick={handleInitialSignUp}
           disabled={!isValid || loading}
-          className="w-full py-2.5 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium text-xs rounded-lg transition-colors shadow-xs flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer btn-tactile"
+          className="w-full py-2.5 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium text-xs rounded-lg transition-colors shadow-xs flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer btn-tactile"
         >
           {loading ? 'Processing...' : 'Continue to Profile'} <ArrowRight size={14} />
         </button>
@@ -414,7 +414,7 @@ function Step1({ data, onChange, onNext }) {
           <button
             type="button"
             onClick={handleGoogleSignup}
-            className="flex items-center justify-center gap-2.5 py-2 bg-gs-card border border-gs-border rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-xs font-medium text-gs-text-main shadow-xs cursor-pointer"
+            className="flex items-center justify-center gap-2.5 py-2 glass-card rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-xs font-medium text-gs-text-main shadow-xs cursor-pointer"
           >
             <svg className="w-4 h-4" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -428,7 +428,7 @@ function Step1({ data, onChange, onNext }) {
           <button
             disabled
             type="button"
-            className="flex items-center justify-center gap-2 py-2 bg-black/5 dark:bg-white/5 border border-gs-border rounded-lg text-xs font-medium text-gs-text-muted cursor-not-allowed opacity-50"
+            className="flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-medium text-gs-text-muted cursor-not-allowed opacity-50"
             title="Coming Soon"
           >
             <svg className="w-3.5 h-3.5" viewBox="0 0 24 24">
@@ -445,7 +445,7 @@ function Step1({ data, onChange, onNext }) {
   );
 }
 
-// â”€â”€â”€ Step 2: Personal Information â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Step 2: Personal Information ────────────────────────────────────────────
 function Step2({ data, onChange, onNext, onBack }) {
   const AVATARS = ['ðŸ¦Š', 'ðŸ‰', 'ðŸ¤–', 'ðŸ¦‹', 'ðŸº', 'ðŸ¦…', 'ðŸ¬', 'ðŸ¦', 'ðŸ¸', 'ðŸ¦„', 'ðŸ»', 'ðŸ¦–'];
   const isValid = data.fullName;
@@ -538,7 +538,7 @@ function Step2({ data, onChange, onNext, onBack }) {
   );
 }
 
-// â”€â”€â”€ Step 3: Academic Information â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Step 3: Academic Information ─────────────────────────────────────────────
 function Step3({ data, onChange, onNext, onBack }) {
   const [collegeSearch, setCollegeSearch] = useState(data.college || '');
   const [showCollegeList, setShowCollegeList] = useState(false);
@@ -663,7 +663,7 @@ function Step3({ data, onChange, onNext, onBack }) {
       {/* CGPA */}
       <div>
         <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-          CGPA / Percentage <span className="text-[11px] text-slate-400 font-normal ml-1">(optional Â· <Lock size={10} className="inline" /> private)</span>
+          CGPA / Percentage <span className="text-[11px] text-slate-400 font-normal ml-1">(optional · <Lock size={10} className="inline" /> private)</span>
         </label>
         <input
           type="text"
@@ -693,7 +693,7 @@ function Step3({ data, onChange, onNext, onBack }) {
   );
 }
 
-// â”€â”€â”€ Step 4: Interests & Preferences â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Step 4: Interests & Preferences ──────────────────────────────────────────
 function Step4({ data, onChange, onSubmit, onBack, isSubmitting, error }) {
   const [skillInput, setSkillInput] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -906,7 +906,7 @@ function Step4({ data, onChange, onSubmit, onBack, isSubmitting, error }) {
   );
 }
 
-// â”€â”€â”€ Main Signup Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Main Signup Component ────────────────────────────────────────────────────
 const STEP_LABELS = ['Account', 'Personal', 'Academic', 'Preferences'];
 
 export default function Signup({ onNavigate, initialStep = 1 }) {
@@ -993,15 +993,15 @@ export default function Signup({ onNavigate, initialStep = 1 }) {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-full bg-gs-bg p-4 relative">
-      <div className="w-full max-w-lg rounded-xl p-6 sm:p-8 z-10 bg-gs-card border border-gs-border shadow-xs machined-edge">
+      <div className="w-full max-w-lg rounded-xl p-6 sm:p-8 z-10 glass-card shadow-xs machined-edge">
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">
-          <div className="w-10 h-10 rounded-lg bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 flex items-center justify-center text-[#6D6AF6] shadow-xs">
+          <div className="w-10 h-10 rounded-lg bg-[#7c6af6]/15 border border-[#7c6af6]/30 flex items-center justify-center text-[#9182f8] shadow-xs">
             <Layers size={18} />
           </div>
           <div>
             <h1 className="text-xl font-bold font-heading text-gs-text-main">GroupSync</h1>
-            <p className="text-xs text-gs-text-muted font-medium">Student Registration Â· Step {step} of 4</p>
+            <p className="text-xs text-gs-text-muted font-medium">Student Registration · Step {step} of 4</p>
           </div>
         </div>
 
@@ -1016,15 +1016,15 @@ export default function Signup({ onNavigate, initialStep = 1 }) {
                 <div className="flex flex-col items-center gap-2 z-10 w-16 shrink-0 relative">
                   <div className={`w-8 h-8 rounded-full border flex items-center justify-center text-xs font-bold transition-all duration-300 ${
                     isDone
-                      ? 'bg-[#6D6AF6] border-[#6D6AF6] text-white shadow-xs'
+                      ? 'bg-[#6D6AF6] border-[#7c6af6] text-white shadow-xs'
                       : isActive
-                      ? 'border-[#6D6AF6] text-[#6D6AF6] bg-[#6D6AF6]/10 ring-2 ring-[#6D6AF6]/20'
+                      ? 'border-[#7c6af6] text-[#9182f8] bg-[#6D6AF6]/10 ring-2 ring-[#6D6AF6]/20'
                       : 'border-gs-border text-gs-text-muted bg-black/5 dark:bg-white/5'
                   }`}>
                     {isDone ? <Check size={14} /> : num}
                   </div>
                   <span className={`text-[11px] font-medium tracking-tight whitespace-nowrap absolute -bottom-5 ${
-                    isActive ? 'text-[#6D6AF6] font-semibold' : isDone ? 'text-gs-text-main' : 'text-gs-text-muted'
+                    isActive ? 'text-[#9182f8] font-semibold' : isDone ? 'text-gs-text-main' : 'text-gs-text-muted'
                   }`}>{label}</span>
                 </div>
                 {i < 3 && (
@@ -1046,7 +1046,7 @@ export default function Signup({ onNavigate, initialStep = 1 }) {
         {/* Login link */}
         <p className="text-center text-gs-text-muted mt-8 text-xs">
           Already have an account?{' '}
-          <button onClick={() => onNavigate('login')} className="text-[#6D6AF6] hover:underline font-medium transition-colors cursor-pointer">
+          <button onClick={() => onNavigate('login')} className="text-[#9182f8] hover:underline font-medium transition-colors cursor-pointer">
             Log in
           </button>
         </p>
@@ -1054,4 +1054,5 @@ export default function Signup({ onNavigate, initialStep = 1 }) {
     </div>
   );
 }
+
 

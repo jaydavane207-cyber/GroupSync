@@ -87,7 +87,7 @@ export default function TeamBrowsePage() {
 
   return (
     <div className="space-y-6 pb-12 max-w-7xl mx-auto">
-      {/* â”€â”€ Page Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Page Header ────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gs-border pb-4">
         <div>
           <h1 className="text-2xl sm:text-[28px] font-semibold tracking-tight text-gs-text-main">
@@ -100,15 +100,15 @@ export default function TeamBrowsePage() {
 
         <button
           onClick={() => navigate('/teams/create')}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium text-xs transition-colors shrink-0 shadow-xs btn-tactile"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium text-xs transition-colors shrink-0 shadow-xs btn-tactile"
         >
           <Plus size={15} />
           Create team
         </button>
       </div>
 
-      {/* â”€â”€ Search Bar + Segmented Filter Tabs in ONE Clean Row â”€â”€â”€â”€â”€â”€â”€ */}
-      <div className="bg-gs-card border border-gs-border rounded-xl p-3 shadow-xs space-y-3">
+      {/* ── Search Bar + Segmented Filter Tabs in ONE Clean Row ─────── */}
+      <div className="glass-card rounded-xl p-3 shadow-xs space-y-3">
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
           {/* Search Input */}
           <div className="relative flex-1">
@@ -118,12 +118,12 @@ export default function TeamBrowsePage() {
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
               placeholder="Search by team name, event, or description..."
-              className="w-full bg-gs-elevated border border-gs-border rounded-lg pl-9 pr-3.5 py-2 text-xs text-gs-text-main placeholder-gs-text-muted outline-none focus:border-[#6D6AF6] focus:ring-1 focus:ring-[#6D6AF6] transition-colors"
+              className="w-full glass-elevated rounded-lg pl-9 pr-3.5 py-2 text-xs text-gs-text-main placeholder-gs-text-muted outline-none focus:border-[#7c6af6] focus:ring-1 focus:ring-[#6D6AF6] transition-colors"
             />
           </div>
 
           {/* Segmented Category Tabs */}
-          <div className="inline-flex p-1 bg-gs-elevated border border-gs-border rounded-lg overflow-x-auto shrink-0">
+          <div className="inline-flex p-1 glass-elevated rounded-lg overflow-x-auto shrink-0">
             {CATEGORIES.map(cat => {
               const isSelected = category === cat.id;
               return (
@@ -155,7 +155,7 @@ export default function TeamBrowsePage() {
         </div>
       </div>
 
-      {/* â”€â”€ Error Banner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Error Banner ───────────────────────────────────────────── */}
       {error && (
         <div className="p-3.5 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-center justify-between text-rose-400 text-xs">
           <div className="flex items-center gap-2">
@@ -168,19 +168,19 @@ export default function TeamBrowsePage() {
         </div>
       )}
 
-      {/* â”€â”€ Loading Skeleton â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Loading Skeleton ───────────────────────────────────────── */}
       {loading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3, 4, 5, 6].map(i => (
-            <div key={i} className="bg-gs-card border border-gs-border rounded-xl p-5 h-56 animate-pulse" />
+            <div key={i} className="glass-card rounded-xl p-5 h-56 animate-pulse" />
           ))}
         </div>
       )}
 
-      {/* â”€â”€ Empty State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Empty State ────────────────────────────────────────────── */}
       {!loading && !error && teams.length === 0 && (
-        <div className="p-12 text-center bg-gs-card border border-gs-border rounded-xl space-y-3">
-          <div className="w-10 h-10 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center mx-auto text-[#6D6AF6]">
+        <div className="p-12 text-center glass-card rounded-xl space-y-3">
+          <div className="w-10 h-10 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center mx-auto text-[#9182f8]">
             <Users size={20} />
           </div>
           <h3 className="text-base font-semibold text-gs-text-main">No teams found</h3>
@@ -189,31 +189,31 @@ export default function TeamBrowsePage() {
           </p>
           <button
             onClick={() => navigate('/teams/create')}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white rounded-lg text-xs font-medium transition-colors btn-tactile"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white rounded-lg text-xs font-medium transition-colors btn-tactile"
           >
             <Plus size={14} /> Create team
           </button>
         </div>
       )}
 
-      {/* â”€â”€ Spotlight / Featured Squad â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Spotlight / Featured Squad ─────────────────────────────── */}
       {!loading && !error && spotlightTeam && (
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-gs-text-muted">
               Featured squad
             </span>
-            <span className="text-[11px] font-medium text-[#7E7BF8] bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 px-2 py-0.5 rounded-full">
+            <span className="text-[11px] font-medium text-[#7E7BF8] bg-[#7c6af6]/15 border border-[#7c6af6]/30 px-2 py-0.5 rounded-full">
               {getMatchPercentage(spotlightTeam)}% match
             </span>
           </div>
 
           <div
             onClick={() => navigate(`/teams/${spotlightTeam.id}`)}
-            className="bg-gs-card border border-gs-border rounded-xl p-5 hover:border-gs-border-hover transition-colors cursor-pointer group machined-edge flex flex-col lg:flex-row lg:items-center justify-between gap-5"
+            className="glass-card rounded-xl p-5 hover:border-gs-border-hover transition-colors cursor-pointer group machined-edge flex flex-col lg:flex-row lg:items-center justify-between gap-5"
           >
             <div className="flex items-start gap-4 flex-1 min-w-0">
-              <div className="w-10 h-10 rounded-lg bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 flex items-center justify-center text-[#6D6AF6] shrink-0">
+              <div className="w-10 h-10 rounded-lg bg-[#7c6af6]/15 border border-[#7c6af6]/30 flex items-center justify-center text-[#9182f8] shrink-0">
                 <Users size={18} />
               </div>
               <div className="space-y-1.5 max-w-2xl min-w-0">
@@ -225,7 +225,7 @@ export default function TeamBrowsePage() {
                     Recruiting: {Math.max(0, (spotlightTeam.max_members || 4) - (spotlightTeam.current_members || 1))} spots open
                   </span>
                 </div>
-                <h3 className="text-base font-semibold text-gs-text-main group-hover:text-[#6D6AF6] transition-colors truncate">
+                <h3 className="text-base font-semibold text-gs-text-main group-hover:text-[#9182f8] transition-colors truncate">
                   {spotlightTeam.name}
                 </h3>
                 <p className="text-xs text-gs-text-muted line-clamp-2 leading-relaxed">
@@ -262,7 +262,7 @@ export default function TeamBrowsePage() {
                 </div>
               </div>
 
-              <span className="text-xs font-medium text-[#6D6AF6] group-hover:underline flex items-center gap-1">
+              <span className="text-xs font-medium text-[#9182f8] group-hover:underline flex items-center gap-1">
                 View & Apply <ArrowRight size={13} />
               </span>
             </div>
@@ -270,7 +270,7 @@ export default function TeamBrowsePage() {
         </div>
       )}
 
-      {/* â”€â”€ All Active Squads Grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── All Active Squads Grid ─────────────────────────────────── */}
       {!loading && !error && regularTeams.length > 0 && (
         <div className="space-y-3 pt-2">
           <div className="flex items-center justify-between">
@@ -292,7 +292,7 @@ export default function TeamBrowsePage() {
                 <div
                   key={team.id}
                   onClick={() => navigate(`/teams/${team.id}`)}
-                  className="bg-gs-card border border-gs-border rounded-xl p-5 flex flex-col justify-between gap-4 hover:border-gs-border-hover transition-colors cursor-pointer group machined-edge"
+                  className="glass-card rounded-xl p-5 flex flex-col justify-between gap-4 hover:border-gs-border-hover transition-colors cursor-pointer group machined-edge"
                 >
                   {/* Header info */}
                   <div>
@@ -301,12 +301,12 @@ export default function TeamBrowsePage() {
                         {team.category || 'Squad'}
                       </span>
                       {/* Compatibility: small tinted pill */}
-                      <span className="text-[10px] font-medium text-[#7E7BF8] bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 px-2 py-0.5 rounded-full">
+                      <span className="text-[10px] font-medium text-[#7E7BF8] bg-[#7c6af6]/15 border border-[#7c6af6]/30 px-2 py-0.5 rounded-full">
                         {matchPct}% match
                       </span>
                     </div>
 
-                    <h3 className="font-semibold text-base text-gs-text-main group-hover:text-[#6D6AF6] transition-colors line-clamp-1">
+                    <h3 className="font-semibold text-base text-gs-text-main group-hover:text-[#9182f8] transition-colors line-clamp-1">
                       {team.name}
                     </h3>
                     <p className="text-xs text-gs-text-muted mt-1 line-clamp-2 leading-relaxed">
@@ -357,7 +357,7 @@ export default function TeamBrowsePage() {
                     <span className="text-[11px] text-gs-text-muted">
                       {team.event || 'Campus Event'}
                     </span>
-                    <span className="font-medium text-[#6D6AF6] group-hover:underline flex items-center gap-1">
+                    <span className="font-medium text-[#9182f8] group-hover:underline flex items-center gap-1">
                       View & Apply <ArrowRight size={12} />
                     </span>
                   </div>
@@ -370,4 +370,5 @@ export default function TeamBrowsePage() {
     </div>
   );
 }
+
 

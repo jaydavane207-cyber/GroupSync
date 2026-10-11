@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 
 const QUESTION_BANK = {
   "React": [
@@ -313,10 +313,10 @@ const SkillVerificationQuiz = () => {
   // -----------------------------------------------------
   if (!selectedSkill) {
     return (
-      <div className="w-full max-w-2xl mx-auto p-6 md:p-8 bg-gs-card border border-gs-border rounded-xl shadow-xs mt-8 text-gs-text-main flex flex-col items-center">
+      <div className="w-full max-w-2xl mx-auto p-6 md:p-8 glass-card rounded-xl shadow-xs mt-8 text-gs-text-main flex flex-col items-center">
         <h2 className="text-xl md:text-2xl font-semibold mb-2 tracking-tight">Skill Verification</h2>
         <p className="text-xs text-gs-text-muted mb-6 text-center max-w-md">
-          Select a skill to verify. You must score at least <span className="text-[#6D6AF6] font-semibold">8/10</span> to pass the verification quiz.
+          Select a skill to verify. You must score at least <span className="text-[#9182f8] font-semibold">8/10</span> to pass the verification quiz.
         </p>
         
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
@@ -324,9 +324,9 @@ const SkillVerificationQuiz = () => {
             <button
               key={skill}
               onClick={() => handleSkillSelect(skill)}
-              className="flex flex-col items-center justify-center p-5 bg-gs-bg hover:bg-white/5 border border-gs-border hover:border-[#6D6AF6]/40 rounded-xl transition-colors duration-150 group text-center cursor-pointer"
+              className="flex flex-col items-center justify-center p-5 bg-gs-bg hover:bg-white/5 border border-gs-border hover:border-[#7c6af6]/40 rounded-xl transition-colors duration-150 group text-center cursor-pointer"
             >
-              <div className="w-9 h-9 bg-[#6D6AF6]/10 text-[#6D6AF6] border border-[#6D6AF6]/20 rounded-lg flex items-center justify-center mb-2.5">
+              <div className="w-9 h-9 bg-[#6D6AF6]/10 text-[#9182f8] border border-[#7c6af6]/20 rounded-lg flex items-center justify-center mb-2.5">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
@@ -346,7 +346,7 @@ const SkillVerificationQuiz = () => {
     const passed = score >= 8;
 
     return (
-      <div className="w-full max-w-xl mx-auto p-6 md:p-8 bg-gs-card border border-gs-border rounded-xl shadow-xs mt-8 text-gs-text-main text-center flex flex-col items-center">
+      <div className="w-full max-w-xl mx-auto p-6 md:p-8 glass-card rounded-xl shadow-xs mt-8 text-gs-text-main text-center flex flex-col items-center">
         {passed ? (
           <>
             <div className="w-14 h-14 bg-emerald-500/10 text-emerald-500 rounded-full flex items-center justify-center mb-4 border border-emerald-500/20">
@@ -363,7 +363,7 @@ const SkillVerificationQuiz = () => {
             </div>
             <button
               onClick={handleProceed}
-              className="w-full sm:w-auto px-6 py-2 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white rounded-lg font-medium text-xs transition-colors shadow-xs btn-tactile cursor-pointer"
+              className="w-full sm:w-auto px-6 py-2 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white rounded-lg font-medium text-xs transition-colors shadow-xs btn-tactile cursor-pointer"
             >
               Proceed
             </button>
@@ -386,7 +386,7 @@ const SkillVerificationQuiz = () => {
             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto justify-center">
               <button
                 onClick={handleRetryQuiz}
-                className="px-4 py-2 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white rounded-lg font-medium text-xs transition-colors shadow-xs btn-tactile cursor-pointer"
+                className="px-4 py-2 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white rounded-lg font-medium text-xs transition-colors shadow-xs btn-tactile cursor-pointer"
               >
                 Retry Quiz
               </button>
@@ -414,10 +414,10 @@ const SkillVerificationQuiz = () => {
   const progressPercentage = ((currentQuestionIndex) / totalQuestions) * 100;
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 md:p-8 bg-gs-card border border-gs-border rounded-xl shadow-xs mt-8 text-gs-text-main flex flex-col">
+    <div className="w-full max-w-2xl mx-auto p-6 md:p-8 glass-card rounded-xl shadow-xs mt-8 text-gs-text-main flex flex-col">
       {/* Header & Progress */}
       <div className="flex justify-between items-center mb-3">
-        <span className="text-xs font-semibold text-[#6D6AF6] uppercase tracking-wider">{selectedSkill} Verification</span>
+        <span className="text-xs font-semibold text-[#9182f8] uppercase tracking-wider">{selectedSkill} Verification</span>
         <span className="text-xs text-gs-text-muted font-medium">Question {currentQuestionIndex + 1} of {totalQuestions}</span>
       </div>
       
@@ -442,12 +442,12 @@ const SkillVerificationQuiz = () => {
               key={idx}
               className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors duration-150 border text-xs ${
                 isSelected 
-                  ? 'bg-[#6D6AF6]/10 border-[#6D6AF6] text-gs-text-main font-medium' 
+                  ? 'bg-[#6D6AF6]/10 border-[#7c6af6] text-gs-text-main font-medium' 
                   : 'bg-gs-bg border-gs-border text-gs-text-muted hover:text-gs-text-main hover:border-white/20'
               }`}
             >
               <div className={`w-4 h-4 rounded-full flex flex-shrink-0 items-center justify-center border transition-colors ${
-                isSelected ? 'border-[#6D6AF6]' : 'border-gs-border'
+                isSelected ? 'border-[#7c6af6]' : 'border-gs-border'
               }`}>
                 {isSelected && <div className="w-2 h-2 bg-[#6D6AF6] rounded-full"></div>}
               </div>
@@ -479,7 +479,7 @@ const SkillVerificationQuiz = () => {
           className={`px-4 py-2 rounded-lg font-medium text-xs transition-colors flex items-center gap-2 cursor-pointer ${
             !selectedOption 
               ? 'bg-gs-border text-gs-text-muted cursor-not-allowed opacity-50' 
-              : 'bg-[#6D6AF6] hover:bg-[#5C59EC] text-white shadow-xs btn-tactile'
+              : 'bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white shadow-xs btn-tactile'
           }`}
         >
           {isLastQuestion ? 'Submit Quiz' : 'Next Question'}
@@ -490,3 +490,4 @@ const SkillVerificationQuiz = () => {
 };
 
 export default SkillVerificationQuiz;
+

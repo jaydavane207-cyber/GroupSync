@@ -1,12 +1,12 @@
 ﻿/**
- * dmService.js â€” GroupSync Direct Messaging Service
+ * dmService.js — GroupSync Direct Messaging Service
  * Manages 1-on-1 conversation lifecycles, user discovery, last-message previews,
  * and unread counters, reusing the existing groups (type='DM') and messages infrastructure.
  */
 import supabase from '@/lib/supabase';
 import { withRetry } from '@/lib/withRetry';
 
-// â”€â”€â”€ GET OR CREATE DM CONVERSATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── GET OR CREATE DM CONVERSATION ───────────────────────────────────────────
 
 /**
  * Finds an existing DM group between two users or creates a new one.
@@ -56,7 +56,7 @@ export async function getOrCreateDM(currentUserId, targetUserId) {
       }
     }
 
-    // 2. No existing DM conversation found â€” create a new one
+    // 2. No existing DM conversation found — create a new one
     const { data: newGroup, error: grpErr } = await supabase
       .from('groups')
       .insert([{
@@ -95,7 +95,7 @@ export async function getOrCreateDM(currentUserId, targetUserId) {
   });
 }
 
-// â”€â”€â”€ GET CONVERSATIONS LIST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── GET CONVERSATIONS LIST ──────────────────────────────────────────────────
 
 /**
  * Fetches all DM conversations for a user with last message preview and other participant details.
@@ -169,7 +169,7 @@ export async function getDMConversations(currentUserId) {
   });
 }
 
-// â”€â”€â”€ SEARCH USERS FOR DM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── SEARCH USERS FOR DM ─────────────────────────────────────────────────────
 
 /**
  * Search active students to start a new direct message conversation.

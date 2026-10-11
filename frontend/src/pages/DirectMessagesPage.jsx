@@ -89,7 +89,7 @@ export default function DirectMessagesPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 pb-12">
-      {/* â”€â”€ Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Header ────────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gs-border pb-4">
         <div>
           <div className="flex items-center gap-2.5">
@@ -97,7 +97,7 @@ export default function DirectMessagesPage() {
               Direct messages
             </h1>
             {unreadTotal > 0 && (
-              <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-[#6D6AF6]/10 text-[#6D6AF6] border border-[#6D6AF6]/20">
+              <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-[#6D6AF6]/10 text-[#9182f8] border border-[#7c6af6]/20">
                 {unreadTotal} new
               </span>
             )}
@@ -109,13 +109,13 @@ export default function DirectMessagesPage() {
 
         <button
           onClick={() => setShowNewModal(true)}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#6D6AF6] hover:bg-[#5C59EC] text-white text-xs font-medium transition-colors shadow-xs shrink-0 btn-tactile"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white text-xs font-medium transition-colors shadow-xs shrink-0 btn-tactile"
         >
           <Plus size={15} /> New message
         </button>
       </div>
 
-      {/* â”€â”€ Search Bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Search Bar ────────────────────────────────────────────── */}
       <div className="relative">
         <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gs-text-muted" />
         <input
@@ -123,23 +123,23 @@ export default function DirectMessagesPage() {
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Search conversations by student name or excerpt..."
-          className="w-full bg-gs-card border border-gs-border rounded-lg pl-9 pr-4 py-2 text-xs text-gs-text-main placeholder-gs-text-muted outline-none focus:border-[#6D6AF6] transition-colors shadow-xs"
+          className="w-full glass-card rounded-lg pl-9 pr-4 py-2 text-xs text-gs-text-main placeholder-gs-text-muted outline-none focus:border-[#7c6af6] transition-colors shadow-xs"
         />
       </div>
 
-      {/* â”€â”€ Loading Skeleton â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Loading Skeleton ──────────────────────────────────────── */}
       {loading && (
         <div className="space-y-3">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="h-16 bg-gs-card border border-gs-border rounded-xl animate-pulse" />
+            <div key={i} className="h-16 glass-card rounded-xl animate-pulse" />
           ))}
         </div>
       )}
 
-      {/* â”€â”€ Empty State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Empty State ───────────────────────────────────────────── */}
       {!loading && conversations.length === 0 && (
-        <div className="p-12 text-center bg-gs-card border border-gs-border rounded-xl space-y-3">
-          <div className="w-10 h-10 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center mx-auto text-[#6D6AF6]">
+        <div className="p-12 text-center glass-card rounded-xl space-y-3">
+          <div className="w-10 h-10 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center mx-auto text-[#9182f8]">
             <MessageCircle size={20} />
           </div>
           <h3 className="text-sm font-semibold text-gs-text-main">No direct messages yet</h3>
@@ -148,16 +148,16 @@ export default function DirectMessagesPage() {
           </p>
           <button
             onClick={() => setShowNewModal(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white rounded-lg text-xs font-medium transition-colors shadow-xs btn-tactile"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white rounded-lg text-xs font-medium transition-colors shadow-xs btn-tactile"
           >
             <Plus size={13} /> Start conversation
           </button>
         </div>
       )}
 
-      {/* â”€â”€ Conversations List â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Conversations List ────────────────────────────────────── */}
       {!loading && conversations.length > 0 && (
-        <div className="bg-gs-card border border-gs-border rounded-xl overflow-hidden divide-y divide-gs-border shadow-xs">
+        <div className="glass-card rounded-xl overflow-hidden divide-y divide-gs-border shadow-xs">
           {filteredConversations.map(conv => {
             const target = conv.targetUser || {};
             const isUnread = conv.isUnread;
@@ -191,11 +191,11 @@ export default function DirectMessagesPage() {
                       </h4>
                       {target.availability && (
                         <span className="hidden sm:inline-block text-[11px] text-emerald-400 font-medium truncate">
-                          Â· {target.availability}
+                          · {target.availability}
                         </span>
                       )}
                     </div>
-                    <p className={`text-xs truncate ${isUnread ? 'text-[#6D6AF6] font-medium' : 'text-gs-text-muted'}`}>
+                    <p className={`text-xs truncate ${isUnread ? 'text-[#9182f8] font-medium' : 'text-gs-text-muted'}`}>
                       {conv.lastMessage || 'No messages yet'}
                     </p>
                   </div>
@@ -214,10 +214,10 @@ export default function DirectMessagesPage() {
         </div>
       )}
 
-      {/* â”€â”€ Modal: New Direct Message â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Modal: New Direct Message ─────────────────────────────── */}
       {showNewModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
-          <div className="bg-gs-card border border-gs-border rounded-xl p-5 max-w-md w-full shadow-xl space-y-3.5">
+          <div className="glass-card rounded-xl p-5 max-w-md w-full shadow-xl space-y-3.5">
             <div className="flex items-center justify-between border-b border-gs-border pb-3">
               <div>
                 <h3 className="text-base font-semibold text-gs-text-main">Start new conversation</h3>
@@ -227,7 +227,7 @@ export default function DirectMessagesPage() {
                 onClick={() => setShowNewModal(false)}
                 className="w-7 h-7 rounded-lg flex items-center justify-center text-gs-text-muted hover:text-gs-text-main hover:bg-white/[0.04] transition-colors"
               >
-                âœ•
+                ✕
               </button>
             </div>
 
@@ -240,7 +240,7 @@ export default function DirectMessagesPage() {
                 placeholder="Type name to search students..."
                 value={userQuery}
                 onChange={e => handleUserSearch(e.target.value)}
-                className="w-full bg-gs-elevated border border-gs-border rounded-lg pl-8 pr-3 py-1.5 text-xs text-gs-text-main outline-none focus:border-[#6D6AF6]"
+                className="w-full glass-elevated rounded-lg pl-8 pr-3 py-1.5 text-xs text-gs-text-main outline-none focus:border-[#7c6af6]"
               />
             </div>
 
@@ -248,7 +248,7 @@ export default function DirectMessagesPage() {
             <div className="max-h-60 overflow-y-auto space-y-1">
               {isSearching && (
                 <div className="py-6 text-center text-xs text-gs-text-muted flex items-center justify-center gap-2">
-                  <Loader2 size={13} className="animate-spin text-[#6D6AF6]" /> Searching directory...
+                  <Loader2 size={13} className="animate-spin text-[#9182f8]" /> Searching directory...
                 </div>
               )}
 
@@ -274,10 +274,10 @@ export default function DirectMessagesPage() {
                   <div className="min-w-0 flex-1">
                     <p className="font-medium text-xs text-gs-text-main truncate">{s.name}</p>
                     <p className="text-[11px] text-gs-text-muted truncate">
-                      {s.college || 'Campus Student'} Â· {s.availability || 'Available'}
+                      {s.college || 'Campus Student'} · {s.availability || 'Available'}
                     </p>
                   </div>
-                  <ArrowRight size={13} className="text-[#6D6AF6]" />
+                  <ArrowRight size={13} className="text-[#9182f8]" />
                 </div>
               ))}
             </div>
@@ -287,4 +287,5 @@ export default function DirectMessagesPage() {
     </div>
   );
 }
+
 

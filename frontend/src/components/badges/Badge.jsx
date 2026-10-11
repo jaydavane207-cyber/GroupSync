@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 export const Badge = ({
   children,
@@ -8,7 +8,7 @@ export const Badge = ({
 }) => {
   const variants = {
     default: 'bg-white/5 text-gs-text-secondary border-white/10',
-    primary: 'bg-[#6D6AF6]/15 text-[#6D6AF6] border-[#6D6AF6]/25',
+    primary: 'bg-[#6D6AF6]/15 text-[#9182f8] border-[#7c6af6]/25',
     success: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/25',
     warning: 'bg-amber-500/15 text-amber-400 border-amber-500/25',
     danger: 'bg-rose-500/15 text-rose-400 border-rose-500/25',
@@ -30,3 +30,4 @@ export const Badge = ({
 };
 
 export default Badge;
+

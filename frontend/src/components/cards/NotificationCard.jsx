@@ -9,7 +9,7 @@ export const NotificationCard = ({ notification, onMarkRead }) => {
   const getIcon = () => {
     switch (notification.type) {
       case 'team_invite':
-        return <MessageSquare className="w-4 h-4 text-[#6D6AF6]" />;
+        return <MessageSquare className="w-4 h-4 text-[#9182f8]" />;
       case 'badge_earned':
         return <CheckCircle className="w-4 h-4 text-emerald-400" />;
       case 'alert':
@@ -38,7 +38,7 @@ export const NotificationCard = ({ notification, onMarkRead }) => {
       {!notification.read && onMarkRead && (
         <button
           onClick={() => onMarkRead(notification.id)}
-          className="text-[11px] text-[#6D6AF6] hover:underline shrink-0"
+          className="text-[11px] text-[#9182f8] hover:underline shrink-0"
         >
           Mark read
         </button>
@@ -48,4 +48,5 @@ export const NotificationCard = ({ notification, onMarkRead }) => {
 };
 
 export default NotificationCard;
+
 

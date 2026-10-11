@@ -1,5 +1,5 @@
 ﻿/**
- * profileService.js â€” GroupSync User Profile Operations
+ * profileService.js — GroupSync User Profile Operations
  * Handles profile edits, avatar storage uploads, skill management,
  * peer endorsements, and dynamic credibility score calculations.
  */
@@ -9,7 +9,7 @@ import { withRetry } from '@/lib/withRetry';
 const AVATAR_BUCKET = 'avatars';
 const MAX_AVATAR_SIZE = 2 * 1024 * 1024; // 2MB
 
-// â”€â”€â”€ AVATAR UPLOAD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── AVATAR UPLOAD ────────────────────────────────────────────────────────────
 
 /**
  * Upload an avatar image to Supabase Storage with progress tracking.
@@ -52,7 +52,7 @@ export async function uploadAvatar(userId, file, onProgress) {
   }
 }
 
-// â”€â”€â”€ UPDATE PROFILE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── UPDATE PROFILE ───────────────────────────────────────────────────────────
 
 /**
  * Update user profile details.
@@ -74,7 +74,7 @@ export async function updateProfile(userId, updates) {
   });
 }
 
-// â”€â”€â”€ ENDORSEMENTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── ENDORSEMENTS ─────────────────────────────────────────────────────────────
 
 /**
  * Endorse a fellow student's skill.
@@ -108,9 +108,9 @@ export async function endorseSkill(targetUserId, endorserId, skillName, message,
     await supabase.from('notifications').insert([{
       user_id: targetUserId,
       type: 'teams',
-      title: 'Skill Endorsement! â­',
+      title: 'Skill Endorsement! ⭐',
       message: `${endorserName || 'A student'} endorsed your proficiency in ${skillName}!`,
-      icon: 'â­',
+      icon: '⭐',
       action_label: 'View Profile',
       action_path: '/profile'
     }]).catch(() => {});
@@ -146,7 +146,7 @@ export async function getEndorsements(userId) {
   });
 }
 
-// â”€â”€â”€ CREDIBILITY BREAKDOWN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── CREDIBILITY BREAKDOWN ───────────────────────────────────────────────────
 
 /**
  * Calculate full credibility score breakdown for a user.

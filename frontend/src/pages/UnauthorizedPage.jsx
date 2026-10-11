@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import { ShieldAlert } from 'lucide-react';
 
@@ -14,7 +14,7 @@ export const UnauthorizedPage = () => {
       </p>
       <Link
         to="/dashboard"
-        className="px-4 py-2 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium rounded-lg transition-colors text-xs shadow-xs btn-tactile"
+        className="px-4 py-2 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium rounded-lg transition-colors text-xs shadow-xs btn-tactile"
       >
         Go to Dashboard
       </Link>
@@ -23,3 +23,4 @@ export const UnauthorizedPage = () => {
 };
 
 export default UnauthorizedPage;
+

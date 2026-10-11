@@ -5,7 +5,7 @@ import { useAppContext } from '@/context/AppContext';
 import { browseQuizzes, getQuizHistory, getUserBadges, getBadgeTier } from '@/lib/services/quizService';
 import { withRetry } from '@/lib/withRetry';
 
-// â”€â”€â”€ Difficulty badge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Difficulty badge ──────────────────────────────────────────────────────────
 const DIFF_CONFIG = {
   beginner:     { color: 'text-emerald-500', bg: 'bg-emerald-500/10 border-emerald-500/20', label: 'Beginner' },
   intermediate: { color: 'text-amber-500',   bg: 'bg-amber-500/10 border-amber-500/20',   label: 'Intermediate' },
@@ -21,7 +21,7 @@ function DiffBadge({ difficulty }) {
   );
 }
 
-// â”€â”€â”€ Quiz Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Quiz Card ─────────────────────────────────────────────────────────────────
 function QuizCard({ quiz, attempt, onStart }) {
   const navigate = useNavigate();
   const isPassed = attempt?.passed;
@@ -37,7 +37,7 @@ function QuizCard({ quiz, attempt, onStart }) {
   };
 
   return (
-    <div className="bg-gs-card border border-gs-border rounded-xl p-5 flex flex-col justify-between hover:border-gs-border/80 transition-colors shadow-xs">
+    <div className="glass-card rounded-xl p-5 flex flex-col justify-between hover:border-gs-border/80 transition-colors shadow-xs">
       <div>
         {/* Header */}
         <div className="flex items-start justify-between gap-3 mb-3.5">
@@ -92,13 +92,13 @@ function QuizCard({ quiz, attempt, onStart }) {
         {hasAttempt && !isPassed && attempt.status === 'completed' && (
           <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-rose-500/10 border border-rose-500/20 rounded-lg text-xs text-rose-400 mb-3.5">
             <AlertCircle size={13} />
-            <span>Last score: {Math.round(attempt.percentage)}% â€” Retake available</span>
+            <span>Last score: {Math.round(attempt.percentage)}% — Retake available</span>
           </div>
         )}
         {attempt?.status === 'in_progress' && (
           <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-amber-500/10 border border-amber-500/20 rounded-lg text-xs text-amber-500 mb-3.5">
             <Clock size={13} />
-            <span>In progress â€” Resume anytime</span>
+            <span>In progress — Resume anytime</span>
           </div>
         )}
       </div>
@@ -106,7 +106,7 @@ function QuizCard({ quiz, attempt, onStart }) {
       {/* CTA */}
       <button
         onClick={handleClick}
-        className="w-full py-2 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium rounded-lg transition-colors text-xs shadow-xs flex items-center justify-center gap-1 cursor-pointer btn-tactile"
+        className="w-full py-2 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium rounded-lg transition-colors text-xs shadow-xs flex items-center justify-center gap-1 cursor-pointer btn-tactile"
       >
         {attempt?.status === 'in_progress' ? 'Resume Quiz' :
          attempt?.status === 'paused' ? 'Resume Quiz' :
@@ -117,7 +117,7 @@ function QuizCard({ quiz, attempt, onStart }) {
   );
 }
 
-// â”€â”€â”€ QuizPage â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── QuizPage ──────────────────────────────────────────────────────────────────
 export default function QuizPage() {
   const { user } = useAppContext();
   const navigate = useNavigate();
@@ -178,7 +178,7 @@ export default function QuizPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-2 border-b border-gs-border/60">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 text-[#6D6AF6] text-xs font-medium mb-2">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#7c6af6]/15 border border-[#7c6af6]/30 text-[#9182f8] text-xs font-medium mb-2">
             <BookOpen size={12} />
             Academic Skill Assessments
           </div>
@@ -192,17 +192,17 @@ export default function QuizPage() {
         <div className="flex items-center gap-2.5 flex-wrap">
           <button
             onClick={() => navigate('/badges')}
-            className="flex items-center gap-2 px-3 py-1.5 bg-gs-card border border-gs-border rounded-lg text-xs font-medium text-gs-text-main hover:bg-black/5 dark:hover:bg-white/5 transition-colors shadow-xs cursor-pointer"
+            className="flex items-center gap-2 px-3 py-1.5 glass-card rounded-lg text-xs font-medium text-gs-text-main hover:bg-black/5 dark:hover:bg-white/5 transition-colors shadow-xs cursor-pointer"
           >
-            <Award size={14} className="text-[#6D6AF6]" />
+            <Award size={14} className="text-[#9182f8]" />
             My Badges
             {totalBadges > 0 && <span className="px-1.5 py-0.2 text-[10px] bg-[#6D6AF6] text-white rounded-full font-semibold">{totalBadges}</span>}
           </button>
           <button
             onClick={() => navigate('/profile')}
-            className="flex items-center gap-2 px-3 py-1.5 bg-gs-card border border-gs-border rounded-lg text-xs font-medium text-gs-text-main hover:bg-black/5 dark:hover:bg-white/5 transition-colors shadow-xs cursor-pointer"
+            className="flex items-center gap-2 px-3 py-1.5 glass-card rounded-lg text-xs font-medium text-gs-text-main hover:bg-black/5 dark:hover:bg-white/5 transition-colors shadow-xs cursor-pointer"
           >
-            <Shield size={14} className="text-[#6D6AF6]" />
+            <Shield size={14} className="text-[#9182f8]" />
             Certificates
           </button>
         </div>
@@ -211,12 +211,12 @@ export default function QuizPage() {
       {/* Stats row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: 'Quizzes Available', value: quizzes.length, icon: BookOpen, tint: 'bg-[#6D6AF6]/10 text-[#6D6AF6]' },
+          { label: 'Quizzes Available', value: quizzes.length, icon: BookOpen, tint: 'bg-[#6D6AF6]/10 text-[#9182f8]' },
           { label: 'Quizzes Passed', value: passedQuizzes, icon: CheckCircle2, tint: 'bg-emerald-500/10 text-emerald-500' },
           { label: 'Badges Earned', value: totalBadges, icon: Award, tint: 'bg-amber-500/10 text-amber-500' },
-          { label: 'Best Quiz Score', value: Object.values(attempts).length > 0 ? `${Math.round(Math.max(...Object.values(attempts).map(a => a.percentage || 0)))}%` : 'â€”', icon: Star, tint: 'bg-[#6D6AF6]/10 text-[#6D6AF6]' },
+          { label: 'Best Quiz Score', value: Object.values(attempts).length > 0 ? `${Math.round(Math.max(...Object.values(attempts).map(a => a.percentage || 0)))}%` : '—', icon: Star, tint: 'bg-[#6D6AF6]/10 text-[#9182f8]' },
         ].map(stat => (
-          <div key={stat.label} className="bg-gs-card border border-gs-border rounded-xl p-4 shadow-xs">
+          <div key={stat.label} className="glass-card rounded-xl p-4 shadow-xs">
             <div className={`w-7 h-7 rounded-md ${stat.tint} flex items-center justify-center mb-3`}>
               <stat.icon size={15} />
             </div>
@@ -233,7 +233,7 @@ export default function QuizPage() {
           <input
             type="text" value={search} onChange={e => setSearch(e.target.value)}
             placeholder="Search quizzes by language or stack (Python, React, SQL)..."
-            className="w-full bg-gs-card border border-gs-border rounded-lg pl-9 pr-4 py-2 text-xs outline-none focus:border-[#6D6AF6] text-gs-text-main placeholder-gs-text-muted"
+            className="w-full glass-card rounded-lg pl-9 pr-4 py-2 text-xs outline-none focus:border-[#7c6af6] text-gs-text-main placeholder-gs-text-muted"
           />
         </div>
         <div className="flex gap-1.5">
@@ -258,7 +258,7 @@ export default function QuizPage() {
       {loading && (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
           {[1,2,3,4,5,6].map(i => (
-            <div key={i} className="h-64 bg-gs-card border border-gs-border rounded-xl animate-pulse" />
+            <div key={i} className="h-64 glass-card rounded-xl animate-pulse" />
           ))}
         </div>
       )}
@@ -267,7 +267,7 @@ export default function QuizPage() {
       {!loading && !error && (
         <>
           {filtered.length === 0 ? (
-            <div className="text-center py-16 bg-gs-card border border-gs-border rounded-xl p-8">
+            <div className="text-center py-16 glass-card rounded-xl p-8">
               <BookOpen size={32} className="mx-auto mb-3 text-gs-text-muted opacity-40" />
               <p className="text-base font-semibold text-gs-text-main mb-1">No quizzes found</p>
               <p className="text-xs text-gs-text-muted">{search || filterDiff !== 'all' ? 'Try adjusting your filters.' : 'Quizzes will appear here once added.'}</p>
@@ -284,4 +284,5 @@ export default function QuizPage() {
     </div>
   );
 }
+
 

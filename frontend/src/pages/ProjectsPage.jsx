@@ -209,14 +209,14 @@ export default function ProjectsPage() {
             <button
               onClick={() => setRetry(r => r + 1)}
               title="Refresh"
-              className="p-2 bg-gs-card border border-gs-border rounded-lg text-gs-text-muted hover:text-gs-text-main hover:bg-black/5 dark:hover:bg-white/[0.04] transition-colors"
+              className="p-2 glass-card rounded-lg text-gs-text-muted hover:text-gs-text-main hover:bg-black/5 dark:hover:bg-white/[0.04] transition-colors"
             >
               <RefreshCw size={15} />
             </button>
           )}
           <button
             onClick={() => setShowCreateModal(true)}
-            className="px-3.5 py-2 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium rounded-lg transition-colors shadow-xs flex items-center gap-1.5 text-xs btn-tactile"
+            className="px-3.5 py-2 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium rounded-lg transition-colors shadow-xs flex items-center gap-1.5 text-xs btn-tactile"
           >
             <Plus size={15} /> Post project
           </button>
@@ -224,9 +224,9 @@ export default function ProjectsPage() {
       </div>
 
       {/* Search & Filters in clean aligned row */}
-      <div className="bg-gs-card border border-gs-border rounded-xl p-3 shadow-xs space-y-3">
+      <div className="glass-card rounded-xl p-3 shadow-xs space-y-3">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-2.5">
-          <div className="relative flex items-center bg-gs-elevated border border-gs-border rounded-lg px-3 py-1.5 focus-within:border-[#6D6AF6] focus-within:ring-1 focus-within:ring-[#6D6AF6] transition-colors md:col-span-1">
+          <div className="relative flex items-center glass-elevated rounded-lg px-3 py-1.5 focus-within:border-[#7c6af6] focus-within:ring-1 focus-within:ring-[#6D6AF6] transition-colors md:col-span-1">
             <Search className="text-gs-text-muted shrink-0 mr-2" size={14} />
             <input
               type="text"
@@ -246,7 +246,7 @@ export default function ProjectsPage() {
             <select 
               value={selectedDomain} 
               onChange={(e) => setSelectedDomain(e.target.value)}
-              className="w-full px-2.5 py-1.5 bg-gs-elevated border border-gs-border rounded-lg text-gs-text-main focus:border-[#6D6AF6] outline-none text-xs"
+              className="w-full px-2.5 py-1.5 glass-elevated rounded-lg text-gs-text-main focus:border-[#7c6af6] outline-none text-xs"
             >
               <option value="all">All domains</option>
               <option value="ai-ml">AI & machine learning</option>
@@ -260,7 +260,7 @@ export default function ProjectsPage() {
             <select 
               value={selectedTimeline} 
               onChange={(e) => setSelectedTimeline(e.target.value)}
-              className="w-full px-2.5 py-1.5 bg-gs-elevated border border-gs-border rounded-lg text-gs-text-main focus:border-[#6D6AF6] outline-none text-xs"
+              className="w-full px-2.5 py-1.5 glass-elevated rounded-lg text-gs-text-main focus:border-[#7c6af6] outline-none text-xs"
             >
               <option value="all">All formats</option>
               <option value="hackathon">Hackathons</option>
@@ -272,7 +272,7 @@ export default function ProjectsPage() {
             <select 
               value={selectedDifficulty} 
               onChange={(e) => setSelectedDifficulty(e.target.value)}
-              className="w-full px-2.5 py-1.5 bg-gs-elevated border border-gs-border rounded-lg text-gs-text-main focus:border-[#6D6AF6] outline-none text-xs"
+              className="w-full px-2.5 py-1.5 glass-elevated rounded-lg text-gs-text-main focus:border-[#7c6af6] outline-none text-xs"
             >
               <option value="all">All skill levels</option>
               <option value="beginner">Beginner</option>
@@ -288,7 +288,7 @@ export default function ProjectsPage() {
         <div className="flex items-center justify-between text-xs text-gs-text-muted px-1">
           <span>{filteredProjects.length} campus project{filteredProjects.length === 1 ? '' : 's'} available</span>
           {appliedIds.size > 0 && (
-            <span className="text-[#6D6AF6] font-medium">Applied to {appliedIds.size}</span>
+            <span className="text-[#9182f8] font-medium">Applied to {appliedIds.size}</span>
           )}
         </div>
       )}
@@ -322,16 +322,16 @@ export default function ProjectsPage() {
               ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' 
               : project.difficulty === 'advanced'
               ? 'bg-rose-500/10 text-rose-400 border-rose-500/20'
-              : 'bg-[#6D6AF6]/10 text-[#7E7BF8] border-[#6D6AF6]/20';
+              : 'bg-[#6D6AF6]/10 text-[#7E7BF8] border-[#7c6af6]/20';
 
             return (
               <div
                 key={project.id}
-                className="bg-gs-card border border-gs-border rounded-xl p-5 shadow-xs hover:border-gs-border-hover transition-colors flex flex-col justify-between machined-edge"
+                className="glass-card rounded-xl p-5 shadow-xs hover:border-gs-border-hover transition-colors flex flex-col justify-between machined-edge"
               >
                 <div>
                   <div className="flex items-start justify-between gap-3 mb-3">
-                    <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center text-[#6D6AF6] shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center text-[#9182f8] shrink-0">
                       <FolderKanban size={16} />
                     </div>
                     <div className="flex items-center gap-1.5">
@@ -392,7 +392,7 @@ export default function ProjectsPage() {
                   className={`w-full py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1.5 btn-tactile ${
                     isApplied
                       ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 cursor-default'
-                      : 'bg-gs-elevated border border-gs-border text-gs-text-main hover:bg-[#6D6AF6] hover:text-white hover:border-[#6D6AF6]'
+                      : 'bg-gs-elevated border border-gs-border text-gs-text-main hover:bg-[#6D6AF6] hover:text-white hover:border-[#7c6af6]'
                   }`}
                 >
                   {isApplying ? (
@@ -411,7 +411,7 @@ export default function ProjectsPage() {
 
       {/* Empty State */}
       {!loading && !error && filteredProjects.length === 0 && (
-        <div className="text-center py-12 bg-gs-card border border-gs-border rounded-xl p-6">
+        <div className="text-center py-12 glass-card rounded-xl p-6">
           <FolderKanban size={32} className="mx-auto text-gs-text-muted mb-2 opacity-50" />
           <h3 className="text-base font-semibold text-gs-text-main mb-1">No matching projects</h3>
           <p className="text-xs text-gs-text-muted max-w-sm mx-auto mb-4">
@@ -480,7 +480,7 @@ function CreateProjectModal({ onClose, onCreate }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
-      <div className="bg-gs-card border border-gs-border rounded-xl p-5 sm:p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-xl relative">
+      <div className="glass-card rounded-xl p-5 sm:p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-xl relative">
         <div className="flex items-center justify-between mb-4 pb-2 border-b border-gs-border">
           <div>
             <h2 className="text-base font-semibold text-gs-text-main">
@@ -634,4 +634,5 @@ function CreateProjectModal({ onClose, onCreate }) {
     </div>
   );
 }
+
 

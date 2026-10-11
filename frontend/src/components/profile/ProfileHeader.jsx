@@ -29,17 +29,17 @@ export const ProfileHeader = ({ profile, onEdit, isOwnProfile = false }) => {
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 mt-4 text-xs text-gs-text-muted">
             {profile.college && (
               <span className="flex items-center gap-1.5">
-                <GraduationCap className="w-3.5 h-3.5 text-[#6D6AF6]" /> {profile.college}
+                <GraduationCap className="w-3.5 h-3.5 text-[#9182f8]" /> {profile.college}
               </span>
             )}
             {profile.email && (
               <span className="flex items-center gap-1.5">
-                <Mail className="w-3.5 h-3.5 text-[#6D6AF6]" /> {profile.email}
+                <Mail className="w-3.5 h-3.5 text-[#9182f8]" /> {profile.email}
               </span>
             )}
             {profile.branch && (
               <span className="flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-[#6D6AF6]" /> {profile.branch}
+                <MapPin className="w-3.5 h-3.5 text-[#9182f8]" /> {profile.branch}
               </span>
             )}
           </div>
@@ -50,4 +50,5 @@ export const ProfileHeader = ({ profile, onEdit, isOwnProfile = false }) => {
 };
 
 export default ProfileHeader;
+
 

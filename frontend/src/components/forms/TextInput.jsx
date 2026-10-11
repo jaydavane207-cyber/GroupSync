@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 export const TextInput = ({
   icon: Icon,
@@ -16,7 +16,7 @@ export const TextInput = ({
       <input
         className={`w-full bg-[#14141a] border ${
           error ? 'border-rose-500/50' : 'border-gs-border'
-        } focus:border-[#6D6AF6] rounded-lg px-3.5 py-2 text-xs text-gs-text-main placeholder-gs-text-muted transition-colors outline-hidden ${
+        } focus:border-[#7c6af6] rounded-lg px-3.5 py-2 text-xs text-gs-text-main placeholder-gs-text-muted transition-colors outline-hidden ${
           Icon ? 'pl-9' : ''
         } ${className}`}
         {...props}
@@ -26,3 +26,4 @@ export const TextInput = ({
 };
 
 export default TextInput;
+

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Award, ExternalLink } from 'lucide-react';
 
 export const CertificateShowcase = ({ certificates = [] }) => {
@@ -12,7 +12,7 @@ export const CertificateShowcase = ({ certificates = [] }) => {
           certificates.map((cert) => (
             <div key={cert.id} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-[#6D6AF6]/15 text-[#6D6AF6]">
+                <div className="p-2 rounded-lg bg-[#6D6AF6]/15 text-[#9182f8]">
                   <Award className="w-4 h-4" />
                 </div>
                 <div>
@@ -39,3 +39,4 @@ export const CertificateShowcase = ({ certificates = [] }) => {
 };
 
 export default CertificateShowcase;
+

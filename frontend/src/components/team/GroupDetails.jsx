@@ -8,16 +8,16 @@ import KanbanBoard from './KanbanBoard';
 import EventDetailsModal from '@/components/modals/EventDetailsModal';
 import supabase from '@/lib/supabase';
 
-// â”€â”€â”€ Emoji Data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Emoji Data ───────────────────────────────────────────────────────────────
 const EMOJI_CATEGORIES = {
-  'ðŸ˜€ Smileys': ['ðŸ˜€','ðŸ˜ƒ','ðŸ˜„','ðŸ˜','ðŸ˜†','ðŸ˜…','ðŸ¤£','ðŸ˜‚','ðŸ™‚','ðŸ˜Š','ðŸ˜‡','ðŸ¥°','ðŸ˜','ðŸ¤©','ðŸ˜˜','ðŸ˜—','ðŸ˜™','ðŸ˜š','ðŸ˜‹','ðŸ˜›','ðŸ˜œ','ðŸ¤ª','ðŸ˜','ðŸ¤‘','ðŸ¤—','ðŸ¤­','ðŸ¤«','ðŸ¤”','ðŸ¤','ðŸ˜','ðŸ˜‘','ðŸ˜¶','ðŸ˜','ðŸ˜’','ðŸ˜ž','ðŸ˜”','ðŸ˜Ÿ','ðŸ˜•','ðŸ™','â˜¹ï¸','ðŸ˜£','ðŸ˜–','ðŸ˜«','ðŸ˜©','ðŸ¥º','ðŸ˜¢','ðŸ˜­','ðŸ˜¤','ðŸ˜ ','ðŸ˜¡'],
-  'ðŸ‘‹ Gestures': ['ðŸ‘‹','ðŸ¤š','ðŸ–ï¸','âœ‹','ðŸ––','ðŸ‘Œ','ðŸ¤Œ','ðŸ¤','âœŒï¸','ðŸ¤ž','ðŸ¤Ÿ','ðŸ¤˜','ðŸ¤™','ðŸ‘ˆ','ðŸ‘‰','ðŸ‘†','ðŸ‘‡','â˜ï¸','ðŸ‘','ðŸ‘Ž','âœŠ','ðŸ‘Š','ðŸ¤›','ðŸ¤œ','ðŸ‘','ðŸ™Œ','ðŸ¤²','ðŸ¤','ðŸ™'],
-  'â¤ï¸ Hearts': ['â¤ï¸','ðŸ§¡','ðŸ’›','ðŸ’š','ðŸ’™','ðŸ’œ','ðŸ–¤','ðŸ¤','ðŸ¤Ž','ðŸ’”','â£ï¸','ðŸ’•','ðŸ’ž','ðŸ’“','ðŸ’—','ðŸ’–','ðŸ’˜','ðŸ’','ðŸ’Ÿ'],
-  'ðŸŽ‰ Celebration': ['ðŸŽ‰','ðŸŽŠ','ðŸŽˆ','ðŸŽ','ðŸŽ€','ðŸ†','ðŸ¥‡','ðŸ¥ˆ','ðŸ¥‰','ðŸŽ–ï¸','ðŸ…','ðŸŽ¨','ðŸŽ¬','ðŸŽ¤','ðŸŽ§','ðŸŽ¸','ðŸŽ¹','ðŸŽº','ðŸŽ»','ðŸ¥'],
-  'ðŸ’» Tech': ['ðŸ’»','ðŸ–¥ï¸','âŒ¨ï¸','ðŸ–±ï¸','ðŸ’¾','ðŸ“±','ðŸ“º','ðŸ“·','ðŸŽ®','ðŸ•¹ï¸','ðŸŽ²','ðŸ’¡','ðŸ”‹','ðŸ”Œ','ðŸ’°','ðŸ“Š','ðŸ“ˆ','ðŸ“‰','ðŸ”­','ðŸ”¬'],
+  '😀 Smileys': ['😀','😃','😄','😁','😆','😅','🤣','😂','🙂','😊','😇','🥰','😍','🤩','😘','😗','😙','😚','😋','😛','😜','🤪','😝','🤑','🤗','🤔','🤐','🤨','😐','😑','😶','😏','😒','🙄','😬','🤥','😌','😔','😪','🤤','😴','😷','🤒','🤕','🤢','🤮','🤧','🥵','🥶','🥴'],
+  '👋 Gestures': ['👋','🤚','🖐️','✋','🖖','👌','✌️','🤞','🤟','🤘','🤙','👈','👉','👆','🖕','👇','☝️','👍','👎','✊','👊','🤛','🤜','👏','🙌','👐','🤲','🤝','🙏'],
+  '❤️ Hearts': ['❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','❣️','💕','💞','💓','💗','💖','💘','💝'],
+  '🎉 Celebration': ['🎉','🎊','🎈','🎂','🎀','🎁','🏆','🥇','🥈','🥉','🏅','🎖️','🎫','🎟️','🎭'],
+  '💻 Tech': ['💻','🖥️','📱','⌨️','🖱️','💾','💿','📀','📊','📈','📉','🔍','🔎','💡','🔋','🔌'],
 };
 
-// â”€â”€â”€ Emoji Picker â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Emoji Picker ─────────────────────────────────────────────────────────────
 function GroupEmojiPicker({ onSelect, onClose }) {
   const [activeCategory, setActiveCategory] = useState(Object.keys(EMOJI_CATEGORIES)[0]);
   const [search, setSearch] = useState('');
@@ -265,7 +265,7 @@ export default function GroupDetails() {
     );
   }
 
-  // â”€â”€ Handle XP Award â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Handle XP Award ────────────────────────────────────────────────────────
   const handleAwardXP = async () => {
     if (!awardUserId || !awardPlacement) return;
     setAwardingXP(true);
@@ -286,7 +286,7 @@ export default function GroupDetails() {
       return;
     }
 
-    // Insert event result â€” DB trigger handles XP update + activity log
+    // Insert event result — DB trigger handles XP update + activity log
     const { error } = await supabase
       .from('event_results')
       .insert([{
@@ -501,7 +501,7 @@ export default function GroupDetails() {
             {group.privacy === 'private' && <Lock className="text-slate-400" size={22}/>}
             {group.privacy === 'public' && <Unlock className="text-emerald-600 dark:text-emerald-400" size={22}/>}
           </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{group.event} â€¢ {group.type}</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{group.event} • {group.type}</p>
         </div>
         <div className="flex gap-2">
           {isAdmin && (
@@ -553,7 +553,7 @@ export default function GroupDetails() {
             </div>
           )}
 
-          {/* â”€â”€ Award XP Panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Award XP Panel ──────────────────────────────────────── */}
           <div className="border-t border-white/10 pt-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
@@ -590,7 +590,7 @@ export default function GroupDetails() {
                       onClick={() => setAwardPlacement(place)}
                     >
                       <div className="text-lg">
-                        {place === '1st' ? 'ðŸ¥‡' : place === '2nd' ? 'ðŸ¥ˆ' : place === '3rd' ? 'ðŸ¥‰' : 'âš¡'}
+                        {place === '1st' ? 'ðŸ¥‡' : place === '2nd' ? 'ðŸ¥ˆ' : place === '3rd' ? 'ðŸ¥‰' : '⚡'}
                       </div>
                       <div className="text-[10px] font-black uppercase tracking-wider">{place}</div>
                       <div className="text-sm font-black">+{xp} XP</div>
@@ -622,7 +622,7 @@ export default function GroupDetails() {
                   className="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-medium rounded-lg text-sm flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
                 >
                   {awardingXP
-                    ? <><Loader2 size={16} className="animate-spin" /> Awardingâ€¦</>
+                    ? <><Loader2 size={16} className="animate-spin" /> Awarding...</>
                     : <><Award size={16} /> Award {XP_VALUES[awardPlacement]} XP for {awardPlacement} Place</>
                   }
                 </button>
@@ -640,21 +640,21 @@ export default function GroupDetails() {
           {/* Navigation Tabs */}
           {isMember && (
             <div className="flex gap-2 border-b border-gs-border pb-2.5">
-              <button onClick={() => setActiveTab('chat')} className={`flex items-center gap-2 px-3.5 py-1.5 font-medium text-xs rounded-lg transition-colors border ${activeTab === 'chat' ? "bg-[#6D6AF6]/10 text-[#6D6AF6] border-[#6D6AF6]/30" : "border-transparent text-gs-text-muted hover:text-gs-text-main hover:bg-white/[0.04]"}`}>
+              <button onClick={() => setActiveTab('chat')} className={`flex items-center gap-2 px-3.5 py-1.5 font-medium text-xs rounded-lg transition-colors border ${activeTab === 'chat' ? "bg-[#6D6AF6]/10 text-[#9182f8] border-[#7c6af6]/30" : "border-transparent text-gs-text-muted hover:text-gs-text-main hover:bg-white/[0.04]"}`}>
                  <MessageSquare size={14} /> Chat
               </button>
-              <button onClick={() => setActiveTab('tasks')} className={`flex items-center gap-2 px-3.5 py-1.5 font-medium text-xs rounded-lg transition-colors border ${activeTab === 'tasks' ? "bg-[#6D6AF6]/10 text-[#6D6AF6] border-[#6D6AF6]/30" : "border-transparent text-gs-text-muted hover:text-gs-text-main hover:bg-white/[0.04]"}`}>
+              <button onClick={() => setActiveTab('tasks')} className={`flex items-center gap-2 px-3.5 py-1.5 font-medium text-xs rounded-lg transition-colors border ${activeTab === 'tasks' ? "bg-[#6D6AF6]/10 text-[#9182f8] border-[#7c6af6]/30" : "border-transparent text-gs-text-muted hover:text-gs-text-main hover:bg-white/[0.04]"}`}>
                  <Layout size={14} /> Tasks
               </button>
             </div>
           )}
 
           {isMember ? (
-            <div className="bg-gs-card border border-gs-border rounded-xl p-5 min-h-[500px] flex flex-col relative overflow-hidden shadow-xs">
+            <div className="glass-card rounded-xl p-5 min-h-[500px] flex flex-col relative overflow-hidden shadow-xs">
                {activeTab === 'chat' && (
                  <div className="flex flex-col flex-1 relative z-10">
                    <h3 className="text-sm font-semibold text-gs-text-main mb-4 flex justify-between items-center">
-                     <div className="flex items-center gap-2"><MessageSquare className="text-[#6D6AF6]" size={16} /> Group Communication</div>
+                     <div className="flex items-center gap-2"><MessageSquare className="text-[#9182f8]" size={16} /> Group Communication</div>
                    </h3>
 
                    {/* Chat Messages Area */}
@@ -726,7 +726,7 @@ export default function GroupDetails() {
                                   <img src={msg.media.url} alt="shared" className="max-w-xs rounded-xl mt-1 border border-gs-border" />
                                 )}
                                 {msg.media?.type === 'file' && (
-                                  <div className="flex items-center gap-2 px-3 py-2 bg-gs-card border border-gs-border rounded-xl mt-1 text-xs">
+                                  <div className="flex items-center gap-2 px-3 py-2 glass-card rounded-xl mt-1 text-xs">
                                     <File size={14} className="text-blue-500" />
                                     <span className="text-gs-text-main">{msg.media.name}</span>
                                     <span className="text-gs-text-muted">{msg.media.size}</span>
@@ -749,7 +749,7 @@ export default function GroupDetails() {
 
                    {/* Poll Creator */}
                    {showPollCreator && (
-                     <div className="mb-3 p-3.5 bg-gs-card border border-gs-border rounded-xl space-y-3">
+                     <div className="mb-3 p-3.5 glass-card rounded-xl space-y-3">
                        <div className="flex justify-between items-center">
                          <h4 className="font-semibold text-xs flex items-center gap-2 text-gs-text-main"><BarChart3 size={15} className="text-blue-500" /> Create Poll</h4>
                          <button onClick={() => setShowPollCreator(false)} className="text-gs-text-muted hover:text-gs-text-main"><X size={15} /></button>
@@ -781,7 +781,7 @@ export default function GroupDetails() {
 
                    {/* Media Preview */}
                    {mediaPreview && (
-                     <div className="flex items-center gap-3 mb-3 p-2 bg-gs-card border border-gs-border rounded-xl">
+                     <div className="flex items-center gap-3 mb-3 p-2 glass-card rounded-xl">
                        {mediaPreview.type === 'image' ? (
                          <img src={mediaPreview.url} alt="preview" className="w-14 h-14 rounded-lg object-cover" />
                        ) : (
@@ -795,7 +795,7 @@ export default function GroupDetails() {
                    {/* Chat Input */}
                    <div className="relative z-10">
                      {showEmoji && <GroupEmojiPicker onSelect={e => setChatInput(prev => prev + e)} onClose={() => setShowEmoji(false)} />}
-                     <form onSubmit={handleSendGroupMessage} className="flex gap-2 items-center bg-gs-elevated border border-gs-border rounded-xl p-1.5 focus-within:border-[#6D6AF6] transition-colors">
+                     <form onSubmit={handleSendGroupMessage} className="flex gap-2 items-center glass-elevated rounded-xl p-1.5 focus-within:border-[#7c6af6] transition-colors">
                        {/* File upload */}
                        <input ref={fileInputRef} type="file" accept="image/*,video/*,.pdf,.doc,.docx,.ppt,.pptx" className="hidden" onChange={handleFileSelect} />
                        <button type="button" onClick={() => fileInputRef.current?.click()}
@@ -826,7 +826,7 @@ export default function GroupDetails() {
                        <button
                          type="submit"
                          disabled={!chatInput.trim() && !mediaPreview}
-                         className="p-1.5 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white rounded-lg transition-colors flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed shadow-xs btn-tactile"
+                         className="p-1.5 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white rounded-lg transition-colors flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed shadow-xs btn-tactile"
                        >
                          <Send size={18} />
                        </button>
@@ -850,7 +850,7 @@ export default function GroupDetails() {
                 <button 
                   disabled={group.members >= group.maxMembers}
                   onClick={handleJoinGroup}
-                  className="w-full py-2.5 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium text-xs rounded-lg shadow-xs transition-colors disabled:opacity-40 disabled:cursor-not-allowed btn-tactile"
+                  className="w-full py-2.5 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium text-xs rounded-lg shadow-xs transition-colors disabled:opacity-40 disabled:cursor-not-allowed btn-tactile"
                 >
                   {group.members >= group.maxMembers ? 'Group Full' : group.privacy === 'private' ? 'Request to Join' : group.privacy === 'password' ? 'Unlock & Join' : 'Join Group'}
                 </button>
@@ -946,7 +946,7 @@ export default function GroupDetails() {
                   </div>
                   <div>
                     <p className="text-xs text-[var(--color-gs-text-muted)]">Time</p>
-                    <p className="text-sm font-bold text-[var(--color-gs-text-main)]">10:00 AM â€” 6:00 PM</p>
+                    <p className="text-sm font-bold text-[var(--color-gs-text-main)]">10:00 AM — 6:00 PM</p>
                   </div>
                 </div>
 
@@ -1027,6 +1027,7 @@ export default function GroupDetails() {
     </div>
   );
 }
+
 
 
 

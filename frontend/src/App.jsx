@@ -109,12 +109,18 @@ export default function GroupSyncApp() {
   return (
     <BrowserRouter>
       <div className={`relative min-h-screen text-gs-text-main font-sans selection:bg-gs-primary/20 selection:text-gs-text-main theme-${theme}`}>
-        <BackgroundVideo />
+        { /* Glassmorphism ambient orbs */ }
+        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+          <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-[radial-gradient(circle,rgba(124,106,246,0.18)_0%,transparent_70%)] blur-[80px] animate-[orbFloat1_18s_ease-in-out_infinite]" />
+          <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(167,139,250,0.14)_0%,transparent_70%)] blur-[80px] animate-[orbFloat2_22s_ease-in-out_infinite]" />
+          <div className="absolute top-1/2 left-1/2 w-[350px] h-[350px] rounded-full bg-[radial-gradient(circle,rgba(56,189,248,0.07)_0%,transparent_70%)] blur-[80px] animate-[orbFloat3_28s_ease-in-out_infinite]" />
+        </div>
         <div className="relative z-10">
           <div className="absolute top-0 left-0 right-0 h-96 pointer-events-none page-header-glow z-0" />
 
+
           {toast && (
-            <div className={`fixed bottom-5 right-5 z-50 animate-[slideIn_0.15s_ease-out] bg-gs-elevated p-3.5 rounded-xl shadow-lg flex items-center gap-3 border ${
+            <div className={`fixed bottom-5 right-5 z-50 animate-[slideIn_0.15s_ease-out] glass-elevated p-3.5 rounded-xl shadow-lg flex items-center gap-3 border ${
               toast.type === 'error' ? 'border-rose-500/30 text-rose-300' : 'border-gs-border text-gs-text-main'
             }`}>
               {toast.type === 'error'
@@ -207,3 +213,4 @@ const ProtectedRoute = ({ children }) => {
   
   return children;
 };
+

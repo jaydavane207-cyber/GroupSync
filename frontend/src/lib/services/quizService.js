@@ -1,11 +1,11 @@
 ﻿/**
- * quizService.js â€” GroupSync Quiz & Skill Verification Operations
+ * quizService.js — GroupSync Quiz & Skill Verification Operations
  * Handles quiz loading, attempt management, answer saving, scoring, badge awarding.
  */
 import supabase from '@/lib/supabase';
 import { withRetry } from '@/lib/withRetry';
 
-// â”€â”€â”€ BADGE TIER CALCULATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── BADGE TIER CALCULATION ───────────────────────────────────────────────────
 
 /**
  * Determine badge tier from quiz percentage score.
@@ -19,7 +19,7 @@ export function getBadgeTier(percentage) {
   return null; // didn't pass
 }
 
-// â”€â”€â”€ CREDIBILITY SCORE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── CREDIBILITY SCORE ────────────────────────────────────────────────────────
 
 /**
  * Calculate credibility score for a skill.
@@ -39,7 +39,7 @@ export function calculateCredibilityScore({ quizScore = 0, hasCertificate = fals
   return Math.min(Math.round(quizComponent + certComponent + endorseComponent + projectComponent), 100);
 }
 
-// â”€â”€â”€ BROWSE QUIZZES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── BROWSE QUIZZES ───────────────────────────────────────────────────────────
 
 /**
  * Fetch all published quizzes with optional filters.
@@ -62,9 +62,9 @@ export async function browseQuizzes(filters = {}) {
   });
 }
 
-// â”€â”€â”€ GET SINGLE QUIZ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── GET SINGLE QUIZ ─────────────────────────────────────────────────────────
 
-/** Fetch quiz metadata only (no questions â€” for browse card) */
+/** Fetch quiz metadata only (no questions — for browse card) */
 export async function getQuiz(quizId) {
   return withRetry(() =>
     supabase.from('quizzes').select('*').eq('id', quizId).single()
@@ -90,7 +90,7 @@ export async function getQuizWithQuestions(quizId) {
   });
 }
 
-// â”€â”€â”€ ATTEMPT MANAGEMENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── ATTEMPT MANAGEMENT ──────────────────────────────────────────────────────
 
 /** Check for an in-progress or paused attempt for this user+quiz */
 export async function getExistingAttempt(userId, quizId) {
@@ -120,7 +120,7 @@ export async function updateAttemptState(attemptId, updates) {
   return supabase.from('quiz_attempts').update(updates).eq('id', attemptId);
 }
 
-// â”€â”€â”€ ANSWER MANAGEMENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── ANSWER MANAGEMENT ───────────────────────────────────────────────────────
 
 /** Save/update an answer for a question (upsert) */
 export async function saveAnswer(attemptId, questionId, userAnswer) {
@@ -149,7 +149,7 @@ export async function loadSavedAnswers(attemptId) {
   return { data: answerMap, error: null };
 }
 
-// â”€â”€â”€ SUBMIT QUIZ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── SUBMIT QUIZ ─────────────────────────────────────────────────────────────
 
 /**
  * Score and finalize a quiz attempt.
@@ -167,7 +167,7 @@ export async function submitQuiz(attemptId, userId, quiz, questions, answers, st
   const completedAt = new Date();
   const timeTakenMinutes = (completedAt.getTime() - startedAtMs) / 60000;
 
-  // â”€â”€ Grade each question â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Grade each question ─────────────────────────────────────────────────
   let correctCount = 0;
   const gradedAnswers = questions.map(q => {
     const userAnswer = (answers[q.id] || '').trim().toLowerCase();
@@ -187,7 +187,7 @@ export async function submitQuiz(attemptId, userId, quiz, questions, answers, st
   const percentage = questions.length > 0 ? (correctCount / questions.length) * 100 : 0;
   const passed = percentage >= quiz.passing_score;
 
-  // â”€â”€ Save answers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Save answers ─────────────────────────────────────────────────────────
   if (gradedAnswers.length > 0) {
     await supabase.from('quiz_answers').upsert(
       gradedAnswers.map(a => ({
@@ -201,7 +201,7 @@ export async function submitQuiz(attemptId, userId, quiz, questions, answers, st
     );
   }
 
-  // â”€â”€ Update attempt â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Update attempt ────────────────────────────────────────────────────────
   const { error: attemptError } = await supabase.from('quiz_attempts').update({
     score: correctCount,
     percentage: Math.round(percentage * 100) / 100,
@@ -213,7 +213,7 @@ export async function submitQuiz(attemptId, userId, quiz, questions, answers, st
 
   if (attemptError) return { data: null, error: attemptError };
 
-  // â”€â”€ Award badge if passed â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Award badge if passed ─────────────────────────────────────────────────
   let badge = null;
   if (passed) {
     const tierInfo = getBadgeTier(percentage);
@@ -233,7 +233,7 @@ export async function submitQuiz(attemptId, userId, quiz, questions, answers, st
       badge = badgeData ? { ...badgeData, ...tierInfo } : null;
     }
 
-    // â”€â”€ Update/create user_skills entry â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Update/create user_skills entry ──────────────────────────────────
     await supabase.from('user_skills').upsert({
       user_id: userId,
       skill_name: quiz.skill_name,
@@ -243,7 +243,7 @@ export async function submitQuiz(attemptId, userId, quiz, questions, answers, st
       updated_at: new Date().toISOString(),
     }, { onConflict: 'user_id,skill_name' });
 
-    // â”€â”€ Award XP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Award XP ──────────────────────────────────────────────────────────
     const xpGain = passed ? Math.round(percentage / 10) * 5 : 0; // 30-50 XP for passing
     if (xpGain > 0) {
       await supabase.rpc('increment_xp', { user_id_input: userId, xp_delta: xpGain }).catch(() => {});
@@ -263,7 +263,7 @@ export async function submitQuiz(attemptId, userId, quiz, questions, answers, st
   };
 }
 
-// â”€â”€â”€ QUIZ HISTORY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── QUIZ HISTORY ────────────────────────────────────────────────────────────
 
 /** Get all completed quiz attempts for a user */
 export async function getQuizHistory(userId) {
@@ -277,7 +277,7 @@ export async function getQuizHistory(userId) {
   );
 }
 
-// â”€â”€â”€ BADGES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── BADGES ──────────────────────────────────────────────────────────────────
 
 /** Get all badges for a user */
 export async function getUserBadges(userId) {

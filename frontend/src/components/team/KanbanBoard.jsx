@@ -11,7 +11,7 @@ const COL_CONFIG = [
   { id: 'done',     title: 'Done',        accent: 'var(--color-gs-green)',      dot: 'bg-green-400'  },
 ];
 
-/* â”€ helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─ helpers ─────────────────────────────────────────────────────────── */
 const safeTags = (tags) => {
   if (Array.isArray(tags)) return tags;
   if (typeof tags === 'string') {
@@ -40,13 +40,13 @@ function formatDueDate(dateStr) {
   today.setHours(0, 0, 0, 0);
   const diff = Math.ceil((d - today) / (1000 * 60 * 60 * 24));
   const label = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  if (diff < 0)  return { label, cls: 'text-red-400',   icon: 'âš ï¸' };
-  if (diff === 0) return { label: 'Today', cls: 'text-amber-400', icon: 'ðŸ”¥' };
-  if (diff <= 3) return { label, cls: 'text-amber-400', icon: 'â³' };
-  return { label, cls: 'text-[var(--color-gs-text-muted)]', icon: 'ðŸ“…' };
+  if (diff < 0)  return { label, cls: 'text-red-400',   icon: '⚠️' };
+  if (diff === 0) return { label: 'Today', cls: 'text-amber-400', icon: '🔥' };
+  if (diff <= 3) return { label, cls: 'text-amber-400', icon: '⏳' };
+  return { label, cls: 'text-[var(--color-gs-text-muted)]', icon: '📅' };
 }
 
-/* â”€ TaskCard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─ TaskCard ─────────────────────────────────────────────────────────── */
 function TaskCard({ task, members, onDelete, onDragStart }) {
   const tags       = safeTags(task.tags);
   const due        = formatDueDate(task.due_date);
@@ -112,7 +112,7 @@ function TaskCard({ task, members, onDelete, onDragStart }) {
   );
 }
 
-/* â”€ KanbanBoard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─ KanbanBoard ─────────────────────────────────────────────────────── */
 export default function KanbanBoard({ groupId, members = [] }) {
   const [columns,      setColumns]      = useState(() => COL_CONFIG.map(c => ({ ...c, tasks: [] })));
   const [loading,      setLoading]      = useState(true);
@@ -127,7 +127,7 @@ export default function KanbanBoard({ groupId, members = [] }) {
   const dragTaskRef  = useRef(null);
   const dragFromRef  = useRef(null);
 
-  /* â”€â”€ data â”€â”€ */
+  /* ── data ── */
   const mapToColumns = useCallback((data) =>
     COL_CONFIG.map(c => ({ ...c, tasks: data.filter(t => t.column_id === c.id) })),
   []);
@@ -144,7 +144,7 @@ export default function KanbanBoard({ groupId, members = [] }) {
     setLoading(false);
   }, [groupId, mapToColumns]);
 
-  /* â”€â”€ realtime â”€â”€ */
+  /* ── realtime ── */
   useEffect(() => {
     if (!groupId) return;
     fetchTasks();
@@ -161,7 +161,7 @@ export default function KanbanBoard({ groupId, members = [] }) {
     return () => { supabase.removeChannel(channel); };
   }, [groupId, fetchTasks]);
 
-  /* â”€â”€ add task â”€â”€ */
+  /* ── add task ── */
   const handleAddTask = async (colId) => {
     if (!newText.trim() || saving) return;
     setSaving(true);
@@ -197,14 +197,14 @@ export default function KanbanBoard({ groupId, members = [] }) {
   const toggleTag = (tag) =>
     setNewTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
 
-  /* â”€â”€ delete task â”€â”€ */
+  /* ── delete task ── */
   const handleDeleteTask = async (taskId) => {
     await supabase.from('tasks').delete().eq('id', taskId);
     // realtime will refresh, but also update optimistically
     setColumns(prev => prev.map(c => ({ ...c, tasks: c.tasks.filter(t => t.id !== taskId) })));
   };
 
-  /* â”€â”€ drag & drop â”€â”€ */
+  /* ── drag & drop ── */
   const handleDragStart = (task, colId) => {
     dragTaskRef.current = task;
     dragFromRef.current = colId;
@@ -234,7 +234,7 @@ export default function KanbanBoard({ groupId, members = [] }) {
     await supabase.from('tasks').update({ column_id: toColId }).eq('id', task.id);
   };
 
-  /* â”€â”€ render â”€â”€ */
+  /* ── render ── */
   if (loading) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center text-[var(--color-gs-text-muted)] gap-3 py-16">
@@ -317,7 +317,7 @@ export default function KanbanBoard({ groupId, members = [] }) {
 
             {/* Add Task Area */}
             {addingTo === col.id ? (
-              <div className="bg-gs-card border border-gs-border rounded-xl p-3 space-y-2.5">
+              <div className="glass-card rounded-xl p-3 space-y-2.5">
                 {/* Task title */}
                 <input
                   type="text"
@@ -430,4 +430,5 @@ export default function KanbanBoard({ groupId, members = [] }) {
     </div>
   );
 }
+
 

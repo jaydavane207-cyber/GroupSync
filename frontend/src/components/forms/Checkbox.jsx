@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 export const Checkbox = ({ label, checked, onChange, name, className = '' }) => {
   return (
@@ -8,7 +8,7 @@ export const Checkbox = ({ label, checked, onChange, name, className = '' }) => 
         name={name}
         checked={checked}
         onChange={onChange}
-        className="w-4 h-4 rounded bg-[#14141a] border-gs-border text-[#6D6AF6] focus:ring-0 focus:ring-offset-0 cursor-pointer"
+        className="w-4 h-4 rounded bg-[#14141a] border-gs-border text-[#9182f8] focus:ring-0 focus:ring-offset-0 cursor-pointer"
       />
       {label && <span>{label}</span>}
     </label>
@@ -16,3 +16,4 @@ export const Checkbox = ({ label, checked, onChange, name, className = '' }) => 
 };
 
 export default Checkbox;
+

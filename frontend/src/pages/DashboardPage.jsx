@@ -1,7 +1,7 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Users, 
-  Bot, 
+  Sparkles, 
   FolderKanban, 
   UserPlus, 
   Award, 
@@ -29,7 +29,7 @@ export default function DashboardPage() {
   const [upcomingDeadlines, setUpcomingDeadlines] = useState([]);
   const [deadlinesLoading, setDeadlinesLoading] = useState(true);
 
-  // â”€â”€ Fetch upcoming project deadlines â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Fetch upcoming project deadlines ────────────────────────────────────
   useEffect(() => {
     const fetchDeadlines = async () => {
       setDeadlinesLoading(true);
@@ -62,7 +62,7 @@ export default function DashboardPage() {
     fetchDeadlines();
   }, []);
 
-  // â”€â”€ XP-based credibility score â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── XP-based credibility score ───────────────────────────────────────────
   const xp = user?.xp || 0;
   const credibilityScore = Math.min(100, Math.round((xp / 2000) * 100));
   const credibilityLabel = credibilityScore >= 80 ? 'Elite' : credibilityScore >= 50 ? 'Advanced' : credibilityScore >= 25 ? 'Contributor' : 'Apprentice';
@@ -88,7 +88,7 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6 pb-12">
-      {/* â”€â”€ Headline â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Headline ────────────────────────────────────────────── */}
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-1">
         <div>
           <h1 className="text-2xl sm:text-[28px] font-semibold text-gs-text-main tracking-tight leading-tight">
@@ -110,12 +110,12 @@ export default function DashboardPage() {
         )}
       </header>
 
-      {/* â”€â”€ 4 Premium Stat Cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── 4 Premium Stat Cards ─────────────────────────────────── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Stat 1: Active Teams */}
-        <div className="bg-gs-card border border-gs-border rounded-xl p-5 hover:border-gs-border-hover transition-colors machined-edge flex flex-col justify-between">
+        <div className="glass-card rounded-xl p-5 hover:border-gs-border-hover transition-colors machined-edge flex flex-col justify-between">
           <div className="flex justify-between items-start mb-3">
-            <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center text-[#6D6AF6]">
+            <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center text-[#9182f8]">
               <Users size={16} />
             </div>
             <span className="text-xs font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
@@ -133,9 +133,9 @@ export default function DashboardPage() {
         </div>
 
         {/* Stat 2: Open Projects */}
-        <div className="bg-gs-card border border-gs-border rounded-xl p-5 hover:border-gs-border-hover transition-colors machined-edge flex flex-col justify-between">
+        <div className="glass-card rounded-xl p-5 hover:border-gs-border-hover transition-colors machined-edge flex flex-col justify-between">
           <div className="flex justify-between items-start mb-3">
-            <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center text-[#6D6AF6]">
+            <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center text-[#9182f8]">
               <FolderKanban size={16} />
             </div>
             <span className="text-xs font-medium text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full">
@@ -153,9 +153,9 @@ export default function DashboardPage() {
         </div>
 
         {/* Stat 3: Online Peers */}
-        <div className="bg-gs-card border border-gs-border rounded-xl p-5 hover:border-gs-border-hover transition-colors machined-edge flex flex-col justify-between">
+        <div className="glass-card rounded-xl p-5 hover:border-gs-border-hover transition-colors machined-edge flex flex-col justify-between">
           <div className="flex justify-between items-start mb-3">
-            <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center text-[#6D6AF6]">
+            <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center text-[#9182f8]">
               <UserPlus size={16} />
             </div>
             <span className="text-xs font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
@@ -172,13 +172,13 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Stat 4: AI Matches */}
-        <div className="bg-gs-card border border-gs-border rounded-xl p-5 hover:border-gs-border-hover transition-colors machined-edge flex flex-col justify-between">
+        {/* Stat 4: Smart Matches */}
+        <div className="glass-card rounded-xl p-5 hover:border-gs-border-hover transition-colors machined-edge flex flex-col justify-between">
           <div className="flex justify-between items-start mb-3">
-            <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center text-[#6D6AF6]">
-              <Bot size={16} />
+            <div className="w-8 h-8 rounded-lg bg-[#7c6af6]/15 flex items-center justify-center text-[#9182f8]">
+              <Sparkles size={16} />
             </div>
-            <span className="text-xs font-medium text-[#7E7BF8] bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 px-2 py-0.5 rounded-full">
+            <span className="text-xs font-medium text-[#9182f8] bg-[#7c6af6]/15 border border-[#7c6af6]/30 px-2 py-0.5 rounded-full">
               Ready to review
             </span>
           </div>
@@ -193,16 +193,16 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* â”€â”€ Quick Actions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Quick Actions ────────────────────────────────────────── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <button
           onClick={() => navigate('/teams')}
           className="p-4 rounded-xl border border-gs-border bg-gs-card hover:border-gs-border-hover transition-colors text-left group btn-tactile"
         >
-          <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center text-[#6D6AF6] mb-3">
+          <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center text-[#9182f8] mb-3">
             <Users size={16} />
           </div>
-          <p className="font-semibold text-xs text-gs-text-main group-hover:text-[#6D6AF6] transition-colors">
+          <p className="font-semibold text-xs text-gs-text-main group-hover:text-[#9182f8] transition-colors">
             Browse teams
           </p>
           <p className="text-[11px] text-gs-text-muted mt-0.5">Explore open campus squads</p>
@@ -212,10 +212,10 @@ export default function DashboardPage() {
           onClick={() => navigate('/projects')}
           className="p-4 rounded-xl border border-gs-border bg-gs-card hover:border-gs-border-hover transition-colors text-left group btn-tactile"
         >
-          <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center text-[#6D6AF6] mb-3">
+          <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center text-[#9182f8] mb-3">
             <FolderKanban size={16} />
           </div>
-          <p className="font-semibold text-xs text-gs-text-main group-hover:text-[#6D6AF6] transition-colors">
+          <p className="font-semibold text-xs text-gs-text-main group-hover:text-[#9182f8] transition-colors">
             Find projects
           </p>
           <p className="text-[11px] text-gs-text-muted mt-0.5">Hackathons & capstone bounties</p>
@@ -225,10 +225,10 @@ export default function DashboardPage() {
           onClick={() => navigate('/ai')}
           className="p-4 rounded-xl border border-gs-border bg-gs-card hover:border-gs-border-hover transition-colors text-left group btn-tactile"
         >
-          <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center text-[#6D6AF6] mb-3">
-            <Bot size={16} />
+          <div className="w-8 h-8 rounded-lg bg-[#7c6af6]/15 flex items-center justify-center text-[#9182f8] mb-3">
+            <Sparkles size={16} />
           </div>
-          <p className="font-semibold text-xs text-gs-text-main group-hover:text-[#6D6AF6] transition-colors">
+          <p className="font-semibold text-xs text-gs-text-main group-hover:text-[#9182f8] transition-colors">
             Team matching
           </p>
           <p className="text-[11px] text-gs-text-muted mt-0.5">Skill-gap recommendations</p>
@@ -238,29 +238,29 @@ export default function DashboardPage() {
           onClick={() => navigate('/friends')}
           className="p-4 rounded-xl border border-gs-border bg-gs-card hover:border-gs-border-hover transition-colors text-left group btn-tactile"
         >
-          <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center text-[#6D6AF6] mb-3">
+          <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 flex items-center justify-center text-[#9182f8] mb-3">
             <UserPlus size={16} />
           </div>
-          <p className="font-semibold text-xs text-gs-text-main group-hover:text-[#6D6AF6] transition-colors">
+          <p className="font-semibold text-xs text-gs-text-main group-hover:text-[#9182f8] transition-colors">
             Peer directory
           </p>
           <p className="text-[11px] text-gs-text-muted mt-0.5">Connect with verified peers</p>
         </button>
       </div>
 
-      {/* â”€â”€ Two Column: Deadlines & Verified Credentials â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Two Column: Deadlines & Verified Credentials ─────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         
         {/* Upcoming Deadlines Widget */}
-        <div className="bg-gs-card border border-gs-border rounded-xl p-5 hover:border-gs-border-hover transition-colors machined-edge flex flex-col justify-between">
+        <div className="glass-card rounded-xl p-5 hover:border-gs-border-hover transition-colors machined-edge flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-sm font-semibold text-gs-text-main flex items-center gap-2">
-                <Calendar className="text-[#6D6AF6]" size={16} /> Upcoming deadlines
+                <Calendar className="text-[#9182f8]" size={16} /> Upcoming deadlines
               </h2>
               <button 
                 onClick={() => navigate('/projects')}
-                className="text-xs font-medium text-[#6D6AF6] hover:underline flex items-center gap-1"
+                className="text-xs font-medium text-[#9182f8] hover:underline flex items-center gap-1"
               >
                 View all <ArrowRight size={12} />
               </button>
@@ -278,8 +278,8 @@ export default function DashboardPage() {
                 <div className="text-center py-8 text-gs-text-muted text-xs">
                   <p>No active project deadlines.</p>
                   <button onClick={() => navigate('/projects')}
-                    className="text-[#6D6AF6] font-medium text-xs mt-1.5 hover:underline">
-                    Browse projects â†’
+                    className="text-[#9182f8] font-medium text-xs mt-1.5 hover:underline">
+                    Browse projects →
                   </button>
                 </div>
               ) : (
@@ -294,7 +294,7 @@ export default function DashboardPage() {
                       <div className="min-w-0">
                         <h4 className="font-semibold text-xs text-gs-text-main truncate">{item.title}</h4>
                         <p className="text-[11px] text-gs-text-muted mt-0.5 truncate">
-                          {item.domain} Â· Due {item.date}
+                          {item.domain} · Due {item.date}
                         </p>
                       </div>
                       <div className="shrink-0 text-right">
@@ -322,15 +322,15 @@ export default function DashboardPage() {
         </div>
 
         {/* Skill Credentials & Credibility Showcase */}
-        <div className="bg-gs-card border border-gs-border rounded-xl p-5 hover:border-gs-border-hover transition-colors machined-edge flex flex-col justify-between">
+        <div className="glass-card rounded-xl p-5 hover:border-gs-border-hover transition-colors machined-edge flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-sm font-semibold text-gs-text-main flex items-center gap-2">
-                <Award className="text-[#6D6AF6]" size={16} /> Verified credentials
+                <Award className="text-[#9182f8]" size={16} /> Verified credentials
               </h2>
               <button 
                 onClick={() => navigate('/badges')}
-                className="text-xs font-medium text-[#6D6AF6] hover:underline flex items-center gap-1"
+                className="text-xs font-medium text-[#9182f8] hover:underline flex items-center gap-1"
               >
                 All badges <ArrowRight size={12} />
               </button>
@@ -346,11 +346,11 @@ export default function DashboardPage() {
             <div className="p-4 rounded-xl border border-gs-border bg-gs-elevated">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-medium text-gs-text-muted flex items-center gap-1.5">
-                  <BarChart3 size={13} className="text-[#6D6AF6]" /> Credibility index
+                  <BarChart3 size={13} className="text-[#9182f8]" /> Credibility index
                 </span>
                 <span className="text-xs font-semibold text-gs-text-main">
                   {credibilityScore} / 100
-                  <span className="ml-1.5 text-[11px] font-medium text-[#6D6AF6]">({credibilityLabel})</span>
+                  <span className="ml-1.5 text-[11px] font-medium text-[#9182f8]">({credibilityLabel})</span>
                 </span>
               </div>
               
@@ -387,12 +387,12 @@ export default function DashboardPage() {
 
       </div>
 
-      {/* â”€â”€ Team Synergy & Proficiencies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-      <div className="bg-gs-card border border-gs-border rounded-xl p-5 hover:border-gs-border-hover transition-colors machined-edge">
+      {/* ── Team Synergy & Proficiencies ─────────────────────────── */}
+      <div className="glass-card rounded-xl p-5 hover:border-gs-border-hover transition-colors machined-edge">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
           <div>
             <div className="flex items-center gap-2 mb-0.5">
-              <ShieldCheck className="text-[#6D6AF6]" size={16} />
+              <ShieldCheck className="text-[#9182f8]" size={16} />
               <h2 className="text-sm font-semibold text-gs-text-main">
                 Team synergy & proficiencies
               </h2>
@@ -451,7 +451,7 @@ export default function DashboardPage() {
                 <div className="p-2 rounded-lg bg-gs-card border border-gs-border">
                   <div className="flex items-center justify-between text-xs font-semibold text-gs-text-main mb-0.5">
                     <span>Machine learning specialist</span>
-                    <span className="text-[#6D6AF6] font-semibold text-[11px]">88% fit</span>
+                    <span className="text-[#9182f8] font-semibold text-[11px]">88% fit</span>
                   </div>
                   <p className="text-[11px] text-gs-text-muted">Matches data & AI projects</p>
                 </div>
@@ -459,9 +459,9 @@ export default function DashboardPage() {
             </div>
             <button
               onClick={() => navigate('/ai')}
-              className="mt-3 pt-2.5 border-t border-gs-border text-xs text-[#6D6AF6] font-medium hover:underline text-left flex items-center justify-between"
+              className="mt-3 pt-2.5 border-t border-gs-border text-xs text-[#9182f8] font-medium hover:underline text-left flex items-center justify-between"
             >
-              <span>Explore AI matches</span>
+              <span>Explore team matches</span>
               <ChevronRight size={13} />
             </button>
           </div>
@@ -484,7 +484,7 @@ export default function DashboardPage() {
                   <Clock size={14} className="text-amber-400 shrink-0 mt-0.5" />
                   <div>
                     <span className="font-semibold text-gs-text-main">Alpha prototype</span>
-                    <p className="text-[11px] text-gs-text-muted">In progress Â· Due Friday</p>
+                    <p className="text-[11px] text-gs-text-muted">In progress · Due Friday</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2.5 text-xs opacity-60">
@@ -506,5 +506,6 @@ export default function DashboardPage() {
     </div>
   );
 }
+
 
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, ExternalLink, FolderGit2, Star } from 'lucide-react';
 import Button from '../components/buttons/Button';
@@ -55,7 +55,7 @@ export const ProjectDetailPage = () => {
       <div className="glass-card p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-[#6D6AF6]/15 flex items-center justify-center text-[#6D6AF6]">
+            <div className="w-12 h-12 rounded-xl bg-[#6D6AF6]/15 flex items-center justify-center text-[#9182f8]">
               <FolderGit2 className="w-6 h-6" />
             </div>
             <div>
@@ -94,3 +94,4 @@ export const ProjectDetailPage = () => {
 };
 
 export default ProjectDetailPage;
+

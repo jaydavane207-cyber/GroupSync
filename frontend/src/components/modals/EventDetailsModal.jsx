@@ -12,7 +12,7 @@ import supabase from '@/lib/supabase';
 
 const EVENT_TYPE_STYLES = {
   Hackathon: {
-    badge: 'bg-[#6D6AF6]/10 text-[#6D6AF6] border-[#6D6AF6]/30',
+    badge: 'bg-[#6D6AF6]/10 text-[#9182f8] border-[#7c6af6]/30',
   },
   Technical: {
     badge: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
@@ -170,7 +170,7 @@ export default function EventDetailsModal({
       }}
     >
       <div
-        className="relative w-full max-w-2xl bg-gs-card border border-gs-border rounded-xl shadow-xl overflow-hidden max-h-[90vh] flex flex-col"
+        className="relative w-full max-w-2xl glass-card rounded-xl shadow-xl overflow-hidden max-h-[90vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Banner / Poster */}
@@ -204,7 +204,7 @@ export default function EventDetailsModal({
                 {group.type}
               </span>
               <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-black/5 dark:bg-white/[0.04] border border-gs-border text-gs-text-muted flex items-center gap-1.5">
-                {group.privacy === 'private' ? <Lock size={12} className="text-rose-400" /> : <Globe size={12} className="text-[#6D6AF6]" />}
+                {group.privacy === 'private' ? <Lock size={12} className="text-rose-400" /> : <Globe size={12} className="text-[#9182f8]" />}
                 {group.privacy === 'private' ? 'Private Group' : group.privacy === 'password' ? 'Password Protected' : 'Public Event'}
               </span>
               <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 flex items-center gap-1.5">
@@ -216,7 +216,7 @@ export default function EventDetailsModal({
             <h2 className="text-2xl font-semibold text-gs-text-main tracking-tight">
               {group.event}
             </h2>
-            <p className="text-xs text-[#6D6AF6] font-medium mt-0.5">
+            <p className="text-xs text-[#9182f8] font-medium mt-0.5">
               Team: {group.name}
             </p>
           </div>
@@ -226,9 +226,9 @@ export default function EventDetailsModal({
         <div className="flex-1 overflow-y-auto px-7 py-6 space-y-6 custom-scrollbar">
           {/* Admin / Creator Edit Mode Toggle */}
           {isAdmin && (
-            <div className="flex items-center justify-between p-3.5 rounded-xl bg-[#6D6AF6]/10 border border-[#6D6AF6]/20">
+            <div className="flex items-center justify-between p-3.5 rounded-xl bg-[#7c6af6]/15 border border-[#7c6af6]/30">
               <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-lg bg-[#6D6AF6]/10 text-[#6D6AF6]">
+                <div className="p-2 rounded-lg bg-[#6D6AF6]/10 text-[#9182f8]">
                   <Edit3 size={16} />
                 </div>
                 <div>
@@ -241,7 +241,7 @@ export default function EventDetailsModal({
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
                   isEditing
                     ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                    : 'bg-[#6D6AF6] hover:bg-[#5C59EC] text-white shadow-xs btn-tactile'
+                    : 'bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white shadow-xs btn-tactile'
                 }`}
               >
                 {isEditing ? 'Cancel Edit' : 'Edit Event Info'}
@@ -249,7 +249,7 @@ export default function EventDetailsModal({
             </div>
           )}
 
-          {/* â”€â”€â”€ EDIT FORM (If Creator is Editing) â”€â”€â”€ */}
+          {/* ─── EDIT FORM (If Creator is Editing) ─── */}
           {isEditing ? (
             <form onSubmit={handleSaveChanges} className="space-y-4 animate-[slideInUp_0.15s_ease-out]">
               <div>
@@ -328,11 +328,11 @@ export default function EventDetailsModal({
                         onClick={() => toggleSkill(s)}
                         className={`px-3 py-1 rounded-md text-xs font-medium border transition-all ${
                           isSelected
-                            ? 'bg-[#6D6AF6] border-[#6D6AF6] text-white'
+                            ? 'bg-[#6D6AF6] border-[#7c6af6] text-white'
                             : 'bg-gs-card border-gs-border text-gs-text-muted hover:text-gs-text-main'
                         }`}
                       >
-                        {isSelected && 'âœ“ '} {s}
+                        {isSelected && '✓ '} {s}
                       </button>
                     );
                   })}
@@ -344,7 +344,7 @@ export default function EventDetailsModal({
                   <label className="text-xs font-semibold uppercase tracking-wider text-gs-text-muted">
                     Max Team Capacity
                   </label>
-                  <span className="text-xs font-semibold text-[#6D6AF6] tabular-nums">{editMaxMembers} Members</span>
+                  <span className="text-xs font-semibold text-[#9182f8] tabular-nums">{editMaxMembers} Members</span>
                 </div>
                 <input
                   type="range"
@@ -367,14 +367,14 @@ export default function EventDetailsModal({
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="flex-[2] py-2 rounded-lg bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium text-xs flex items-center justify-center gap-2 shadow-xs transition-colors disabled:opacity-50 btn-tactile cursor-pointer"
+                  className="flex-[2] py-2 rounded-lg bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium text-xs flex items-center justify-center gap-2 shadow-xs transition-colors disabled:opacity-50 btn-tactile cursor-pointer"
                 >
                   {isSaving ? <><Loader2 size={15} className="animate-spin" /> Saving...</> : <><Save size={15} /> Save Changes</>}
                 </button>
               </div>
             </form>
           ) : (
-            /* â”€â”€â”€ NORMAL EVENT DETAILS VIEW â”€â”€â”€ */
+            /* ─── NORMAL EVENT DETAILS VIEW ─── */
             <div className="space-y-6">
               {/* 1. Creator / Organizer Card */}
               <div className="p-4 rounded-xl bg-gs-card border border-gs-border relative overflow-hidden">
@@ -393,7 +393,7 @@ export default function EventDetailsModal({
                         <h4 className="font-semibold text-gs-text-main text-sm">
                           {creatorProfile?.name || (isAdmin ? `${user?.name || 'You'} (Creator)` : 'Event Organizer')}
                         </h4>
-                        <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-[#6D6AF6]/10 text-[#6D6AF6] border border-[#6D6AF6]/20">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-[#6D6AF6]/10 text-[#9182f8] border border-[#7c6af6]/20">
                           Creator
                         </span>
                       </div>
@@ -407,7 +407,7 @@ export default function EventDetailsModal({
                   {creatorProfile?.id && creatorProfile.id !== user?.id && (
                     <button
                       onClick={handleMessageCreator}
-                      className="px-3 py-1.5 rounded-lg border border-gs-border text-xs font-medium text-[#6D6AF6] hover:bg-[#6D6AF6]/10 transition-colors flex items-center gap-1.5 cursor-pointer"
+                      className="px-3 py-1.5 rounded-lg border border-gs-border text-xs font-medium text-[#9182f8] hover:bg-[#6D6AF6]/10 transition-colors flex items-center gap-1.5 cursor-pointer"
                     >
                       <MessageSquare size={13} /> Message
                     </button>
@@ -439,7 +439,7 @@ export default function EventDetailsModal({
                         key={skill}
                         className="px-2.5 py-1 rounded-lg bg-black/5 dark:bg-white/[0.04] border border-gs-border text-xs font-medium text-gs-text-muted flex items-center gap-1.5"
                       >
-                        <ShieldCheck size={12} className="text-[#6D6AF6]" />
+                        <ShieldCheck size={12} className="text-[#9182f8]" />
                         {skill}
                       </span>
                     ))
@@ -472,7 +472,7 @@ export default function EventDetailsModal({
                     <Clock size={15} className="text-gs-text-muted shrink-0" />
                     <div>
                       <p className="text-[11px] text-gs-text-muted">Time & duration</p>
-                      <p className="text-xs font-medium text-gs-text-main">10:00 AM â€” 6:00 PM</p>
+                      <p className="text-xs font-medium text-gs-text-main">10:00 AM — 6:00 PM</p>
                     </div>
                   </div>
 
@@ -500,7 +500,7 @@ export default function EventDetailsModal({
               <div className="p-3.5 rounded-xl bg-gs-card border border-gs-border space-y-2">
                 <div className="flex justify-between items-center text-xs">
                   <span className="text-gs-text-muted">Team fill progress</span>
-                  <span className="font-semibold text-[#6D6AF6] tabular-nums">{currentMembersCount} / {maxCapacity} members ({capacityPercent}%)</span>
+                  <span className="font-semibold text-[#9182f8] tabular-nums">{currentMembersCount} / {maxCapacity} members ({capacityPercent}%)</span>
                 </div>
                 <div className="w-full h-1.5 bg-black/10 dark:bg-white/10 rounded-full overflow-hidden">
                   <div
@@ -542,7 +542,7 @@ export default function EventDetailsModal({
                   onJoinGroup?.();
                 }}
                 disabled={currentMembersCount >= maxCapacity}
-                className="px-4 py-2 rounded-lg bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium text-xs shadow-xs transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer btn-tactile"
+                className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium text-xs shadow-xs transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer btn-tactile"
               >
                 {currentMembersCount >= maxCapacity ? 'Group Full' : 'Apply / Join Team'}
               </button>
@@ -553,4 +553,5 @@ export default function EventDetailsModal({
     </div>
   );
 }
+
 

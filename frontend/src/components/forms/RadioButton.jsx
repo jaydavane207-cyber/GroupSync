@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 export const RadioButton = ({ label, name, value, checked, onChange, className = '' }) => {
   return (
@@ -9,7 +9,7 @@ export const RadioButton = ({ label, name, value, checked, onChange, className =
         value={value}
         checked={checked}
         onChange={onChange}
-        className="w-4 h-4 rounded-full bg-[#14141a] border-gs-border text-[#6D6AF6] focus:ring-0 focus:ring-offset-0 cursor-pointer"
+        className="w-4 h-4 rounded-full bg-[#14141a] border-gs-border text-[#9182f8] focus:ring-0 focus:ring-offset-0 cursor-pointer"
       />
       {label && <span>{label}</span>}
     </label>
@@ -17,3 +17,4 @@ export const RadioButton = ({ label, name, value, checked, onChange, className =
 };
 
 export default RadioButton;
+

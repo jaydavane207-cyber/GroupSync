@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Loader2 } from 'lucide-react';
 
 export const Spinner = ({ size = 'md', className = '' }) => {
@@ -10,9 +10,10 @@ export const Spinner = ({ size = 'md', className = '' }) => {
 
   return (
     <Loader2
-      className={`animate-spin text-[#6D6AF6] ${sizes[size] || sizes.md} ${className}`}
+      className={`animate-spin text-[#9182f8] ${sizes[size] || sizes.md} ${className}`}
     />
   );
 };
 
 export default Spinner;
+

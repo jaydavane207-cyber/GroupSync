@@ -8,7 +8,7 @@ export const TeamHeader = ({ team, isLeader = false, onInvite, onSettings }) => 
   return (
     <div className="glass-card p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div className="flex items-center gap-4">
-        <div className="w-14 h-14 rounded-2xl bg-[#6D6AF6]/15 flex items-center justify-center text-[#6D6AF6]">
+        <div className="w-14 h-14 rounded-2xl bg-[#6D6AF6]/15 flex items-center justify-center text-[#9182f8]">
           <Users className="w-7 h-7" />
         </div>
         <div>
@@ -39,4 +39,5 @@ export const TeamHeader = ({ team, isLeader = false, onInvite, onSettings }) => 
 };
 
 export default TeamHeader;
+
 

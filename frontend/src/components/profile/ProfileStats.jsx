@@ -5,7 +5,7 @@ import { formatXP } from '@/lib/utils/formatting';
 export const ProfileStats = ({ stats = {} }) => {
   const statItems = [
     { label: 'Total XP', value: formatXP(stats.xp || 0), icon: Zap, color: 'text-amber-400' },
-    { label: 'Teams Joined', value: stats.teamsCount || 0, icon: Users, color: 'text-[#6D6AF6]' },
+    { label: 'Teams Joined', value: stats.teamsCount || 0, icon: Users, color: 'text-[#9182f8]' },
     { label: 'Projects Built', value: stats.projectsCount || 0, icon: FolderGit2, color: 'text-emerald-400' },
     { label: 'Badges Earned', value: stats.badgesCount || 0, icon: CheckCircle2, color: 'text-rose-400' },
   ];
@@ -29,4 +29,5 @@ export const ProfileStats = ({ stats = {} }) => {
 };
 
 export default ProfileStats;
+
 

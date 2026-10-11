@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import Card from './Card';
 import { Award, Zap } from 'lucide-react';
 
@@ -21,7 +21,7 @@ export const UserCard = ({ user, onAction, actionLabel = 'Connect' }) => {
               <Zap className="w-2.5 h-2.5" /> {user.xp || 0} XP
             </span>
             {user.credibility_score && (
-              <span className="text-[10px] text-[#6D6AF6] flex items-center gap-0.5">
+              <span className="text-[10px] text-[#9182f8] flex items-center gap-0.5">
                 <Award className="w-2.5 h-2.5" /> {user.credibility_score} CS
               </span>
             )}
@@ -42,3 +42,4 @@ export const UserCard = ({ user, onAction, actionLabel = 'Connect' }) => {
 };
 
 export default UserCard;
+

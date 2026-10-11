@@ -41,11 +41,11 @@ function FactionCard({ faction, idx, maxXP }) {
   const progressPct = maxXP > 0 ? (animatedXP / maxXP) * 100 : 0;
 
   return (
-    <div className="bg-gs-card border border-gs-border rounded-xl p-5 shadow-sm hover:border-[#6D6AF6]/30 transition-colors flex flex-col justify-between">
+    <div className="glass-card rounded-xl p-5 shadow-sm hover:border-[#7c6af6]/30 transition-colors flex flex-col justify-between">
       <div>
         <div className="flex items-start justify-between gap-4 mb-4">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 flex items-center justify-center text-[#6D6AF6] shrink-0">
+            <div className="w-9 h-9 rounded-lg bg-[#7c6af6]/15 border border-[#7c6af6]/30 flex items-center justify-center text-[#9182f8] shrink-0">
               <FactionIcon size={18} />
             </div>
             <div>
@@ -120,7 +120,7 @@ function LiveTicker({ events }) {
 
   return (
     <div className="flex items-center gap-3 rounded-lg border border-gs-border bg-gs-card px-3 py-2 text-xs">
-      <div className="flex items-center gap-1.5 text-[#6D6AF6] font-medium shrink-0 pr-3 border-r border-gs-border">
+      <div className="flex items-center gap-1.5 text-[#9182f8] font-medium shrink-0 pr-3 border-r border-gs-border">
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
         <span className="text-[11px]">Activity</span>
       </div>
@@ -285,7 +285,7 @@ export default function Leaderboard() {
             onClick={() => setViewMode('factions')}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 border ${
               viewMode === 'factions'
-                ? 'bg-[#6D6AF6]/10 text-[#6D6AF6] border-[#6D6AF6]/30'
+                ? 'bg-[#6D6AF6]/10 text-[#9182f8] border-[#7c6af6]/30'
                 : 'bg-white/[0.02] border-gs-border text-gs-text-muted hover:text-gs-text-main'
             }`}
           >
@@ -295,7 +295,7 @@ export default function Leaderboard() {
             onClick={() => setViewMode('individual')}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 border ${
               viewMode === 'individual'
-                ? 'bg-[#6D6AF6]/10 text-[#6D6AF6] border-[#6D6AF6]/30'
+                ? 'bg-[#6D6AF6]/10 text-[#9182f8] border-[#7c6af6]/30'
                 : 'bg-white/[0.02] border-gs-border text-gs-text-muted hover:text-gs-text-main'
             }`}
           >
@@ -348,18 +348,18 @@ export default function Leaderboard() {
           {user && (
             <div className="p-4 rounded-xl bg-gs-card border border-gs-border shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-lg bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 flex items-center justify-center text-xs font-semibold text-[#6D6AF6] shrink-0">
-                  {myRank ? `#${myRank}` : 'â€”'}
+                <div className="w-9 h-9 rounded-lg bg-[#7c6af6]/15 border border-[#7c6af6]/30 flex items-center justify-center text-xs font-semibold text-[#9182f8] shrink-0">
+                  {myRank ? `#${myRank}` : '—'}
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
                     <h3 className="font-semibold text-xs text-gs-text-main">{user.name}</h3>
-                    <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-[#6D6AF6]/10 text-[#6D6AF6] border border-[#6D6AF6]/20">
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-[#6D6AF6]/10 text-[#9182f8] border border-[#7c6af6]/20">
                       Your rank
                     </span>
                   </div>
                   <p className="text-[11px] text-gs-text-muted mt-0.5">
-                    {factions[user.faction]?.name || 'Scholar'} Â· {myProfileData?.badges?.length || 0} badges
+                    {factions[user.faction]?.name || 'Scholar'} · {myProfileData?.badges?.length || 0} badges
                   </p>
                 </div>
               </div>
@@ -441,7 +441,7 @@ export default function Leaderboard() {
                 placeholder="Search scholars by name..."
                 value={searchStudent}
                 onChange={e => setSearchStudent(e.target.value)}
-                className="w-full bg-gs-card border border-gs-border rounded-lg pl-8 pr-3 py-1.5 text-xs text-gs-text-main placeholder-gs-text-muted outline-none focus:border-[#6D6AF6] transition-colors"
+                className="w-full glass-card rounded-lg pl-8 pr-3 py-1.5 text-xs text-gs-text-main placeholder-gs-text-muted outline-none focus:border-[#7c6af6] transition-colors"
               />
             </div>
 
@@ -449,7 +449,7 @@ export default function Leaderboard() {
               <select
                 value={factionFilter}
                 onChange={e => setFactionFilter(e.target.value)}
-                className="w-full bg-gs-card border border-gs-border rounded-lg px-2.5 py-1.5 text-xs text-gs-text-main outline-none focus:border-[#6D6AF6] transition-colors"
+                className="w-full glass-card rounded-lg px-2.5 py-1.5 text-xs text-gs-text-main outline-none focus:border-[#7c6af6] transition-colors"
               >
                 <option value="all">All houses</option>
                 {Object.entries(factions).map(([k, f]) => (
@@ -460,7 +460,7 @@ export default function Leaderboard() {
           </div>
 
           {/* Table */}
-          <div className="bg-gs-card border border-gs-border rounded-xl overflow-hidden shadow-sm">
+          <div className="glass-card rounded-xl overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
@@ -537,7 +537,7 @@ export default function Leaderboard() {
                                 </span>
                               ))
                             ) : (
-                              <span className="text-gs-text-muted text-[11px]">â€”</span>
+                              <span className="text-gs-text-muted text-[11px]">—</span>
                             )}
                             {badges.length > 3 && (
                               <span className="text-[10px] text-gs-text-muted">+{badges.length - 3}</span>
@@ -568,4 +568,5 @@ export default function Leaderboard() {
     </div>
   );
 }
+
 

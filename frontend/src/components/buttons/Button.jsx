@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 export const Button = ({
   children,
@@ -12,7 +12,7 @@ export const Button = ({
   const baseStyles = 'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-150 btn-tactile focus:outline-hidden disabled:opacity-50 disabled:cursor-not-allowed';
   
   const variants = {
-    primary: 'bg-[#6D6AF6] hover:bg-[#5C59EC] text-white shadow-xs',
+    primary: 'bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white shadow-xs',
     secondary: 'bg-white/5 hover:bg-white/10 text-gs-text-main border border-white/10',
     outline: 'border border-gs-border hover:border-gs-border-hover text-gs-text-main hover:bg-white/5',
     ghost: 'text-gs-text-secondary hover:text-gs-text-main hover:bg-white/5',
@@ -43,3 +43,4 @@ export const Button = ({
 };
 
 export default Button;
+

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import Card from './Card';
 import { FolderGit2, Star, ExternalLink } from 'lucide-react';
 
@@ -9,7 +9,7 @@ export const ProjectCard = ({ project, onSelect }) => {
     <Card hover onClick={() => onSelect?.(project)} className="flex flex-col justify-between">
       <div>
         <div className="flex items-center justify-between mb-2">
-          <div className="p-2 rounded-lg bg-[#6D6AF6]/10 text-[#6D6AF6]">
+          <div className="p-2 rounded-lg bg-[#6D6AF6]/10 text-[#9182f8]">
             <FolderGit2 className="w-4 h-4" />
           </div>
           <span className="text-[10px] font-medium uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/5 text-gs-text-muted border border-white/5">
@@ -49,3 +49,4 @@ export const ProjectCard = ({ project, onSelect }) => {
 };
 
 export default ProjectCard;
+

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import Card from './Card';
 import { Users, Shield, ArrowRight } from 'lucide-react';
 
@@ -10,7 +10,7 @@ export const TeamCard = ({ team, onJoin, onView }) => {
       <div>
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/15 flex items-center justify-center text-[#6D6AF6]">
+            <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/15 flex items-center justify-center text-[#9182f8]">
               <Users className="w-4 h-4" />
             </div>
             <div>
@@ -38,7 +38,7 @@ export const TeamCard = ({ team, onJoin, onView }) => {
             e.stopPropagation();
             onJoin?.(team);
           }}
-          className="text-xs text-[#6D6AF6] hover:text-[#5C59EC] font-medium flex items-center gap-1"
+          className="text-xs text-[#9182f8] hover:text-[#5C59EC] font-medium flex items-center gap-1"
         >
           Join <ArrowRight className="w-3 h-3" />
         </button>
@@ -48,3 +48,4 @@ export const TeamCard = ({ team, onJoin, onView }) => {
 };
 
 export default TeamCard;
+

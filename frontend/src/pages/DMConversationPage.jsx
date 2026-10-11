@@ -14,7 +14,7 @@ import {
 } from '@/lib/services/chatService';
 import supabase from '@/lib/supabase';
 
-const QUICK_EMOJIS = ['ðŸ‘', 'â¤ï¸', 'ðŸ˜‚', 'ðŸŽ‰', 'ðŸ”¥', 'ðŸš€'];
+const QUICK_EMOJIS = ['👍', '❤️', '😂', '🎉', '🔥', '🚀'];
 
 export default function DMConversationPage() {
   const { targetUserId } = useParams();
@@ -50,7 +50,7 @@ export default function DMConversationPage() {
     messagesEndRef.current?.scrollIntoView({ behavior });
   };
 
-  // â”€â”€â”€ Initialize DM conversation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Initialize DM conversation ─────────────────────────────────────────────
   useEffect(() => {
     if (!user?.id || !targetUserId) return;
     let cancelled = false;
@@ -95,7 +95,7 @@ export default function DMConversationPage() {
     return () => { cancelled = true; };
   }, [user?.id, targetUserId]);
 
-  // â”€â”€â”€ Realtime Message & Reaction Subscription â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Realtime Message & Reaction Subscription ──────────────────────────────
   useEffect(() => {
     if (!dmInfo?.groupId) return;
 
@@ -173,7 +173,7 @@ export default function DMConversationPage() {
     };
   }, [dmInfo?.groupId, user?.id, messages.length]);
 
-  // â”€â”€â”€ Typing Emitter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Typing Emitter ─────────────────────────────────────────────────────────
   const handleInputChange = (e) => {
     setInputText(e.target.value);
     if (!presenceChannelRef.current) return;
@@ -185,7 +185,7 @@ export default function DMConversationPage() {
     }, 2000);
   };
 
-  // â”€â”€â”€ Send Message â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Send Message ───────────────────────────────────────────────────────────
   const handleSend = async (e) => {
     e?.preventDefault();
     if ((!inputText.trim() && !uploadFile) || isSending || !dmInfo) return;
@@ -238,7 +238,7 @@ export default function DMConversationPage() {
     }
   };
 
-  // â”€â”€â”€ Reaction Handlers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Reaction Handlers ──────────────────────────────────────────────────────
   const handleToggleReaction = async (msgId, emoji) => {
     const msgReactions = reactions[msgId] || {};
     const reactors = msgReactions[emoji] || [];
@@ -254,7 +254,7 @@ export default function DMConversationPage() {
     if (updated) setReactions(prev => ({ ...prev, ...updated }));
   };
 
-  // â”€â”€â”€ Edit / Delete Handlers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Edit / Delete Handlers ─────────────────────────────────────────────────
   const handleSaveEdit = async (msgId, createdAt) => {
     if (!editText.trim()) return;
     const { error } = await editMessage(msgId, user.id, editText, createdAt);
@@ -282,8 +282,8 @@ export default function DMConversationPage() {
   const target = dmInfo?.targetUser || { name: 'Student', avatar: 'ðŸŽ“' };
 
   return (
-    <div className="max-w-4xl mx-auto flex flex-col h-[calc(100vh-7.5rem)] bg-gs-card border border-gs-border rounded-xl overflow-hidden shadow-sm">
-      {/* â”€â”€ Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+    <div className="max-w-4xl mx-auto flex flex-col h-[calc(100vh-7.5rem)] glass-card rounded-xl overflow-hidden shadow-sm">
+      {/* ── Header ────────────────────────────────────────────────── */}
       <div className="px-4 py-3 border-b border-gs-border flex items-center justify-between gap-4 bg-gs-card">
         <div className="flex items-center gap-3">
           <button
@@ -315,7 +315,7 @@ export default function DMConversationPage() {
                 )}
                 {target.availability && (
                   <span className="text-emerald-500 font-medium truncate max-w-[180px]">
-                    Â· {target.availability}
+                    · {target.availability}
                   </span>
                 )}
               </div>
@@ -324,7 +324,7 @@ export default function DMConversationPage() {
         </div>
       </div>
 
-      {/* â”€â”€ Message Thread Area â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Message Thread Area ───────────────────────────────────── */}
       <div className="flex-1 p-4 sm:p-5 overflow-y-auto space-y-3.5 bg-gs-card">
         {messages.length === 0 && (
           <div className="py-20 text-center space-y-2">
@@ -468,7 +468,7 @@ export default function DMConversationPage() {
                         onClick={() => handleToggleReaction(msg.id, em)}
                         className={`flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-medium border transition-colors ${
                           hasMe
-                            ? 'bg-[#6D6AF6]/15 border-[#6D6AF6]/30 text-[#6D6AF6]'
+                            ? 'bg-[#6D6AF6]/15 border-[#7c6af6]/30 text-[#9182f8]'
                             : 'bg-white/[0.04] border-gs-border text-gs-text-muted'
                         }`}
                       >
@@ -486,17 +486,17 @@ export default function DMConversationPage() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* â”€â”€ File Preview Bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── File Preview Bar ──────────────────────────────────────── */}
       {uploadFile && (
         <div className="px-4 py-2 bg-gs-elevated border-t border-gs-border flex items-center justify-between text-xs">
           <div className="flex items-center gap-2 truncate text-gs-text-main">
-            <Paperclip size={14} className="text-[#6D6AF6]" />
+            <Paperclip size={14} className="text-[#9182f8]" />
             <span className="truncate">{uploadFile.name}</span>
             <span className="text-[11px] text-gs-text-muted">
               ({(uploadFile.size / 1024).toFixed(0)} KB)
             </span>
           </div>
-          <button onClick={() => setUploadFile(null)} className="text-gs-text-muted hover:text-rose-400 p-1">âœ•</button>
+          <button onClick={() => setUploadFile(null)} className="text-gs-text-muted hover:text-rose-400 p-1">✕</button>
         </div>
       )}
 
@@ -507,7 +507,7 @@ export default function DMConversationPage() {
         </div>
       )}
 
-      {/* â”€â”€ Message Input Bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Message Input Bar ─────────────────────────────────────── */}
       <form onSubmit={handleSend} className="p-3 bg-gs-card border-t border-gs-border flex items-center gap-2">
         <input
           type="file"
@@ -529,13 +529,13 @@ export default function DMConversationPage() {
           value={inputText}
           onChange={handleInputChange}
           placeholder={`Message ${target.name}...`}
-          className="flex-1 bg-gs-elevated border border-gs-border rounded-lg px-3 py-1.5 text-xs text-gs-text-main placeholder-gs-text-muted outline-none focus:border-[#6D6AF6] transition-colors"
+          className="flex-1 glass-elevated rounded-lg px-3 py-1.5 text-xs text-gs-text-main placeholder-gs-text-muted outline-none focus:border-[#7c6af6] transition-colors"
         />
 
         <button
           type="submit"
           disabled={(!inputText.trim() && !uploadFile) || isSending}
-          className="p-2 rounded-lg bg-[#6D6AF6] hover:bg-[#5C59EC] text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-xs shrink-0 btn-tactile"
+          className="p-2 rounded-lg bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-xs shrink-0 btn-tactile"
         >
           {isSending ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
         </button>
@@ -543,4 +543,5 @@ export default function DMConversationPage() {
     </div>
   );
 }
+
 

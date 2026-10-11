@@ -13,7 +13,7 @@ import { withRetry, ErrorCard } from '@/lib/withRetry';
 
 function NotificationSkeleton({ count = 4 }) {
   return (
-    <div className="divide-y divide-gs-border bg-gs-card border border-gs-border rounded-xl">
+    <div className="divide-y divide-gs-border glass-card rounded-xl">
       {Array.from({ length: count }).map((_, i) => (
         <div key={i} className="p-4 animate-pulse flex items-start gap-3">
           <div className="w-8 h-8 rounded-lg bg-black/10 dark:bg-white/10 shrink-0" />
@@ -197,7 +197,7 @@ export default function NotificationsPage() {
           <h1 className="text-2xl sm:text-[28px] font-semibold tracking-tight text-gs-text-main flex items-center gap-2.5">
             Notifications
             {unreadCount > 0 && (
-              <span className="text-xs px-2 py-0.5 rounded-full bg-[#6D6AF6]/10 text-[#7E7BF8] font-medium border border-[#6D6AF6]/20">
+              <span className="text-xs px-2 py-0.5 rounded-full bg-[#6D6AF6]/10 text-[#7E7BF8] font-medium border border-[#7c6af6]/20">
                 {unreadCount} unread
               </span>
             )}
@@ -211,7 +211,7 @@ export default function NotificationsPage() {
           <button 
             onClick={() => setRetry(r => r + 1)} 
             title="Refresh"
-            className="p-1.5 bg-gs-elevated border border-gs-border rounded-lg text-gs-text-muted hover:text-gs-text-main hover:bg-white/[0.04] transition-colors btn-tactile"
+            className="p-1.5 glass-elevated rounded-lg text-gs-text-muted hover:text-gs-text-main hover:bg-white/[0.04] transition-colors btn-tactile"
           >
             <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
           </button>
@@ -235,7 +235,7 @@ export default function NotificationsPage() {
       </div>
 
       {/* Filter Tabs as Segmented Control */}
-      <div className="segmented-control p-1 bg-gs-elevated border border-gs-border rounded-lg inline-flex gap-1 overflow-x-auto">
+      <div className="segmented-control p-1 glass-elevated rounded-lg inline-flex gap-1 overflow-x-auto">
         {[
           { id: 'all', label: 'All' },
           { id: 'teams', label: 'Teams' },
@@ -283,7 +283,7 @@ export default function NotificationsPage() {
 
       {/* Clean List Rows (not big bordered cards) */}
       {!loading && !error && (
-        <div className="bg-gs-card border border-gs-border rounded-xl divide-y divide-gs-border overflow-hidden shadow-xs machined-edge">
+        <div className="glass-card rounded-xl divide-y divide-gs-border overflow-hidden shadow-xs machined-edge">
           {filtered.map(item => {
             return (
               <div 
@@ -303,7 +303,7 @@ export default function NotificationsPage() {
                 </div>
 
                 {/* Small tinted icon container */}
-                <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 text-[#6D6AF6] flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 text-[#9182f8] flex items-center justify-center shrink-0">
                   <Bell size={14} />
                 </div>
 
@@ -332,7 +332,7 @@ export default function NotificationsPage() {
                         handleMarkAsRead(item.id);
                         navigate(item.action_path);
                       }}
-                      className="text-xs font-medium text-[#6D6AF6] hover:underline flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="text-xs font-medium text-[#9182f8] hover:underline flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       {item.action_label || 'View'} <ExternalLink size={11} />
                     </button>
@@ -352,7 +352,7 @@ export default function NotificationsPage() {
 
           {filtered.length === 0 && !loading && (
             <div className="text-center py-12 p-6">
-              <div className="w-10 h-10 rounded-lg bg-[#6D6AF6]/10 text-[#6D6AF6] flex items-center justify-center mx-auto mb-2">
+              <div className="w-10 h-10 rounded-lg bg-[#6D6AF6]/10 text-[#9182f8] flex items-center justify-center mx-auto mb-2">
                 <Bell size={18} />
               </div>
               <p className="text-sm font-semibold text-gs-text-main">
@@ -378,4 +378,5 @@ export default function NotificationsPage() {
     </div>
   );
 }
+
 

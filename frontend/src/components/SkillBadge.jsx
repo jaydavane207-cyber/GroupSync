@@ -1,10 +1,10 @@
-import React from 'react';
+﻿import React from 'react';
 import { Award, Code, Cpu, ShieldCheck } from 'lucide-react';
 
 const TIER_CONFIG = {
   platinum: {
-    pill: 'bg-[#6D6AF6]/10 text-[#7E7BF8] border-[#6D6AF6]/20',
-    iconColor: 'text-[#6D6AF6]',
+    pill: 'bg-[#6D6AF6]/10 text-[#7E7BF8] border-[#7c6af6]/20',
+    iconColor: 'text-[#9182f8]',
     label: 'Platinum',
   },
   gold: {
@@ -61,3 +61,4 @@ export const SkillBadgeInline = ({ level = 'gold', skill = 'React' }) => {
 };
 
 export default SkillBadge;
+

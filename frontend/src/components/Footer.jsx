@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Layers, Github, Linkedin, Twitter } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,14 +18,14 @@ export default function Footer({ onNavigate }) {
   };
 
   return (
-    <footer className="bg-gs-card border-t border-gs-border py-14 px-4 sm:px-6 lg:px-8 mt-24 relative overflow-hidden">
+    <footer className="glass-navbar border-t border-white/[0.06] py-14 px-4 sm:px-6 lg:px-8 mt-24 relative overflow-hidden">
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 lg:gap-16 mb-12">
           
           {/* Column 1: Brand */}
           <div className="col-span-1 border-r-0 md:border-r border-gs-border pr-0 md:pr-10">
             <button onClick={() => handleNav('home')} className="flex items-center gap-2.5 mb-4 text-left cursor-pointer">
-              <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 flex items-center justify-center text-[#6D6AF6] shadow-xs">
+              <div className="w-8 h-8 rounded-lg bg-[#7c6af6]/15 border border-[#7c6af6]/30 flex items-center justify-center text-[#9182f8] shadow-xs">
                 <Layers size={16} />
               </div>
               <div className="flex items-center gap-1.5">
@@ -47,11 +47,11 @@ export default function Footer({ onNavigate }) {
           <div className="col-span-1">
             <h4 className="text-gs-text-main font-semibold mb-4 text-xs uppercase tracking-wider font-heading">Platform</h4>
             <ul className="space-y-2 text-xs text-gs-text-muted">
-              <li><button onClick={() => handleNav('home')} className="hover:text-[#6D6AF6] transition-colors cursor-pointer">Home</button></li>
-              <li><button onClick={() => handleNav('about')} className="hover:text-[#6D6AF6] transition-colors cursor-pointer">About Us</button></li>
-              <li><button onClick={() => handleNav('teams')} className="hover:text-[#6D6AF6] transition-colors cursor-pointer">Browse Teams</button></li>
-              <li><button onClick={() => handleNav('projects')} className="hover:text-[#6D6AF6] transition-colors cursor-pointer">Projects & Hackathons</button></li>
-              <li><button onClick={() => handleNav('leaderboard')} className="hover:text-[#6D6AF6] transition-colors cursor-pointer">Campus Leaderboard</button></li>
+              <li><button onClick={() => handleNav('home')} className="hover:text-[#9182f8] transition-colors cursor-pointer">Home</button></li>
+              <li><button onClick={() => handleNav('about')} className="hover:text-[#9182f8] transition-colors cursor-pointer">About Us</button></li>
+              <li><button onClick={() => handleNav('teams')} className="hover:text-[#9182f8] transition-colors cursor-pointer">Browse Teams</button></li>
+              <li><button onClick={() => handleNav('projects')} className="hover:text-[#9182f8] transition-colors cursor-pointer">Projects & Hackathons</button></li>
+              <li><button onClick={() => handleNav('leaderboard')} className="hover:text-[#9182f8] transition-colors cursor-pointer">Campus Leaderboard</button></li>
             </ul>
           </div>
 
@@ -59,10 +59,10 @@ export default function Footer({ onNavigate }) {
           <div className="col-span-1">
             <h4 className="text-gs-text-main font-semibold mb-4 text-xs uppercase tracking-wider font-heading">Features</h4>
             <ul className="space-y-2 text-xs text-gs-text-muted">
-              <li><button onClick={() => handleNav('ai')} className="hover:text-[#6D6AF6] transition-colors cursor-pointer">AI Team Match</button></li>
-              <li><button onClick={() => handleNav('chat')} className="hover:text-[#6D6AF6] transition-colors cursor-pointer">Campus Chat</button></li>
-              <li><button onClick={() => handleNav('friends')} className="hover:text-[#6D6AF6] transition-colors cursor-pointer">Friends Network</button></li>
-              <li><button onClick={() => handleNav('profile')} className="hover:text-[#6D6AF6] transition-colors cursor-pointer">Skill Badges & Verification</button></li>
+              <li><button onClick={() => handleNav('ai')} className="hover:text-[#9182f8] transition-colors cursor-pointer">Smart Match</button></li>
+              <li><button onClick={() => handleNav('chat')} className="hover:text-[#9182f8] transition-colors cursor-pointer">Campus Chat</button></li>
+              <li><button onClick={() => handleNav('friends')} className="hover:text-[#9182f8] transition-colors cursor-pointer">Friends Network</button></li>
+              <li><button onClick={() => handleNav('profile')} className="hover:text-[#9182f8] transition-colors cursor-pointer">Skill Badges & Verification</button></li>
             </ul>
           </div>
 
@@ -105,3 +105,6 @@ export default function Footer({ onNavigate }) {
     </footer>
   );
 }
+
+
+

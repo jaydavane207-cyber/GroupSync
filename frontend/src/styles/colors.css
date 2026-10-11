@@ -1,37 +1,50 @@
-/* GroupSync Color Tokens */
+/* GroupSync Glassmorphism Color Tokens */
 :root {
-  --color-gs-bg: #09090b;
-  --color-gs-primary: #6d6af6;
-  --color-gs-primary-hover: #7e7bf8;
-  --color-gs-primary-active: #5c59ec;
-  --color-gs-cyan: #6d6af6;
-  --color-gs-secondary: #7c6ff0;
-  --color-gs-pink: #fb7185;
+  /* Deep Space Base */
+  --color-gs-bg: #05050f;
+  --color-gs-primary: #7c6af6;
+  --color-gs-primary-hover: #9182f8;
+  --color-gs-primary-active: #6155e0;
+  --color-gs-cyan: #38bdf8;
+  --color-gs-secondary: #a78bfa;
+  --color-gs-pink: #f472b6;
   --color-gs-amber: #fbbf24;
   --color-gs-green: #34d399;
-  --color-gs-text-main: #fafafa;
-  --color-gs-text-secondary: #a1a1aa;
-  --color-gs-text-muted: #71717a;
-  --color-gs-card: #14141a;
-  --color-gs-card-bg: #14141a;
-  --color-gs-elevated: #1c1c24;
-  --color-gs-card-border: rgba(255, 255, 255, 0.07);
-  --color-gs-border: rgba(255, 255, 255, 0.07);
-  --color-gs-border-hover: rgba(255, 255, 255, 0.14);
+  --color-gs-text-main: #f0f0ff;
+  --color-gs-text-secondary: #b4b0d8;
+  --color-gs-text-muted: #7c78a8;
+
+  /* Glass Surfaces */
+  --color-gs-card: rgba(255, 255, 255, 0.04);
+  --color-gs-card-bg: rgba(255, 255, 255, 0.04);
+  --color-gs-elevated: rgba(255, 255, 255, 0.07);
+  --color-gs-card-border: rgba(255, 255, 255, 0.10);
+  --color-gs-border: rgba(255, 255, 255, 0.10);
+  --color-gs-border-hover: rgba(160, 140, 255, 0.35);
+
+  /* Glass blur & glow */
+  --glass-blur: blur(18px);
+  --glass-blur-sm: blur(10px);
+  --glass-glow-primary: 0 0 40px rgba(124, 106, 246, 0.18);
+  --glass-glow-sm: 0 0 20px rgba(124, 106, 246, 0.10);
 }
 
 .theme-light {
-  --color-gs-bg: #fafafa;
-  --color-gs-card: #ffffff;
-  --color-gs-card-bg: #ffffff;
-  --color-gs-elevated: #ffffff;
-  --color-gs-card-border: #e4e4e7;
-  --color-gs-border: #e4e4e7;
-  --color-gs-border-hover: #d4d4d8;
-  --color-gs-text-main: #09090b;
-  --color-gs-text-secondary: #52525b;
-  --color-gs-text-muted: #71717a;
+  --color-gs-bg: #f0f0ff;
+  --color-gs-card: rgba(255, 255, 255, 0.60);
+  --color-gs-card-bg: rgba(255, 255, 255, 0.60);
+  --color-gs-elevated: rgba(255, 255, 255, 0.80);
+  --color-gs-card-border: rgba(100, 90, 220, 0.15);
+  --color-gs-border: rgba(100, 90, 220, 0.15);
+  --color-gs-border-hover: rgba(100, 90, 220, 0.30);
+  --color-gs-text-main: #1a1535;
+  --color-gs-text-secondary: #3d3768;
+  --color-gs-text-muted: #6b64a0;
   --color-gs-primary: #6d6af6;
   --color-gs-primary-hover: #5c59ec;
   --color-gs-secondary: #7c6ff0;
+  --glass-blur: blur(18px);
+  --glass-blur-sm: blur(10px);
+  --glass-glow-primary: 0 0 40px rgba(109, 106, 246, 0.12);
+  --glass-glow-sm: 0 0 20px rgba(109, 106, 246, 0.08);
 }

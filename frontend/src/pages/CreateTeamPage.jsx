@@ -11,7 +11,7 @@ const SUGGESTED_SKILLS = [
   'UI/UX', 'Solidity', 'FastAPI', 'PyTorch', 'AWS', 'Flutter', 'TypeScript'
 ];
 
-const EMOJI_OPTIONS = ['ðŸš€', 'ðŸ¤–', 'âš¡', 'ðŸ’¡', 'ðŸ§ ', 'ðŸ›¡ï¸', 'ðŸŒ', 'ðŸŒ±', 'ðŸŽ¨', 'ðŸ§¬', 'ðŸ’»', 'ðŸŽ¯'];
+const EMOJI_OPTIONS = ['ðŸš€', 'ðŸ¤–', '⚡', 'ðŸ’¡', 'ðŸ§ ', 'ðŸ›¡ï¸', 'ðŸŒ', 'ðŸŒ±', 'ðŸŽ¨', 'ðŸ§¬', 'ðŸ’»', 'ðŸŽ¯'];
 
 export default function CreateTeamPage() {
   const navigate = useNavigate();
@@ -99,7 +99,7 @@ export default function CreateTeamPage() {
       </button>
 
       {/* Main Card */}
-      <div className="bg-gs-card border border-gs-border rounded-xl p-6 sm:p-8 space-y-6 shadow-sm">
+      <div className="glass-card rounded-xl p-6 sm:p-8 space-y-6 shadow-sm">
         <div className="border-b border-gs-border pb-4">
           <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-gs-text-main">
             Create a team
@@ -145,7 +145,7 @@ export default function CreateTeamPage() {
                   placeholder="e.g. Distributed Consensus Labs"
                   value={name}
                   onChange={e => setName(e.target.value)}
-                  className="w-full h-10 bg-gs-elevated border border-gs-border rounded-lg px-3 text-xs text-gs-text-main placeholder-gs-text-muted outline-none focus:border-[#6D6AF6] transition-colors"
+                  className="w-full h-10 glass-elevated rounded-lg px-3 text-xs text-gs-text-main placeholder-gs-text-muted outline-none focus:border-[#7c6af6] transition-colors"
                 />
               </div>
             </div>
@@ -169,7 +169,7 @@ export default function CreateTeamPage() {
                   onClick={() => setCategory(cat.id)}
                   className={`py-2 px-2.5 rounded-lg text-xs font-medium transition-colors border text-center ${
                     category === cat.id
-                      ? 'bg-[#6D6AF6]/10 text-[#6D6AF6] border-[#6D6AF6]/30'
+                      ? 'bg-[#6D6AF6]/10 text-[#9182f8] border-[#7c6af6]/30'
                       : 'bg-white/[0.02] border-gs-border text-gs-text-muted hover:text-gs-text-main'
                   }`}
                 >
@@ -194,7 +194,7 @@ export default function CreateTeamPage() {
               placeholder="Outline what your squad intends to build, key event dates or deadlines, and what responsibilities each member will own..."
               value={description}
               onChange={e => setDescription(e.target.value)}
-              className="w-full bg-gs-elevated border border-gs-border rounded-lg p-2.5 text-xs text-gs-text-main placeholder-gs-text-muted outline-none focus:border-[#6D6AF6] transition-colors resize-none leading-relaxed"
+              className="w-full glass-elevated rounded-lg p-2.5 text-xs text-gs-text-main placeholder-gs-text-muted outline-none focus:border-[#7c6af6] transition-colors resize-none leading-relaxed"
             />
           </div>
 
@@ -215,7 +215,7 @@ export default function CreateTeamPage() {
                     handleAddSkill();
                   }
                 }}
-                className="flex-1 bg-gs-elevated border border-gs-border rounded-lg px-3 py-1.5 text-xs text-gs-text-main outline-none focus:border-[#6D6AF6]"
+                className="flex-1 glass-elevated rounded-lg px-3 py-1.5 text-xs text-gs-text-main outline-none focus:border-[#7c6af6]"
               />
               <button
                 type="button"
@@ -231,7 +231,7 @@ export default function CreateTeamPage() {
               {skills.map(s => (
                 <span
                   key={s}
-                  className="flex items-center gap-1.5 px-2.5 py-0.5 bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 text-[#6D6AF6] rounded text-xs"
+                  className="flex items-center gap-1.5 px-2.5 py-0.5 bg-[#7c6af6]/15 border border-[#7c6af6]/30 text-[#9182f8] rounded text-xs"
                 >
                   {s}
                   <button type="button" onClick={() => handleRemoveSkill(s)} className="hover:text-rose-400">
@@ -288,7 +288,7 @@ export default function CreateTeamPage() {
                   onClick={() => setPrivacy('public')}
                   className={`flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium border transition-colors ${
                     privacy === 'public'
-                      ? 'bg-[#6D6AF6]/10 text-[#6D6AF6] border-[#6D6AF6]/30'
+                      ? 'bg-[#6D6AF6]/10 text-[#9182f8] border-[#7c6af6]/30'
                       : 'bg-white/[0.02] text-gs-text-muted border-gs-border'
                   }`}
                 >
@@ -299,7 +299,7 @@ export default function CreateTeamPage() {
                   onClick={() => setPrivacy('private')}
                   className={`flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium border transition-colors ${
                     privacy === 'private'
-                      ? 'bg-[#6D6AF6]/10 text-[#6D6AF6] border-[#6D6AF6]/30'
+                      ? 'bg-[#6D6AF6]/10 text-[#9182f8] border-[#7c6af6]/30'
                       : 'bg-white/[0.02] text-gs-text-muted border-gs-border'
                   }`}
                 >
@@ -321,7 +321,7 @@ export default function CreateTeamPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 py-2 rounded-lg bg-[#6D6AF6] hover:bg-[#5C59EC] text-white text-xs font-medium transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50 shadow-xs btn-tactile"
+              className="flex-1 py-2 rounded-lg bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white text-xs font-medium transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50 shadow-xs btn-tactile"
             >
               {isSubmitting ? (
                 <>
@@ -337,4 +337,5 @@ export default function CreateTeamPage() {
     </div>
   );
 }
+
 

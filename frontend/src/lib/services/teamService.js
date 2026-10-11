@@ -1,12 +1,12 @@
 ﻿/**
- * teamService.js â€” GroupSync Team Management Operations
+ * teamService.js — GroupSync Team Management Operations
  * Handles team creation, member recruitment, applications, invitations,
  * linked team chats, and notification dispatches with retry logic.
  */
 import supabase from '@/lib/supabase';
 import { withRetry } from '@/lib/withRetry';
 
-// â”€â”€â”€ CREATE TEAM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── CREATE TEAM ─────────────────────────────────────────────────────────────
 
 /**
  * Create a new team. Automatically provisions a linked chat group,
@@ -95,7 +95,7 @@ export async function createTeam(payload) {
   });
 }
 
-// â”€â”€â”€ GET TEAMS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── GET TEAMS ───────────────────────────────────────────────────────────────
 
 /**
  * Fetch teams with search and filtering capabilities.
@@ -141,7 +141,7 @@ export async function getTeams(filters = {}) {
   });
 }
 
-// â”€â”€â”€ GET SINGLE TEAM DETAILS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── GET SINGLE TEAM DETAILS ─────────────────────────────────────────────────
 
 /**
  * Fetch full details for a team: members with badges, applications, invitations.
@@ -222,7 +222,7 @@ export async function getTeamDetails(teamId, currentUserId) {
   });
 }
 
-// â”€â”€â”€ APPLY TO TEAM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── APPLY TO TEAM ───────────────────────────────────────────────────────────
 
 /**
  * Submit an application to join a team.
@@ -250,7 +250,7 @@ export async function applyToTeam(teamId, applicantId, message, skills = [], lea
         type: 'teams',
         title: 'New Team Application',
         message: `A candidate has applied to join ${teamName || 'your team'}.`,
-        icon: 'ðŸ‘¥',
+        icon: 'ℹ️',
         action_label: 'View Application',
         action_path: `/teams/${teamId}`,
         reference_id: teamId
@@ -261,7 +261,7 @@ export async function applyToTeam(teamId, applicantId, message, skills = [], lea
   });
 }
 
-// â”€â”€â”€ REVIEW APPLICATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── REVIEW APPLICATION ──────────────────────────────────────────────────────
 
 /**
  * Leader accepts or rejects an application.
@@ -317,7 +317,7 @@ export async function reviewApplication(applicationId, teamId, applicantId, stat
         type: 'teams',
         title: 'Application Accepted! ðŸŽ‰',
         message: `Welcome aboard! You have been accepted into ${teamName || 'the team'}.`,
-        icon: 'ðŸŽ‰',
+        icon: 'ℹ️',
         action_label: 'Open Team',
         action_path: `/teams/${teamId}`,
         reference_id: teamId
@@ -329,7 +329,7 @@ export async function reviewApplication(applicationId, teamId, applicantId, stat
         type: 'teams',
         title: 'Application Update',
         message: `Your application to join ${teamName || 'the team'} was declined.`,
-        icon: 'â„¹ï¸',
+        icon: 'ℹ️',
         action_label: 'Browse Teams',
         action_path: '/teams',
         reference_id: teamId
@@ -340,7 +340,7 @@ export async function reviewApplication(applicationId, teamId, applicantId, stat
   });
 }
 
-// â”€â”€â”€ INVITE MEMBER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── INVITE MEMBER ───────────────────────────────────────────────────────────
 
 /**
  * Team leader sends an invitation to another student.
@@ -365,9 +365,9 @@ export async function inviteMember(teamId, inviterId, inviteeId, teamName, messa
     await supabase.from('notifications').insert([{
       user_id: inviteeId,
       type: 'teams',
-      title: 'Team Invitation ðŸ“©',
+      title: 'Team Invitation 📩',
       message: `You have been invited to join ${teamName || 'a team'}.`,
-      icon: 'âœ‰ï¸',
+      icon: 'ℹ️',
       action_label: 'View Team',
       action_path: `/teams/${teamId}`,
       reference_id: teamId
@@ -377,7 +377,7 @@ export async function inviteMember(teamId, inviterId, inviteeId, teamName, messa
   });
 }
 
-// â”€â”€â”€ REMOVE MEMBER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── REMOVE MEMBER ───────────────────────────────────────────────────────────
 
 /**
  * Team leader removes a member from the roster.
@@ -424,7 +424,7 @@ export async function removeMember(teamId, memberUserId, teamName, chatGroupId) 
       type: 'teams',
       title: 'Team Roster Update',
       message: `You were removed from ${teamName || 'the team'}.`,
-      icon: 'ðŸ‘‹',
+      icon: 'ℹ️',
       action_label: 'Browse Teams',
       action_path: '/teams',
       reference_id: teamId
@@ -434,7 +434,7 @@ export async function removeMember(teamId, memberUserId, teamName, chatGroupId) 
   });
 }
 
-// â”€â”€â”€ LEAVE TEAM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── LEAVE TEAM ──────────────────────────────────────────────────────────────
 
 /**
  * Regular member voluntary departure from a team.
@@ -482,7 +482,7 @@ export async function leaveTeam(teamId, userId, leaderId, teamName, chatGroupId)
         type: 'teams',
         title: 'Teammate Departed',
         message: `A member has left ${teamName || 'your team'}.`,
-        icon: 'ðŸšª',
+        icon: 'ℹ️',
         action_label: 'View Team',
         action_path: `/teams/${teamId}`,
         reference_id: teamId
@@ -493,7 +493,7 @@ export async function leaveTeam(teamId, userId, leaderId, teamName, chatGroupId)
   });
 }
 
-// â”€â”€â”€ UPDATE TEAM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── UPDATE TEAM ─────────────────────────────────────────────────────────────
 
 /**
  * Update team metadata (Leader only).
@@ -515,7 +515,7 @@ export async function updateTeam(teamId, updates) {
   });
 }
 
-// â”€â”€â”€ DELETE TEAM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── DELETE TEAM ─────────────────────────────────────────────────────────────
 
 /**
  * Delete a team and its associated chat group.

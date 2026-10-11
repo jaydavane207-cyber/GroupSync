@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 
 export const LinkButton = ({
@@ -9,7 +9,7 @@ export const LinkButton = ({
   ...props
 }) => {
   const variants = {
-    primary: 'bg-[#6D6AF6] hover:bg-[#5C59EC] text-white',
+    primary: 'bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white',
     outline: 'border border-gs-border hover:border-gs-border-hover text-gs-text-main',
     ghost: 'text-gs-text-secondary hover:text-gs-text-main',
   };
@@ -26,3 +26,4 @@ export const LinkButton = ({
 };
 
 export default LinkButton;
+

@@ -9,7 +9,7 @@ import {
 import supabase from '@/lib/supabase';
 import { useAppContext } from '@/context/AppContext';
 
-// â”€â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Constants ────────────────────────────────────────────────────────────────
 
 const PASSING_SCORE  = 8;
 const TOTAL_QUESTIONS = 10;
@@ -23,7 +23,7 @@ const SKILLS = [
   { id: 'ml',         label: 'Machine Learning',icon: BarChart2, color: 'text-purple-500',  bg: 'bg-purple-500/10',  border: 'border-purple-500/20' },
 ];
 
-// â”€â”€â”€ Question Bank â€” 20+ questions per skill â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Question Bank — 20+ questions per skill ──────────────────────────────────
 // Each question: { question, options (4 choices), answer (the correct option string) }
 const QUESTION_BANK = {
   react: [
@@ -167,7 +167,7 @@ const QUESTION_BANK = {
   ],
 };
 
-// â”€â”€â”€ Fisher-Yates Shuffle Utility â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Fisher-Yates Shuffle Utility ─────────────────────────────────────────────
 /**
  * Shuffles an array in place using the Fisher-Yates (Knuth) algorithm.
  * Returns a NEW shuffled array (does not mutate the original).
@@ -209,9 +209,9 @@ function prepareQuizQuestions(skillId) {
   });
 }
 
-// â”€â”€â”€ Step definitions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Step definitions ─────────────────────────────────────────────────────────
 // Step 1: Select Skill
-// Step 2: Quiz  (must score â‰¥ 8)
+// Step 2: Quiz  (must score ≥ 8)
 // Step 3: Certificate Upload  (mandatory after quiz pass)
 // Step 4: Success
 
@@ -222,7 +222,7 @@ const STEPS = [
   { id: 4, label: 'Done',         icon: CheckCircle },
 ];
 
-// â”€â”€â”€ Supabase stubs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Supabase stubs ───────────────────────────────────────────────────────────
 
 /**
  * Uploads the certificate to Supabase Storage and inserts a verified_skill
@@ -236,7 +236,7 @@ const STEPS = [
  * @returns {{ publicUrl: string }}
  */
 async function verifyAndSaveSkill(userId, skillId, skillLabel, file) {
-  // â”€â”€ Step 1: Try to upload certificate to Supabase Storage (optional) â”€â”€â”€â”€â”€â”€
+  // ── Step 1: Try to upload certificate to Supabase Storage (optional) ──────
   let publicUrl = null;
   try {
     const filePath = `${userId}/${skillId}/${Date.now()}_${file.name}`;
@@ -245,7 +245,7 @@ async function verifyAndSaveSkill(userId, skillId, skillLabel, file) {
       .upload(filePath, file, { upsert: true });
 
     if (storageErr) {
-      // Storage bucket may not exist â€” log & continue without a cert URL
+      // Storage bucket may not exist — log & continue without a cert URL
       console.warn('[SkillVerification] Storage upload skipped:', storageErr.message);
     } else {
       const { data: urlData } = supabase.storage
@@ -257,7 +257,7 @@ async function verifyAndSaveSkill(userId, skillId, skillLabel, file) {
     console.warn('[SkillVerification] Storage exception (non-fatal):', storageEx);
   }
 
-  // â”€â”€ Step 2: Upsert into verified_skills table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Step 2: Upsert into verified_skills table ──────────────────────────────
   const { error: dbErr } = await supabase
     .from('verified_skills')
     .upsert(
@@ -281,7 +281,7 @@ async function verifyAndSaveSkill(userId, skillId, skillLabel, file) {
   return { publicUrl };
 }
 
-// â”€â”€â”€ Shared UI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Shared UI ────────────────────────────────────────────────────────────────
 
 /** Animated 3-dot loader */
 function LoadingDots() {
@@ -324,7 +324,7 @@ function StepIndicator({ currentStep }) {
               <div className={`
                 relative w-8 h-8 rounded-full flex items-center justify-center border transition-colors
                 ${isComplete ? 'bg-emerald-500 border-emerald-500 text-white' : ''}
-                ${isCurrent  ? 'bg-[#6D6AF6] border-[#6D6AF6] text-white' : ''}
+                ${isCurrent  ? 'bg-[#6D6AF6] border-[#7c6af6] text-white' : ''}
                 ${isLocked   ? 'bg-gs-bg border-gs-border text-gs-text-muted' : ''}
               `}>
                 {isComplete
@@ -333,7 +333,7 @@ function StepIndicator({ currentStep }) {
                 }
               </div>
               <span className={`text-[11px] font-medium ${
-                isCurrent ? 'text-[#6D6AF6] font-semibold' : isComplete ? 'text-emerald-500' : 'text-gs-text-muted'
+                isCurrent ? 'text-[#9182f8] font-semibold' : isComplete ? 'text-emerald-500' : 'text-gs-text-muted'
               }`}>
                 {step.label}
               </span>
@@ -352,7 +352,7 @@ function StepIndicator({ currentStep }) {
   );
 }
 
-// â”€â”€â”€ Step 1: Skill Selection â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Step 1: Skill Selection ──────────────────────────────────────────────────
 function SkillSelectionStep({ onSelect }) {
   const [query, setQuery] = useState('');
 
@@ -365,7 +365,7 @@ function SkillSelectionStep({ onSelect }) {
       <div className="text-center space-y-1">
         <h2 className="text-lg font-bold text-gs-text-main">Select a Skill to Verify</h2>
         <p className="text-gs-text-muted text-xs max-w-sm mx-auto">
-          Pass a 10-question assessment (â‰¥ 8/10) and submit your credential to verify.
+          Pass a 10-question assessment (≥ 8/10) and submit your credential to verify.
         </p>
       </div>
 
@@ -376,8 +376,8 @@ function SkillSelectionStep({ onSelect }) {
           type="text"
           value={query}
           onChange={e => setQuery(e.target.value)}
-          placeholder="Search skillsâ€¦"
-          className="w-full bg-gs-bg border border-gs-border rounded-lg px-3 py-2 text-xs text-gs-text-main placeholder:text-gs-text-muted focus:outline-none focus:border-[#6D6AF6] focus:ring-1 focus:ring-[#6D6AF6] transition-colors"
+          placeholder="Search skills..."
+          className="w-full bg-gs-bg border border-gs-border rounded-lg px-3 py-2 text-xs text-gs-text-main placeholder:text-gs-text-muted focus:outline-none focus:border-[#7c6af6] focus:ring-1 focus:ring-[#6D6AF6] transition-colors"
         />
       </div>
 
@@ -390,7 +390,7 @@ function SkillSelectionStep({ onSelect }) {
               key={skill.id}
               id={`strict-skill-${skill.id}`}
               onClick={() => onSelect(skill)}
-              className="flex flex-col items-center gap-2 p-3.5 rounded-xl border border-gs-border bg-gs-card hover:border-[#6D6AF6]/50 hover:bg-[#6D6AF6]/5 transition-colors cursor-pointer text-center"
+              className="flex flex-col items-center gap-2 p-3.5 rounded-xl border border-gs-border bg-gs-card hover:border-[#7c6af6]/50 hover:bg-[#6D6AF6]/5 transition-colors cursor-pointer text-center"
             >
               <div className={`p-2 rounded-lg ${skill.bg} border ${skill.border}`}>
                 <Icon size={18} className={skill.color} />
@@ -409,9 +409,9 @@ function SkillSelectionStep({ onSelect }) {
   );
 }
 
-// â”€â”€â”€ Step 2: Quiz â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Step 2: Quiz ─────────────────────────────────────────────────────────────
 function QuizStep({ skill, onPassQuiz, onCancel }) {
-  // â”€â”€ Dynamic quiz state: shuffled + sliced from the large pool â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Dynamic quiz state: shuffled + sliced from the large pool ─────────────
   const [activeQuizQuestions, setActiveQuizQuestions] = useState(() =>
     prepareQuizQuestions(skill.id)
   );
@@ -455,7 +455,7 @@ function QuizStep({ skill, onPassQuiz, onCancel }) {
     setQuizStatus('in_progress');
   };
 
-  // â”€â”€ PASSED â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── PASSED ────────────────────────────────────────────────────────────────
   if (quizStatus === 'passed') {
     return (
       <div className="text-center space-y-4 py-2">
@@ -468,7 +468,7 @@ function QuizStep({ skill, onPassQuiz, onCancel }) {
           <h3 className="text-lg font-semibold text-[var(--color-gs-text-main)]">Quiz Passed</h3>
           <p className="text-[var(--color-gs-text-muted)] text-xs">
             You scored <span className="font-semibold text-emerald-500">{score}/{TOTAL_QUESTIONS}</span>.
-            Now complete <span className="text-[#6D6AF6] font-medium">Step 3</span> â€” upload your certificate to finalise verification.
+            Now complete <span className="text-[#9182f8] font-medium">Step 3</span> — upload your certificate to finalise verification.
           </p>
         </div>
 
@@ -481,12 +481,12 @@ function QuizStep({ skill, onPassQuiz, onCancel }) {
           <ProgressBar current={score} total={TOTAL_QUESTIONS} color="#10b981" />
           <div className="flex justify-between text-xs text-[var(--color-gs-text-muted)] mt-1">
             <span>0</span>
-            <span className="text-emerald-400 font-medium">Pass â‰¥ {PASSING_SCORE}</span>
+            <span className="text-emerald-400 font-medium">Pass ≥ {PASSING_SCORE}</span>
             <span>{TOTAL_QUESTIONS}</span>
           </div>
         </div>
 
-        {/* Answer review â€” compact */}
+        {/* Answer review — compact */}
         <div className="bg-[var(--color-gs-bg)] border border-[var(--color-gs-border)] rounded-xl p-4 max-w-xs mx-auto text-left space-y-1.5">
           <p className="text-[10px] font-semibold text-[var(--color-gs-text-muted)] uppercase tracking-wide mb-2">Answer Review</p>
           {activeQuizQuestions.map((q, i) => {
@@ -504,7 +504,7 @@ function QuizStep({ skill, onPassQuiz, onCancel }) {
         <button
           id="quiz-proceed-to-upload-btn"
           onClick={() => onPassQuiz(score)}
-          className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium rounded-lg transition-colors text-xs shadow-xs btn-tactile cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium rounded-lg transition-colors text-xs shadow-xs btn-tactile cursor-pointer"
         >
           Proceed to Document Upload <ChevronRight size={14} />
         </button>
@@ -512,7 +512,7 @@ function QuizStep({ skill, onPassQuiz, onCancel }) {
     );
   }
 
-  // â”€â”€ FAILED â€” flow stops here, skill NOT added â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── FAILED — flow stops here, skill NOT added ──────────────────────────────
   if (quizStatus === 'failed') {
     return (
       <div className="text-center space-y-4 py-2">
@@ -561,7 +561,7 @@ function QuizStep({ skill, onPassQuiz, onCancel }) {
           <button
             id="quiz-retry-btn"
             onClick={handleRetry}
-            className="flex items-center gap-1.5 px-4 py-2 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium text-xs rounded-lg transition-colors shadow-xs btn-tactile cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium text-xs rounded-lg transition-colors shadow-xs btn-tactile cursor-pointer"
           >
             <RotateCcw size={13} /> Retry Assessment
           </button>
@@ -577,7 +577,7 @@ function QuizStep({ skill, onPassQuiz, onCancel }) {
     );
   }
 
-  // â”€â”€ IN PROGRESS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── IN PROGRESS ────────────────────────────────────────────────────────────
   return (
     <div className="space-y-4">
       {/* Skill badge + question counter */}
@@ -605,7 +605,7 @@ function QuizStep({ skill, onPassQuiz, onCancel }) {
         className="bg-gs-bg border border-gs-border rounded-xl p-4 space-y-3"
       >
         <div className="flex items-start gap-2.5">
-          <span className="shrink-0 w-6 h-6 rounded-md bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 flex items-center justify-center text-[#6D6AF6] text-xs font-semibold">
+          <span className="shrink-0 w-6 h-6 rounded-md bg-[#7c6af6]/15 border border-[#7c6af6]/30 flex items-center justify-center text-[#9182f8] text-xs font-semibold">
             {currentIndex + 1}
           </span>
           <p className="text-gs-text-main font-medium text-sm pt-0.5">
@@ -625,12 +625,12 @@ function QuizStep({ skill, onPassQuiz, onCancel }) {
                 className={`
                   w-full flex items-center gap-3 p-3 rounded-lg border text-left text-xs transition-colors cursor-pointer
                   ${isSelected
-                    ? 'border-[#6D6AF6] bg-[#6D6AF6]/10 text-gs-text-main font-medium'
+                    ? 'border-[#7c6af6] bg-[#6D6AF6]/10 text-gs-text-main font-medium'
                     : 'border-gs-border hover:border-gs-border/80 bg-gs-card text-gs-text-muted hover:text-gs-text-main'
                   }
                 `}
               >
-                <div className={`shrink-0 w-4 h-4 rounded-full border flex items-center justify-center ${isSelected ? 'border-[#6D6AF6] bg-[#6D6AF6] text-white' : 'border-gs-border'}`}>
+                <div className={`shrink-0 w-4 h-4 rounded-full border flex items-center justify-center ${isSelected ? 'border-[#7c6af6] bg-[#6D6AF6] text-white' : 'border-gs-border'}`}>
                   {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                 </div>
                 <span>{opt}</span>
@@ -656,7 +656,7 @@ function QuizStep({ skill, onPassQuiz, onCancel }) {
           className={`
             flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium text-xs transition-colors shadow-xs
             ${selectedOption !== null
-              ? 'bg-[#6D6AF6] hover:bg-[#5C59EC] text-white cursor-pointer btn-tactile'
+              ? 'bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white cursor-pointer btn-tactile'
               : 'bg-gs-card border border-gs-border text-gs-text-muted cursor-not-allowed opacity-50'
             }
           `}
@@ -668,7 +668,7 @@ function QuizStep({ skill, onPassQuiz, onCancel }) {
   );
 }
 
-// â”€â”€â”€ Step 3: Certificate Upload â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Step 3: Certificate Upload ───────────────────────────────────────────────
 function CertificateUploadStep({ skill, quizScore, onSubmit, onCancel, isSubmitting }) {
   const [certificateFile, setCertificateFile] = useState(null);
   const [isDragOver, setIsDragOver]           = useState(false);
@@ -733,10 +733,10 @@ function CertificateUploadStep({ skill, quizScore, onSubmit, onCancel, isSubmitt
         className={`
           relative flex flex-col items-center justify-center gap-3 p-8 rounded-xl border-2 border-dashed cursor-pointer transition-colors duration-150
           ${isDragOver
-            ? 'border-[#6D6AF6] bg-[#6D6AF6]/10'
+            ? 'border-[#7c6af6] bg-[#7c6af6]/12'
             : certificateFile
               ? 'border-emerald-500/50 bg-emerald-500/5 hover:border-emerald-500/70'
-              : 'border-gs-border bg-gs-bg hover:border-[#6D6AF6]/40 hover:bg-[#6D6AF6]/[0.02]'
+              : 'border-gs-border bg-gs-bg hover:border-[#7c6af6]/40 hover:bg-[#6D6AF6]/[0.02]'
           }
           ${isSubmitting ? 'pointer-events-none opacity-70' : ''}
         `}
@@ -764,7 +764,7 @@ function CertificateUploadStep({ skill, quizScore, onSubmit, onCancel, isSubmitt
                 {certificateFile.name}
               </p>
               <p className="text-xs text-emerald-400 mt-0.5">
-                {(certificateFile.size / 1024).toFixed(1)} KB Â· Ready to upload
+                {(certificateFile.size / 1024).toFixed(1)} KB · Ready to upload
               </p>
             </div>
             <button
@@ -779,15 +779,15 @@ function CertificateUploadStep({ skill, quizScore, onSubmit, onCancel, isSubmitt
         ) : (
           <>
             <div className={`w-14 h-14 rounded-xl flex items-center justify-center border transition-colors duration-200 ${
-              isDragOver ? 'bg-[#6D6AF6]/20 border-[#6D6AF6]/50' : 'bg-black/5 dark:bg-white/5 border-gs-border'
+              isDragOver ? 'bg-[#6D6AF6]/20 border-[#7c6af6]/50' : 'bg-black/5 dark:bg-white/5 border-gs-border'
             }`}>
-              <Upload size={24} className={isDragOver ? 'text-[#6D6AF6]' : 'text-gs-text-muted'} />
+              <Upload size={24} className={isDragOver ? 'text-[#9182f8]' : 'text-gs-text-muted'} />
             </div>
             <div className="text-center">
               <p className="text-sm font-medium text-[var(--color-gs-text-main)]">
                 {isDragOver ? 'Drop it here' : 'Drag and drop or click to browse'}
               </p>
-              <p className="text-xs text-[var(--color-gs-text-muted)] mt-0.5">PDF, JPG, PNG, WebP Â· max {MAX_SIZE_MB} MB</p>
+              <p className="text-xs text-[var(--color-gs-text-muted)] mt-0.5">PDF, JPG, PNG, WebP · max {MAX_SIZE_MB} MB</p>
             </div>
           </>
         )}
@@ -810,7 +810,7 @@ function CertificateUploadStep({ skill, quizScore, onSubmit, onCancel, isSubmitt
           className={`
             flex-1 flex items-center justify-center gap-2 py-2 rounded-lg font-medium text-xs transition-colors cursor-pointer
             ${certificateFile && !isSubmitting
-              ? 'bg-[#6D6AF6] hover:bg-[#5C59EC] text-white shadow-xs btn-tactile'
+              ? 'bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white shadow-xs btn-tactile'
               : 'bg-gs-border text-gs-text-muted cursor-not-allowed opacity-50'
             }
           `}
@@ -827,14 +827,14 @@ function CertificateUploadStep({ skill, quizScore, onSubmit, onCancel, isSubmitt
       {!certificateFile && (
         <div className="flex items-center gap-2 text-xs text-[var(--color-gs-text-muted)]">
           <AlertTriangle size={12} className="text-amber-500 shrink-0" />
-          A certificate is required â€” the Submit button will remain disabled until a file is selected.
+          A certificate is required — the Submit button will remain disabled until a file is selected.
         </div>
       )}
     </div>
   );
 }
 
-// â”€â”€â”€ Step 4: Success â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Step 4: Success ──────────────────────────────────────────────────────────
 function SuccessStep({ skill, quizScore, onDone }) {
   const Icon = skill.icon;
   return (
@@ -873,7 +873,7 @@ function SuccessStep({ skill, quizScore, onDone }) {
             <p className="text-[11px] text-[var(--color-gs-text-muted)]">Quiz Score</p>
           </div>
           <div className="bg-[var(--color-gs-card)] border border-[var(--color-gs-border)] rounded-lg p-2.5 text-center">
-            <p className="text-base font-semibold text-[#6D6AF6]">Accepted</p>
+            <p className="text-base font-semibold text-[#9182f8]">Accepted</p>
             <p className="text-[11px] text-[var(--color-gs-text-muted)]">Certificate</p>
           </div>
         </div>
@@ -882,7 +882,7 @@ function SuccessStep({ skill, quizScore, onDone }) {
       <button
         id="success-done-btn"
         onClick={onDone}
-        className="inline-flex items-center gap-2 px-6 py-2 bg-[#6D6AF6] hover:bg-[#5C59EC] text-white font-medium rounded-lg text-xs transition-colors shadow-xs btn-tactile cursor-pointer"
+        className="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-[#7c6af6] to-[#a78bfa] hover:from-[#6155e0] hover:to-[#9178f4] text-white font-medium rounded-lg text-xs transition-colors shadow-xs btn-tactile cursor-pointer"
       >
         <CheckCircle size={15} /> Done
       </button>
@@ -890,31 +890,31 @@ function SuccessStep({ skill, quizScore, onDone }) {
   );
 }
 
-// â”€â”€â”€ Main Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Main Modal ───────────────────────────────────────────────────────────────
 
 /**
  * StrictSkillVerificationModal
  *
  * Props:
- *   isOpen       {boolean}   â€” whether the modal is visible
- *   onClose      {function}  â€” called when the user closes the modal
- *   onSkillAdded {function(skillLabel: string)} â€” called after a verified skill
+ *   isOpen       {boolean}   — whether the modal is visible
+ *   onClose      {function}  — called when the user closes the modal
+ *   onSkillAdded {function(skillLabel: string)} — called after a verified skill
  *                             is saved so the parent can refresh its state
  */
 export default function StrictSkillVerificationModal({ isOpen, onClose, onSkillAdded }) {
   const { user, updateLocalUser, showToast } = useAppContext();
 
-  // â”€â”€ Wizard state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Wizard state ──────────────────────────────────────────────────────────
   const [currentStep, setCurrentStep]       = useState(1);
   const [selectedSkill, setSelectedSkill]   = useState(null); // skill object
   const [quizScore, setQuizScore]           = useState(null); // number (set only on pass)
   const [certificateFile, setCertificateFile] = useState(null); // File object
   const [isSubmitting, setIsSubmitting]     = useState(false);
 
-  // â”€â”€ Guard: hidden when not open â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Guard: hidden when not open ───────────────────────────────────────────
   if (!isOpen) return null;
 
-  // â”€â”€ Handlers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Handlers ──────────────────────────────────────────────────────────────
   const handleSkillSelect = (skill) => {
     setSelectedSkill(skill);
     setCurrentStep(2);
@@ -929,7 +929,7 @@ export default function StrictSkillVerificationModal({ isOpen, onClose, onSkillA
   /**
    * Called after a file is chosen and the user clicks "Submit Verification".
    * STRICT GATING: this function only executes when quizScore >= PASSING_SCORE
-   * AND a file is present â€” both conditions enforced before this point in the flow.
+   * AND a file is present — both conditions enforced before this point in the flow.
    */
   const handleCertificateSubmit = async (file) => {
     if (!selectedSkill || quizScore === null || quizScore < PASSING_SCORE || !file) return;
@@ -940,7 +940,7 @@ export default function StrictSkillVerificationModal({ isOpen, onClose, onSkillA
     try {
       await verifyAndSaveSkill(user?.id, selectedSkill.id, selectedSkill.label, file);
 
-      // â”€â”€ Optimistic local profile update â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Optimistic local profile update ───────────────────────────────────
       if (user && updateLocalUser) {
         const existing = Array.isArray(user.skills) ? user.skills : [];
         if (!existing.includes(selectedSkill.label)) {
@@ -948,7 +948,7 @@ export default function StrictSkillVerificationModal({ isOpen, onClose, onSkillA
         }
       }
 
-      // â”€â”€ Signal parent to refresh its Skills section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Signal parent to refresh its Skills section ────────────────────────
       onSkillAdded?.(selectedSkill.label);
 
       showToast?.(`ðŸŽ‰ ${selectedSkill.label} verified and added to your profile!`, 'success');
@@ -971,7 +971,7 @@ export default function StrictSkillVerificationModal({ isOpen, onClose, onSkillA
     onClose?.();
   };
 
-  // â”€â”€ Step back (only from quiz â†’ skill or cancel altogether) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Step back (only from quiz → skill or cancel altogether) ───────────────
   const handleBack = () => {
     if (currentStep === 2) {
       setSelectedSkill(null);
@@ -979,7 +979,7 @@ export default function StrictSkillVerificationModal({ isOpen, onClose, onSkillA
     }
   };
 
-  // â”€â”€ Backdrop click closes only if not submitting and not in step 4 â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Backdrop click closes only if not submitting and not in step 4 ────────
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget && !isSubmitting && currentStep !== 4) {
       handleClose();
@@ -987,27 +987,27 @@ export default function StrictSkillVerificationModal({ isOpen, onClose, onSkillA
   };
 
   return (
-    /* â”€â”€ Overlay â”€â”€ */
+    /* ── Overlay ── */
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs"
       style={{ animation: 'fadeIn 0.2s ease-out' }}
       onClick={handleBackdropClick}
     >
-      {/* â”€â”€ Modal panel â”€â”€ */}
+      {/* ── Modal panel ── */}
       <div
-        className="relative w-full max-w-lg bg-gs-card border border-gs-border rounded-xl shadow-xl overflow-hidden"
+        className="relative w-full max-w-lg glass-card rounded-xl shadow-xl overflow-hidden"
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gs-border">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#6D6AF6]/10 border border-[#6D6AF6]/20 flex items-center justify-center">
-              <Shield size={15} className="text-[#6D6AF6]" />
+            <div className="w-8 h-8 rounded-lg bg-[#7c6af6]/15 border border-[#7c6af6]/30 flex items-center justify-center">
+              <Shield size={15} className="text-[#9182f8]" />
             </div>
             <div>
               <p className="font-semibold text-sm text-[var(--color-gs-text-main)]">Skill Verification</p>
               <p className="text-xs text-[var(--color-gs-text-muted)]">
                 Step {Math.min(currentStep, 3)} of 3
-                {currentStep === 4 ? ' Â· Complete' : ''}
+                {currentStep === 4 ? ' · Complete' : ''}
               </p>
             </div>
           </div>
@@ -1040,7 +1040,7 @@ export default function StrictSkillVerificationModal({ isOpen, onClose, onSkillA
           <StepIndicator currentStep={currentStep} />
         </div>
 
-        {/* â”€â”€ Step Content â”€â”€ */}
+        {/* ── Step Content ── */}
         <div className="px-6 pb-6 max-h-[70vh] overflow-y-auto">
           {currentStep === 1 && (
             <SkillSelectionStep onSelect={handleSkillSelect} />
@@ -1076,4 +1076,5 @@ export default function StrictSkillVerificationModal({ isOpen, onClose, onSkillA
     </div>
   );
 }
+
 

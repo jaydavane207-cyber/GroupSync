@@ -1,15 +1,25 @@
-/* GroupSync Shadow & Elevation Tokens */
+/* GroupSync Glassmorphism Shadow & Elevation Tokens */
 :root {
-  --shadow-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --shadow-modal: 0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.25);
-  --shadow-primary-glow: 0 0 20px rgba(109, 106, 246, 0.25);
+  --shadow-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.20), 0 0 0 1px rgba(255,255,255,0.06);
+  --shadow-modal: 0 24px 48px rgba(0, 0, 0, 0.40), 0 0 0 1px rgba(255,255,255,0.08);
+  --shadow-primary-glow: 0 0 30px rgba(124, 106, 246, 0.28), 0 0 60px rgba(124, 106, 246, 0.10);
+  --shadow-primary-glow-sm: 0 0 16px rgba(124, 106, 246, 0.22);
+  --shadow-glass-inner: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -1px 0 rgba(0, 0, 0, 0.08);
 }
 
 .shadow-card-elevated {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255,255,255,0.06), inset 0 1px 0 rgba(255,255,255,0.08);
 }
 
 .shadow-glow {
   box-shadow: var(--shadow-primary-glow);
+}
+
+.shadow-glow-sm {
+  box-shadow: var(--shadow-primary-glow-sm);
+}
+
+.shadow-glass {
+  box-shadow: var(--shadow-card), var(--shadow-glass-inner);
 }

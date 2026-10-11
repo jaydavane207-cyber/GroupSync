@@ -18,7 +18,7 @@ export const Avatar = ({
   if (!src && fallbackName) {
     return (
       <div
-        className={`rounded-full bg-[#6D6AF6]/20 text-[#6D6AF6] font-bold flex items-center justify-center shrink-0 border border-white/10 ${
+        className={`rounded-full bg-[#6D6AF6]/20 text-[#9182f8] font-bold flex items-center justify-center shrink-0 border border-white/10 ${
           sizes[size] || sizes.md
         } ${className}`}
       >
@@ -39,4 +39,5 @@ export const Avatar = ({
 };
 
 export default Avatar;
+
 

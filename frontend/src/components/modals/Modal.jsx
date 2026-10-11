@@ -20,11 +20,11 @@ export const Modal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-[fadeIn_0.15s_ease-out]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-[fadeIn_0.15s_ease-out]">
       <div
-        className={`w-full ${maxWidth} bg-[#14141a] border border-gs-border rounded-2xl shadow-2xl p-6 relative animate-[scaleUp_0.15s_ease-out] ${className}`}
+        className={`w-full ${maxWidth} glass-card rounded-2xl shadow-[0_24px_64px_rgba(0,0,0,0.50)] p-6 relative animate-[scaleUp_0.15s_ease-out] ${className}`}
       >
-        <div className="flex items-center justify-between pb-4 border-b border-gs-border mb-4">
+        <div className="flex items-center justify-between pb-4 border-b border-white/[0.08] mb-4">
           <h3 className="font-semibold text-sm text-gs-text-main">{title}</h3>
           <button
             onClick={onClose}

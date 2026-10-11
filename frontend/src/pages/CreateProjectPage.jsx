@@ -47,7 +47,7 @@ export const CreateProjectPage = () => {
 
       <div className="glass-card p-6">
         <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gs-border">
-          <div className="p-2.5 rounded-xl bg-[#6D6AF6]/15 text-[#6D6AF6]">
+          <div className="p-2.5 rounded-xl bg-[#6D6AF6]/15 text-[#9182f8]">
             <FolderGit2 className="w-5 h-5" />
           </div>
           <div>
@@ -107,4 +107,5 @@ export const CreateProjectPage = () => {
 };
 
 export default CreateProjectPage;
+
 
