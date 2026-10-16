@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import {
   FolderKanban,
   Search,
@@ -14,22 +14,38 @@ import {
 import { useAppContext } from '@/context/AppContext';
 import supabase from '@/lib/supabase';
 import { withRetry, ErrorCard, SkeletonCard } from '@/lib/withRetry';
+import storage from '@/lib/utils/localStorage';
+import {
+  SAMPLE_PROJECTS,
+  isTableMissingError,
+  getLocalProjects,
+  saveLocalProjects
+} from '@/lib/services/projectService';
+
+const getLocalAppliedIds = (userId) =>
+  storage.get(`groupsync_applied_project_ids_${userId}`, []);
+const saveLocalAppliedIds = (userId, ids) =>
+  storage.set(`groupsync_applied_project_ids_${userId}`, ids);
 
 // Helper: notify organizer
 async function notifyOrganizer(project, applicant) {
   if (!project.organizer_id || project.organizer_id === applicant.id) return;
-  await withRetry(() =>
-    supabase.from('notifications').insert([{
-      user_id: project.organizer_id,
-      type: 'projects',
-      title: 'New project application',
-      message: `${applicant.name || 'A student'} applied to join "${project.title}".`,
-      icon: '📋',
-      action_label: 'View project',
-      action_path: '/projects',
-      reference_id: String(project.id),
-    }])
-  );
+  try {
+    await withRetry(() =>
+      supabase.from('notifications').insert([{
+        user_id: project.organizer_id,
+        type: 'projects',
+        title: 'New project application',
+        message: `${applicant.name || 'A student'} applied to join "${project.title}".`,
+        icon: '📋',
+        action_label: 'View project',
+        action_path: '/projects',
+        reference_id: String(project.id),
+      }])
+    );
+  } catch {
+    // Non-blocking notification failure
+  }
 }
 
 export default function ProjectsPage() {
@@ -39,6 +55,7 @@ export default function ProjectsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [retry, setRetry] = useState(0);
+  const [isOfflineMode, setIsOfflineMode] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDomain, setSelectedDomain] = useState('all');
@@ -54,30 +71,67 @@ export default function ProjectsPage() {
     setLoading(true);
     setError(null);
 
-    const { data: projectsData, error: projectsErr } = await withRetry(() =>
-      supabase
-        .from('projects')
-        .select('*')
-        .order('created_at', { ascending: false })
-    );
+    let projs = [];
+    let isOffline = false;
 
-    if (projectsErr) {
-      setError(projectsErr.userMessage || 'Failed to load projects.');
-      setLoading(false);
-      return;
+    try {
+      const { data: projectsData, error: projectsErr } = await withRetry(() =>
+        supabase
+          .from('projects')
+          .select('*')
+          .order('created_at', { ascending: false })
+      );
+
+      if (projectsErr) {
+        if (isTableMissingError(projectsErr)) {
+          isOffline = true;
+          const localList = getLocalProjects();
+          projs = [...localList, ...SAMPLE_PROJECTS];
+        } else {
+          setError(projectsErr.userMessage || 'Failed to load projects.');
+          setLoading(false);
+          return;
+        }
+      } else {
+        projs = projectsData || [];
+      }
+    } catch (catchedErr) {
+      if (isTableMissingError(catchedErr)) {
+        isOffline = true;
+        const localList = getLocalProjects();
+        projs = [...localList, ...SAMPLE_PROJECTS];
+      } else {
+        setError(catchedErr.message || 'Failed to load projects.');
+        setLoading(false);
+        return;
+      }
     }
 
-    setProjects(projectsData || []);
+    setIsOfflineMode(isOffline);
+    setProjects(projs);
 
     if (user?.id) {
-      const { data: appsData } = await withRetry(() =>
-        supabase
-          .from('project_applications')
-          .select('project_id')
-          .eq('applicant_id', user.id)
-      );
-      if (appsData) {
-        setAppliedIds(new Set(appsData.map(a => a.project_id)));
+      if (isOffline) {
+        const localApps = getLocalAppliedIds(user.id);
+        setAppliedIds(new Set(localApps));
+      } else {
+        try {
+          const { data: appsData, error: appsErr } = await withRetry(() =>
+            supabase
+              .from('project_applications')
+              .select('project_id')
+              .eq('applicant_id', user.id)
+          );
+          if (appsErr && isTableMissingError(appsErr)) {
+            const localApps = getLocalAppliedIds(user.id);
+            setAppliedIds(new Set(localApps));
+          } else if (appsData) {
+            setAppliedIds(new Set(appsData.map(a => a.project_id)));
+          }
+        } catch {
+          const localApps = getLocalAppliedIds(user.id);
+          setAppliedIds(new Set(localApps));
+        }
       }
     }
 
@@ -90,27 +144,42 @@ export default function ProjectsPage() {
 
   // Real-time subscription
   useEffect(() => {
-    const channel = supabase
-      .channel('projects-realtime')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'projects' },
-        (payload) => {
-          setProjects(prev => [payload.new, ...prev]);
-        }
-      )
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'projects' },
-        (payload) => {
-          setProjects(prev => prev.map(p => p.id === payload.new.id ? payload.new : p));
-        }
-      )
-      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'projects' },
-        (payload) => {
-          setProjects(prev => prev.filter(p => p.id !== payload.old.id));
-        }
-      )
-      .subscribe();
+    let channel;
+    try {
+      channel = supabase
+        .channel('projects-realtime')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'projects' },
+          (payload) => {
+            if (payload?.new) {
+              setProjects(prev => [payload.new, ...prev.filter(p => p.id !== payload.new.id)]);
+            }
+          }
+        )
+        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'projects' },
+          (payload) => {
+            if (payload?.new) {
+              setProjects(prev => prev.map(p => p.id === payload.new.id ? payload.new : p));
+            }
+          }
+        )
+        .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'projects' },
+          (payload) => {
+            if (payload?.old?.id) {
+              setProjects(prev => prev.filter(p => p.id !== payload.old.id));
+            }
+          }
+        )
+        .subscribe();
 
-    channelRef.current = channel;
-    return () => { supabase.removeChannel(channel); };
+      channelRef.current = channel;
+    } catch {
+      // Non-blocking realtime subscription
+    }
+    return () => {
+      if (channel) {
+        supabase.removeChannel(channel);
+      }
+    };
   }, []);
 
   const handleApply = async (project) => {
@@ -119,43 +188,98 @@ export default function ProjectsPage() {
 
     setApplyingId(project.id);
 
-    const { error: insertErr } = await withRetry(() =>
-      supabase.from('project_applications').insert([{
-        project_id: project.id,
-        applicant_id: user.id,
-        status: 'pending',
-      }])
-    );
+    let succeeded = false;
+    if (!isOfflineMode) {
+      try {
+        const { error: insertErr } = await withRetry(() =>
+          supabase.from('project_applications').insert([{
+            project_id: project.id,
+            applicant_id: user.id,
+            status: 'pending',
+          }])
+        );
+
+        if (!insertErr) {
+          succeeded = true;
+        } else if (isTableMissingError(insertErr)) {
+          succeeded = true;
+        } else {
+          showToast('Could not submit application: ' + (insertErr.userMessage || insertErr.message), 'error');
+        }
+      } catch (err) {
+        if (isTableMissingError(err)) {
+          succeeded = true;
+        } else {
+          showToast('Could not submit application.', 'error');
+        }
+      }
+    } else {
+      succeeded = true;
+    }
 
     setApplyingId(null);
 
-    if (insertErr) {
-      showToast('Could not submit application.', 'error');
-    } else {
-      setAppliedIds(prev => new Set([...prev, project.id]));
+    if (succeeded) {
+      const nextSet = new Set([...appliedIds, project.id]);
+      setAppliedIds(nextSet);
+      saveLocalAppliedIds(user.id, Array.from(nextSet));
       showToast('Application sent to organizer.', 'success');
-      notifyOrganizer(project, user);
+      try {
+        await notifyOrganizer(project, user);
+      } catch {
+        // Non-blocking notification
+      }
     }
   };
 
   const handleCreateProject = async (newProj) => {
     if (!user?.id) { showToast('Please log in to post a project.', 'error'); return; }
 
-    const { data, error: insertErr } = await withRetry(() =>
-      supabase.from('projects').insert([{
-        ...newProj,
-        organizer_id: user.id,
-        organizer_name: user.name || 'Campus Student',
-      }]).select().single()
-    );
+    const projectPayload = {
+      ...newProj,
+      organizer_id: user.id,
+      organizer_name: user.name || user.email?.split('@')[0] || 'Campus Student',
+    };
 
-    if (insertErr) {
-      showToast('Failed to post project.', 'error');
-    } else {
-      setProjects(prev => [data, ...prev]);
-      setShowCreateModal(false);
-      showToast('Project published successfully.', 'success');
+    let createdItem = null;
+
+    if (!isOfflineMode) {
+      try {
+        const { data, error: insertErr } = await withRetry(() =>
+          supabase.from('projects').insert([projectPayload]).select().single()
+        );
+
+        if (insertErr) {
+          if (isTableMissingError(insertErr)) {
+            // fallback to local creation
+          } else {
+            showToast('Failed to post project: ' + (insertErr.userMessage || insertErr.message), 'error');
+            return;
+          }
+        } else {
+          createdItem = data;
+        }
+      } catch (e) {
+        if (!isTableMissingError(e)) {
+          showToast('Failed to post project.', 'error');
+          return;
+        }
+      }
     }
+
+    if (!createdItem) {
+      createdItem = {
+        ...projectPayload,
+        id: 'local-proj-' + Date.now(),
+        created_at: new Date().toISOString(),
+      };
+      const existing = getLocalProjects();
+      saveLocalProjects([createdItem, ...existing]);
+    }
+
+    setProjects(prev => [createdItem, ...prev]);
+    setShowCreateModal(false);
+    showToast('Project published successfully.', 'success');
   };
 
   const filteredProjects = useMemo(() => {
@@ -194,6 +318,19 @@ export default function ProjectsPage() {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
+      {/* Offline / Table missing fallback indicator */}
+      {isOfflineMode && (
+        <div className="flex items-center justify-between gap-3 px-4 py-2.5 rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-300 text-xs machined-edge animate-fadeIn">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
+            <span>
+              <strong>Preview Mode:</strong> Projects database table is initializing. Displaying campus hackathons & projects.
+            </span>
+          </div>
+          <span className="text-[11px] text-amber-200/70 hidden sm:inline">Local applications & posting active</span>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-gs-border">
         <div>

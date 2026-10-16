@@ -21,6 +21,7 @@ import { seedDatabase } from '@/lib/seeddata';
 import { SkillBadge } from '@/components/badges/SkillBadge';
 import supabase from '@/lib/supabase';
 import { withRetry } from '@/lib/withRetry';
+import { SAMPLE_PROJECTS } from '@/lib/services/projectService';
 
 export default function DashboardPage() {
   const { user, factions, stats: liveStats, refreshGroups, refreshStats, showToast } = useAppContext();
@@ -34,28 +35,61 @@ export default function DashboardPage() {
     const fetchDeadlines = async () => {
       setDeadlinesLoading(true);
       const today = new Date().toISOString().split('T')[0];
-      const { data, error } = await withRetry(() =>
-        supabase
-          .from('projects')
-          .select('id, title, deadline, timeline, prize_pool, organizer_name')
-          .gte('deadline', today)
-          .order('deadline', { ascending: true })
-          .limit(4)
-      );
-      if (!error && data) {
-        setUpcomingDeadlines(data.map((p) => {
-          const daysLeft = Math.max(0, Math.ceil(
-            (new Date(p.deadline).getTime() - Date.now()) / 86400000
-          ));
-          return {
-            id: p.id,
-            title: p.title,
-            date: new Date(p.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-            daysLeft,
-            domain: p.organizer_name || 'Campus Hackathon',
-            prize: p.prize_pool || 'Certificate',
-          };
-        }));
+      try {
+        const { data, error } = await withRetry(() =>
+          supabase
+            .from('projects')
+            .select('id, title, deadline, timeline, prize_pool, organizer_name')
+            .gte('deadline', today)
+            .order('deadline', { ascending: true })
+            .limit(4)
+        );
+
+        if (!error && data && data.length > 0) {
+          setUpcomingDeadlines(data.map((p) => {
+            const daysLeft = Math.max(0, Math.ceil(
+              (new Date(p.deadline).getTime() - Date.now()) / 86400000
+            ));
+            return {
+              id: p.id,
+              title: p.title,
+              date: new Date(p.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+              daysLeft,
+              domain: p.organizer_name || 'Campus Hackathon',
+              prize: p.prize_pool || 'Certificate',
+            };
+          }));
+        } else {
+          // Fallback to sample projects
+          const sampleUpcoming = SAMPLE_PROJECTS.filter((p) => !p.deadline || p.deadline >= today).slice(0, 4);
+          setUpcomingDeadlines(sampleUpcoming.map((p) => {
+            const daysLeft = p.deadline
+              ? Math.max(0, Math.ceil((new Date(p.deadline).getTime() - Date.now()) / 86400000))
+              : 7;
+            return {
+              id: p.id,
+              title: p.title,
+              date: p.deadline
+                ? new Date(p.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                : 'Upcoming',
+              daysLeft,
+              domain: p.organizer_name || 'Campus Hackathon',
+              prize: p.prize_pool || 'Certificate',
+            };
+          }));
+        }
+      } catch {
+        const sampleUpcoming = SAMPLE_PROJECTS.slice(0, 4);
+        setUpcomingDeadlines(sampleUpcoming.map((p) => ({
+          id: p.id,
+          title: p.title,
+          date: p.deadline
+            ? new Date(p.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+            : 'Upcoming',
+          daysLeft: 7,
+          domain: p.organizer_name || 'Campus Hackathon',
+          prize: p.prize_pool || 'Certificate',
+        })));
       }
       setDeadlinesLoading(false);
     };

@@ -1,6 +1,6 @@
 -- ============================================================================
--- GroupSync: Phase 2 Task 2 — Skill Verification & Quiz System Migration
--- Run ONCE in Supabase Dashboard → SQL Editor
+-- GroupSync: Skill Verification & Quiz System Migration
+-- Run in Supabase Dashboard → SQL Editor
 -- Safe to re-run (all statements are idempotent)
 -- ============================================================================
 
@@ -22,16 +22,15 @@ CREATE TABLE IF NOT EXISTS public.quizzes (
 
 ALTER TABLE public.quizzes ENABLE ROW LEVEL SECURITY;
 
-DO $$ BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='quizzes' AND policyname='Published quizzes viewable by authenticated users') THEN
-    CREATE POLICY "Published quizzes viewable by authenticated users"
-      ON public.quizzes FOR SELECT
-      USING (is_published = true AND auth.role() = 'authenticated');
-  END IF;
-END $$;
+DROP POLICY IF EXISTS "Published quizzes viewable by everyone" ON public.quizzes;
+DROP POLICY IF EXISTS "Published quizzes viewable by authenticated users" ON public.quizzes;
+CREATE POLICY "Published quizzes viewable by everyone"
+  ON public.quizzes FOR SELECT
+  USING (is_published = true);
 
 CREATE INDEX IF NOT EXISTS idx_quizzes_skill ON public.quizzes (skill_name);
 CREATE INDEX IF NOT EXISTS idx_quizzes_difficulty ON public.quizzes (difficulty);
+
 
 -- ─── TABLE 2: QUIZ_QUESTIONS ──────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.quiz_questions (
@@ -48,15 +47,14 @@ CREATE TABLE IF NOT EXISTS public.quiz_questions (
 
 ALTER TABLE public.quiz_questions ENABLE ROW LEVEL SECURITY;
 
-DO $$ BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='quiz_questions' AND policyname='Questions viewable by authenticated users') THEN
-    CREATE POLICY "Questions viewable by authenticated users"
-      ON public.quiz_questions FOR SELECT
-      USING (auth.role() = 'authenticated');
-  END IF;
-END $$;
+DROP POLICY IF EXISTS "Questions viewable by everyone" ON public.quiz_questions;
+DROP POLICY IF EXISTS "Questions viewable by authenticated users" ON public.quiz_questions;
+CREATE POLICY "Questions viewable by everyone"
+  ON public.quiz_questions FOR SELECT
+  USING (true);
 
 CREATE INDEX IF NOT EXISTS idx_quiz_questions_quiz ON public.quiz_questions (quiz_id, question_order);
+
 
 -- ─── TABLE 3: QUIZ_ATTEMPTS ───────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.quiz_attempts (
@@ -77,29 +75,21 @@ CREATE TABLE IF NOT EXISTS public.quiz_attempts (
 
 ALTER TABLE public.quiz_attempts ENABLE ROW LEVEL SECURITY;
 
-DO $$ BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='quiz_attempts' AND policyname='Users can view own attempts') THEN
-    CREATE POLICY "Users can view own attempts"
-      ON public.quiz_attempts FOR SELECT USING (auth.uid() = user_id);
-  END IF;
-END $$;
+DROP POLICY IF EXISTS "Users can view own attempts" ON public.quiz_attempts;
+CREATE POLICY "Users can view own attempts"
+  ON public.quiz_attempts FOR SELECT USING (auth.uid() = user_id);
 
-DO $$ BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='quiz_attempts' AND policyname='Users can create own attempts') THEN
-    CREATE POLICY "Users can create own attempts"
-      ON public.quiz_attempts FOR INSERT WITH CHECK (auth.uid() = user_id);
-  END IF;
-END $$;
+DROP POLICY IF EXISTS "Users can create own attempts" ON public.quiz_attempts;
+CREATE POLICY "Users can create own attempts"
+  ON public.quiz_attempts FOR INSERT WITH CHECK (auth.uid() = user_id);
 
-DO $$ BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='quiz_attempts' AND policyname='Users can update own attempts') THEN
-    CREATE POLICY "Users can update own attempts"
-      ON public.quiz_attempts FOR UPDATE USING (auth.uid() = user_id);
-  END IF;
-END $$;
+DROP POLICY IF EXISTS "Users can update own attempts" ON public.quiz_attempts;
+CREATE POLICY "Users can update own attempts"
+  ON public.quiz_attempts FOR UPDATE USING (auth.uid() = user_id);
 
 CREATE INDEX IF NOT EXISTS idx_attempts_user ON public.quiz_attempts (user_id, quiz_id);
 CREATE INDEX IF NOT EXISTS idx_attempts_status ON public.quiz_attempts (user_id, status);
+
 
 -- ─── TABLE 4: QUIZ_ANSWERS ────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.quiz_answers (
@@ -115,17 +105,31 @@ CREATE TABLE IF NOT EXISTS public.quiz_answers (
 
 ALTER TABLE public.quiz_answers ENABLE ROW LEVEL SECURITY;
 
-DO $$ BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='quiz_answers' AND policyname='Users can manage own answers') THEN
-    CREATE POLICY "Users can manage own answers"
-      ON public.quiz_answers FOR ALL
-      USING (
-        EXISTS (SELECT 1 FROM public.quiz_attempts WHERE id = attempt_id AND user_id = auth.uid())
-      );
-  END IF;
-END $$;
+DROP POLICY IF EXISTS "Users can manage own answers" ON public.quiz_answers;
+DROP POLICY IF EXISTS "Users can view own answers" ON public.quiz_answers;
+DROP POLICY IF EXISTS "Users can insert own answers" ON public.quiz_answers;
+DROP POLICY IF EXISTS "Users can update own answers" ON public.quiz_answers;
+
+CREATE POLICY "Users can view own answers"
+  ON public.quiz_answers FOR SELECT
+  USING (
+    EXISTS (SELECT 1 FROM public.quiz_attempts WHERE id = attempt_id AND user_id = auth.uid())
+  );
+
+CREATE POLICY "Users can insert own answers"
+  ON public.quiz_answers FOR INSERT
+  WITH CHECK (
+    EXISTS (SELECT 1 FROM public.quiz_attempts WHERE id = attempt_id AND user_id = auth.uid())
+  );
+
+CREATE POLICY "Users can update own answers"
+  ON public.quiz_answers FOR UPDATE
+  USING (
+    EXISTS (SELECT 1 FROM public.quiz_attempts WHERE id = attempt_id AND user_id = auth.uid())
+  );
 
 CREATE INDEX IF NOT EXISTS idx_answers_attempt ON public.quiz_answers (attempt_id);
+
 
 -- ─── TABLE 5: CERTIFICATES ───────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.certificates (
@@ -148,35 +152,24 @@ CREATE TABLE IF NOT EXISTS public.certificates (
 
 ALTER TABLE public.certificates ENABLE ROW LEVEL SECURITY;
 
-DO $$ BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='certificates' AND policyname='Users can view own certificates') THEN
-    CREATE POLICY "Users can view own certificates"
-      ON public.certificates FOR SELECT USING (auth.uid() = user_id);
-  END IF;
-END $$;
+DROP POLICY IF EXISTS "Users can view own certificates" ON public.certificates;
+CREATE POLICY "Users can view own certificates"
+  ON public.certificates FOR SELECT USING (auth.uid() = user_id);
 
-DO $$ BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='certificates' AND policyname='Users can create own certificates') THEN
-    CREATE POLICY "Users can create own certificates"
-      ON public.certificates FOR INSERT WITH CHECK (auth.uid() = user_id);
-  END IF;
-END $$;
+DROP POLICY IF EXISTS "Users can create own certificates" ON public.certificates;
+CREATE POLICY "Users can create own certificates"
+  ON public.certificates FOR INSERT WITH CHECK (auth.uid() = user_id);
 
-DO $$ BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='certificates' AND policyname='Users can update own certificates') THEN
-    CREATE POLICY "Users can update own certificates"
-      ON public.certificates FOR UPDATE USING (auth.uid() = user_id);
-  END IF;
-END $$;
+DROP POLICY IF EXISTS "Users can update own certificates" ON public.certificates;
+CREATE POLICY "Users can update own certificates"
+  ON public.certificates FOR UPDATE USING (auth.uid() = user_id);
 
-DO $$ BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='certificates' AND policyname='Users can delete own certificates') THEN
-    CREATE POLICY "Users can delete own certificates"
-      ON public.certificates FOR DELETE USING (auth.uid() = user_id);
-  END IF;
-END $$;
+DROP POLICY IF EXISTS "Users can delete own certificates" ON public.certificates;
+CREATE POLICY "Users can delete own certificates"
+  ON public.certificates FOR DELETE USING (auth.uid() = user_id);
 
 CREATE INDEX IF NOT EXISTS idx_certificates_user ON public.certificates (user_id, created_at DESC);
+
 
 -- ─── TABLE 6: SKILL_BADGES ────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.skill_badges (
@@ -195,24 +188,28 @@ CREATE TABLE IF NOT EXISTS public.skill_badges (
 
 ALTER TABLE public.skill_badges ENABLE ROW LEVEL SECURITY;
 
-DO $$ BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='skill_badges' AND policyname='Badges viewable by everyone') THEN
-    CREATE POLICY "Badges viewable by everyone"
-      ON public.skill_badges FOR SELECT USING (true);
-  END IF;
-END $$;
+DROP POLICY IF EXISTS "Badges viewable by everyone" ON public.skill_badges;
+CREATE POLICY "Badges viewable by everyone"
+  ON public.skill_badges FOR SELECT USING (true);
 
-DO $$ BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='skill_badges' AND policyname='Users can create own badges') THEN
-    CREATE POLICY "Users can create own badges"
-      ON public.skill_badges FOR INSERT WITH CHECK (auth.uid() = user_id);
-  END IF;
-END $$;
+DROP POLICY IF EXISTS "Users can create own badges" ON public.skill_badges;
+CREATE POLICY "Users can create own badges"
+  ON public.skill_badges FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 CREATE INDEX IF NOT EXISTS idx_badges_user ON public.skill_badges (user_id, earned_date DESC);
 CREATE INDEX IF NOT EXISTS idx_badges_skill ON public.skill_badges (skill_name);
 
-ALTER PUBLICATION supabase_realtime ADD TABLE public.skill_badges;
+DO $$ BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_publication_tables 
+    WHERE pubname = 'supabase_realtime' 
+      AND schemaname = 'public' 
+      AND tablename = 'skill_badges'
+  ) THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.skill_badges;
+  END IF;
+END $$;
+
 
 -- ─── TABLE 7: USER_SKILLS ────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.user_skills (
@@ -231,25 +228,30 @@ CREATE TABLE IF NOT EXISTS public.user_skills (
 
 ALTER TABLE public.user_skills ENABLE ROW LEVEL SECURITY;
 
-DO $$ BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='user_skills' AND policyname='User skills viewable by everyone') THEN
-    CREATE POLICY "User skills viewable by everyone"
-      ON public.user_skills FOR SELECT USING (true);
-  END IF;
-END $$;
+DROP POLICY IF EXISTS "User skills viewable by everyone" ON public.user_skills;
+CREATE POLICY "User skills viewable by everyone"
+  ON public.user_skills FOR SELECT USING (true);
 
-DO $$ BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='user_skills' AND policyname='Users can manage own skills') THEN
-    CREATE POLICY "Users can manage own skills"
-      ON public.user_skills FOR ALL USING (auth.uid() = user_id);
-  END IF;
-END $$;
+DROP POLICY IF EXISTS "Users can manage own skills" ON public.user_skills;
+CREATE POLICY "Users can manage own skills"
+  ON public.user_skills FOR ALL USING (auth.uid() = user_id);
 
 CREATE INDEX IF NOT EXISTS idx_user_skills_user ON public.user_skills (user_id);
 
--- ─── EXTEND PROFILES TABLE ────────────────────────────────────────────────────
+
+-- ─── EXTEND PROFILES & HELPER FUNCTIONS ──────────────────────────────────────
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS credibility_score NUMERIC(5,2) DEFAULT 0;
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS xp INTEGER DEFAULT 0;
+
+CREATE OR REPLACE FUNCTION public.increment_xp(user_id_input UUID, xp_delta INTEGER)
+RETURNS VOID AS $$
+BEGIN
+  UPDATE public.profiles
+  SET xp = COALESCE(xp, 0) + xp_delta
+  WHERE id = user_id_input;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 
 -- ─── SEED: SAMPLE QUIZZES ────────────────────────────────────────────────────
 INSERT INTO public.quizzes (title, skill_name, description, difficulty, duration_minutes, total_questions, passing_score, is_published, tags)
@@ -262,7 +264,8 @@ SELECT * FROM (VALUES
 ) AS seed(title, skill_name, description, difficulty, duration_minutes, total_questions, passing_score, is_published, tags)
 WHERE NOT EXISTS (SELECT 1 FROM public.quizzes LIMIT 1);
 
--- ─── SEED: SAMPLE QUESTIONS (for JavaScript Fundamentals quiz) ───────────────
+
+-- ─── SEED: SAMPLE QUESTIONS (JavaScript Fundamentals) ────────────────────────
 WITH quiz_row AS (SELECT id FROM public.quizzes WHERE skill_name = 'JavaScript' LIMIT 1)
 INSERT INTO public.quiz_questions (quiz_id, question_text, question_type, options, correct_answer, explanation, question_order)
 SELECT
@@ -282,7 +285,8 @@ FROM quiz_row, (VALUES
 ) AS q(question_text, question_type, options, correct_answer, explanation, q_order)
 WHERE NOT EXISTS (SELECT 1 FROM public.quiz_questions qqs JOIN public.quizzes qz ON qqs.quiz_id = qz.id WHERE qz.skill_name = 'JavaScript' LIMIT 1);
 
--- Seed React quiz questions
+
+-- ─── SEED: SAMPLE QUESTIONS (React Hooks & State) ────────────────────────────
 WITH quiz_row AS (SELECT id FROM public.quizzes WHERE skill_name = 'React' LIMIT 1)
 INSERT INTO public.quiz_questions (quiz_id, question_text, question_type, options, correct_answer, explanation, question_order)
 SELECT
@@ -300,6 +304,10 @@ FROM quiz_row, (VALUES
   ('Which of the following is NOT a valid React hook?', 'mcq', '[{"label":"A","text":"useEffect"},{"label":"B","text":"useLoop"},{"label":"C","text":"useReducer"},{"label":"D","text":"useLayoutEffect"}]', 'B', 'useLoop is not a valid React hook. The valid hooks are useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useLayoutEffect, etc.', 10)
 ) AS q(question_text, question_type, options, correct_answer, explanation, q_order)
 WHERE NOT EXISTS (SELECT 1 FROM public.quiz_questions qqs JOIN public.quizzes qz ON qqs.quiz_id = qz.id WHERE qz.skill_name = 'React' LIMIT 1);
+
+
+-- ─── NOTIFY POSTGREST SCHEMA CACHE RELOAD ────────────────────────────────────
+NOTIFY pgrst, 'reload schema';
 
 -- ─── VERIFY ───────────────────────────────────────────────────────────────────
 SELECT table_name, (
