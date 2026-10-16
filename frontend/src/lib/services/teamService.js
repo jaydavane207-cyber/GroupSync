@@ -283,10 +283,14 @@ export async function createTeam(payload) {
 
     if (!chatErr && chatGroup) {
       chatGroupId = chatGroup.id;
-      await supabase.from('group_members').insert([{
-        group_id: chatGroupId,
-        profile_id: leaderId
-      }]).catch(() => {});
+      try {
+        await supabase.from('group_members').insert([{
+          group_id: chatGroupId,
+          profile_id: leaderId
+        }]);
+      } catch (gmErr) {
+        console.warn('Team leader chat membership link notice:', gmErr);
+      }
     }
   } catch (e) {
     console.warn('Team chat group provision notice:', e);
@@ -315,16 +319,22 @@ export async function createTeam(payload) {
     if (teamErr) {
       // Rollback chat group if team creation fails
       if (chatGroupId) {
-        await supabase.from('groups').delete().eq('id', chatGroupId).catch(() => {});
+        try {
+          await supabase.from('groups').delete().eq('id', chatGroupId);
+        } catch (_) {}
       }
       throw teamErr;
     }
 
-    await supabase.from('team_members').insert([{
-      team_id: team.id,
-      user_id: leaderId,
-      role: 'leader'
-    }]).catch(() => {});
+    try {
+      await supabase.from('team_members').insert([{
+        team_id: team.id,
+        user_id: leaderId,
+        role: 'leader'
+      }]);
+    } catch (tmErr) {
+      console.warn('Team leader link notice:', tmErr);
+    }
 
     return { data: team, error: null };
   } catch (teamErr) {
@@ -511,22 +521,27 @@ export async function getTeamDetails(teamId, currentUserId) {
           appQuery = appQuery.eq('applicant_id', currentUserId);
         }
 
-        const { data: apps } = await appQuery.order('created_at', { ascending: false }).catch(() => ({ data: [] }));
-        applications = apps || [];
+        let apps = [];
+        try {
+          const { data: fetchedApps } = await appQuery.order('created_at', { ascending: false });
+          apps = fetchedApps || [];
+        } catch (_) {}
+        applications = apps;
       }
 
       // 4. Fetch invitations
       let invitations = [];
       if (currentUserId && team.leader_id === currentUserId) {
-        const { data: invs } = await supabase
-          .from('team_invitations')
-          .select(`
-            *,
-            invitee:profiles!invitee_id(id, name, avatar, faction)
-          `)
-          .eq('team_id', teamId)
-          .catch(() => ({ data: [] }));
-        invitations = invs || [];
+        try {
+          const { data: invs } = await supabase
+            .from('team_invitations')
+            .select(`
+              *,
+              invitee:profiles!invitee_id(id, name, avatar, faction)
+            `)
+            .eq('team_id', teamId);
+          invitations = invs || [];
+        } catch (_) {}
       }
 
       return {
@@ -594,16 +609,18 @@ export async function applyToTeam(teamId, applicantId, message, skills = [], lea
       }
 
       if (leaderId) {
-        await supabase.from('notifications').insert([{
-          user_id: leaderId,
-          type: 'teams',
-          title: 'New Team Application',
-          message: `A candidate has applied to join ${teamName || 'your team'}.`,
-          icon: 'ℹ️',
-          action_label: 'View Application',
-          action_path: `/teams/${teamId}`,
-          reference_id: teamId
-        }]).catch(() => {});
+        try {
+          await supabase.from('notifications').insert([{
+            user_id: leaderId,
+            type: 'teams',
+            title: 'New Team Application',
+            message: `A candidate has applied to join ${teamName || 'your team'}.`,
+            icon: 'ℹ️',
+            action_label: 'View Application',
+            action_path: `/teams/${teamId}`,
+            reference_id: teamId
+          }]);
+        } catch (_) {}
       }
 
       return { data, error: null };
@@ -643,17 +660,21 @@ export async function reviewApplication(applicationId, teamId, applicantId, stat
       if (appErr && !isTableMissingError(appErr)) throw appErr;
 
       if (status === 'accepted') {
-        await supabase.from('team_members').upsert([{
-          team_id: teamId,
-          user_id: applicantId,
-          role: 'member'
-        }], { onConflict: 'team_id,user_id' }).catch(() => {});
+        try {
+          await supabase.from('team_members').upsert([{
+            team_id: teamId,
+            user_id: applicantId,
+            role: 'member'
+          }], { onConflict: 'team_id,user_id' });
+        } catch (_) {}
 
         if (chatGroupId) {
-          await supabase.from('group_members').upsert([{
-            group_id: chatGroupId,
-            profile_id: applicantId
-          }], { onConflict: 'group_id,profile_id' }).catch(() => {});
+          try {
+            await supabase.from('group_members').upsert([{
+              group_id: chatGroupId,
+              profile_id: applicantId
+            }], { onConflict: 'group_id,profile_id' });
+          } catch (_) {}
         }
       }
 
@@ -718,8 +739,7 @@ export async function removeMember(teamId, memberUserId, teamName, chatGroupId) 
         .from('team_members')
         .delete()
         .eq('team_id', teamId)
-        .eq('user_id', memberUserId)
-        .catch(() => {});
+        .eq('user_id', memberUserId);
 
       return { success: true, error: null };
     } catch (e) {
@@ -737,8 +757,7 @@ export async function leaveTeam(teamId, userId, leaderId, teamName, chatGroupId)
         .from('team_members')
         .delete()
         .eq('team_id', teamId)
-        .eq('user_id', userId)
-        .catch(() => {});
+        .eq('user_id', userId);
 
       return { success: true, error: null };
     } catch (e) {
@@ -780,18 +799,20 @@ export async function updateTeam(teamId, updates) {
 
 export async function deleteTeam(teamId, chatGroupId) {
   try {
-    await supabase
-      .from('teams')
-      .delete()
-      .eq('id', teamId)
-      .catch(() => {});
+    try {
+      await supabase
+        .from('teams')
+        .delete()
+        .eq('id', teamId);
+    } catch (_) {}
 
     if (chatGroupId) {
-      await supabase
-        .from('groups')
-        .delete()
-        .eq('id', chatGroupId)
-        .catch(() => {});
+      try {
+        await supabase
+          .from('groups')
+          .delete()
+          .eq('id', chatGroupId);
+      } catch (_) {}
     }
 
     const localTeams = storage.get('groupsync_local_teams', []);

@@ -246,7 +246,9 @@ export async function submitQuiz(attemptId, userId, quiz, questions, answers, st
     // ── Award XP ──────────────────────────────────────────────────────────
     const xpGain = passed ? Math.round(percentage / 10) * 5 : 0; // 30-50 XP for passing
     if (xpGain > 0) {
-      await supabase.rpc('increment_xp', { user_id_input: userId, xp_delta: xpGain }).catch(() => {});
+      try {
+        await supabase.rpc('increment_xp', { user_id_input: userId, xp_delta: xpGain });
+      } catch (_) {}
     }
   }
 

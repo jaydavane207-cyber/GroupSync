@@ -105,6 +105,7 @@ export async function endorseSkill(targetUserId, endorserId, skillName, message,
     }
 
     // 2. Dispatch notification
+    try {
     await supabase.from('notifications').insert([{
       user_id: targetUserId,
       type: 'teams',
@@ -113,7 +114,8 @@ export async function endorseSkill(targetUserId, endorserId, skillName, message,
       icon: '⭐',
       action_label: 'View Profile',
       action_path: '/profile'
-    }]).catch(() => {});
+    }]);
+  } catch (_) {}
 
     return { data, error: null };
   });
