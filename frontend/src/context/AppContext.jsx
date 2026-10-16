@@ -1,4 +1,4 @@
-﻿import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import supabase from '@/lib/supabase';
 import { MOCK_FACTIONS } from '@/data/mockData';
 import { withRetry } from '@/lib/withRetry';
@@ -50,15 +50,27 @@ export const AppProvider = ({ children }) => {
     // Fetch groups and their members using a join or separate query
     const { data: groupsData, error: groupsError } = await supabase.from('groups').select('*, group_members(profile_id)');
     
-    if (!groupsError) {
-      const mappedGroups = groupsData.map(g => ({
+    if (!groupsError && groupsData) {
+      // Deduplicate replicate groups (such as duplicate Team chat groups)
+      const seenGroupKeys = new Set();
+      const uniqueGroups = groupsData.filter(g => {
+        if (!g || !g.id) return false;
+        const key = g.type === 'Team'
+          ? `team::${(g.name || '').trim().toLowerCase()}::${g.admin_id || ''}`
+          : `group::${g.id}`;
+        if (seenGroupKeys.has(key)) return false;
+        seenGroupKeys.add(key);
+        return true;
+      });
+
+      const mappedGroups = uniqueGroups.map(g => ({
         ...g,
         adminId: g.admin_id,
         maxMembers: Math.min(g.max_members || g.maxMembers || 10, 10),
         memberIds: g.group_members?.map(m => m.profile_id) || []
       }));
       setGroups(mappedGroups.sort((a,b) => new Date(b.created_at) - new Date(a.created_at)));
-    } else {
+    } else if (groupsError) {
       console.error('Error fetching groups:', groupsError);
     }
   }, []);

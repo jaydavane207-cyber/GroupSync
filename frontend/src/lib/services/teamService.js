@@ -130,11 +130,99 @@ const filterLocalTeams = (allTeams, filters = {}) => {
   return filtered;
 };
 
+// ─── DEDUPLICATE TEAMS HELPER ───────────────────────────────────────────────
+
+/**
+ * Filter out duplicate squads based on ID and (name + leader_id).
+ * Retains the primary/newest entry for each squad.
+ */
+export const deduplicateTeams = (teamsList = []) => {
+  if (!Array.isArray(teamsList)) return [];
+  const seenIds = new Set();
+  const seenKeys = new Set();
+  const result = [];
+
+  for (const t of teamsList) {
+    if (!t || !t.id) continue;
+    if (seenIds.has(t.id)) continue;
+
+    const normName = (t.name || '').trim().toLowerCase();
+    const leaderKey = t.leader_id || t.admin_id || 'unknown';
+    const uniqueKey = `${normName}::${leaderKey}`;
+
+    if (seenKeys.has(uniqueKey)) {
+      continue;
+    }
+
+    seenIds.add(t.id);
+    seenKeys.add(uniqueKey);
+    result.push(t);
+  }
+
+  return result;
+};
+
+// ─── CLEANUP DUPLICATE SQUADS ────────────────────────────────────────────────
+
+/**
+ * Deletes replicate squads in Supabase belonging to the given leader,
+ * keeping only the single newest squad for each unique team name.
+ */
+export async function cleanupDuplicateSquadsForLeader(leaderId) {
+  if (!leaderId) return { cleanedCount: 0 };
+  try {
+    const { data: userTeams, error } = await supabase
+      .from('teams')
+      .select('id, name, chat_group_id, created_at')
+      .eq('leader_id', leaderId)
+      .order('created_at', { ascending: false });
+
+    if (error || !userTeams || userTeams.length <= 1) return { cleanedCount: 0 };
+
+    const grouped = {};
+    for (const t of userTeams) {
+      const norm = (t.name || '').trim().toLowerCase();
+      if (!grouped[norm]) grouped[norm] = [];
+      grouped[norm].push(t);
+    }
+
+    const teamIdsToDelete = [];
+    const groupIdsToDelete = [];
+
+    for (const norm in grouped) {
+      const list = grouped[norm];
+      if (list.length > 1) {
+        // Keep index 0 (newest / primary), mark remainder for deletion
+        for (let i = 1; i < list.length; i++) {
+          teamIdsToDelete.push(list[i].id);
+          if (list[i].chat_group_id) {
+            groupIdsToDelete.push(list[i].chat_group_id);
+          }
+        }
+      }
+    }
+
+    if (teamIdsToDelete.length > 0) {
+      console.info(`[teamService] Auto-cleaning ${teamIdsToDelete.length} duplicate squad(s)...`);
+      await supabase.from('teams').delete().in('id', teamIdsToDelete);
+      if (groupIdsToDelete.length > 0) {
+        await supabase.from('groups').delete().in('id', groupIdsToDelete);
+      }
+      return { cleanedCount: teamIdsToDelete.length };
+    }
+    return { cleanedCount: 0 };
+  } catch (err) {
+    console.warn('[teamService] cleanupDuplicateSquadsForLeader notice:', err);
+    return { cleanedCount: 0 };
+  }
+}
+
 // ─── CREATE TEAM ─────────────────────────────────────────────────────────────
 
 /**
  * Create a new team. Provisions a linked chat group if possible,
  * registers creator as leader, and saves with fallback support.
+ * (Note: We do NOT wrap insertions in withRetry to prevent accidental duplicates)
  */
 export async function createTeam(payload) {
   const {
@@ -149,105 +237,130 @@ export async function createTeam(payload) {
     leaderId
   } = payload;
 
-  if (!name?.trim()) {
+  const trimmedName = (name || '').trim();
+
+  if (!trimmedName) {
     return { data: null, error: { userMessage: 'Team name is required.' } };
   }
   if (!leaderId) {
     return { data: null, error: { userMessage: 'Authentication required to create a team.' } };
   }
 
-  return withRetry(async () => {
-    let chatGroupId = null;
-    try {
-      const { data: chatGroup, error: chatErr } = await supabase
-        .from('groups')
-        .insert([{
-          name: name.trim(),
-          type: 'Team',
-          description: `Team chat for ${name.trim()}`,
-          privacy,
-          max_members: maxMembers,
-          members: 1,
-          admin_id: leaderId
-        }])
-        .select('id')
-        .single();
+  // 1. Prevent duplicate team creation with identical name for this leader
+  try {
+    const { data: existingTeams } = await supabase
+      .from('teams')
+      .select('id, name')
+      .eq('leader_id', leaderId)
+      .ilike('name', trimmedName)
+      .limit(1);
 
-      if (!chatErr && chatGroup) {
-        chatGroupId = chatGroup.id;
-        await supabase.from('group_members').insert([{
-          group_id: chatGroupId,
-          profile_id: leaderId
-        }]).catch(() => {});
-      }
-    } catch (e) {
-      console.warn('Team chat group provision notice:', e);
+    if (existingTeams && existingTeams.length > 0) {
+      return {
+        data: null,
+        error: { userMessage: `You already have an active squad named "${trimmedName}". Please choose a distinct name.` }
+      };
     }
+  } catch (dupCheckErr) {
+    console.warn('Duplicate pre-check notice:', dupCheckErr);
+  }
 
-    try {
-      const { data: team, error: teamErr } = await supabase
-        .from('teams')
-        .insert([{
-          name: name.trim(),
-          description: description?.trim() || '',
-          category,
-          skills,
-          max_members: Number(maxMembers) || 4,
-          current_members: 1,
-          privacy,
-          status: 'recruiting',
-          banner_emoji: bannerEmoji || '🚀',
-          banner_url: bannerUrl || null,
-          leader_id: leaderId,
-          chat_group_id: chatGroupId
-        }])
-        .select()
-        .single();
+  let chatGroupId = null;
+  try {
+    const { data: chatGroup, error: chatErr } = await supabase
+      .from('groups')
+      .insert([{
+        name: trimmedName,
+        type: 'Team',
+        description: `Team chat for ${trimmedName}`,
+        privacy,
+        max_members: maxMembers,
+        members: 1,
+        admin_id: leaderId
+      }])
+      .select('id')
+      .single();
 
-      if (teamErr) throw teamErr;
-
-      await supabase.from('team_members').insert([{
-        team_id: team.id,
-        user_id: leaderId,
-        role: 'leader'
+    if (!chatErr && chatGroup) {
+      chatGroupId = chatGroup.id;
+      await supabase.from('group_members').insert([{
+        group_id: chatGroupId,
+        profile_id: leaderId
       }]).catch(() => {});
+    }
+  } catch (e) {
+    console.warn('Team chat group provision notice:', e);
+  }
 
-      return { data: team, error: null };
-    } catch (teamErr) {
-      if (isTableMissingError(teamErr)) {
-        const localTeam = {
-          id: `local_team_${Date.now()}`,
-          name: name.trim(),
-          description: description?.trim() || '',
-          category,
-          skills,
-          max_members: Number(maxMembers) || 4,
-          current_members: 1,
-          privacy,
-          status: 'recruiting',
-          banner_emoji: bannerEmoji || '🚀',
-          banner_url: bannerUrl || null,
-          leader_id: leaderId,
-          created_at: new Date().toISOString(),
-          chat_group_id: chatGroupId,
-          leader: { id: leaderId, name: payload.leaderName || 'You', avatar: '🎓' },
-          members: [
-            { id: `mem_${Date.now()}`, role: 'leader', user_id: leaderId, profile: { id: leaderId, name: payload.leaderName || 'You', avatar: '🎓' } }
-          ]
-        };
-        const custom = storage.get('groupsync_local_teams', []);
-        storage.set('groupsync_local_teams', [localTeam, ...custom]);
-        return { data: localTeam, error: null, isOffline: true };
+  try {
+    const { data: team, error: teamErr } = await supabase
+      .from('teams')
+      .insert([{
+        name: trimmedName,
+        description: description?.trim() || '',
+        category,
+        skills,
+        max_members: Number(maxMembers) || 4,
+        current_members: 1,
+        privacy,
+        status: 'recruiting',
+        banner_emoji: bannerEmoji || '🚀',
+        banner_url: bannerUrl || null,
+        leader_id: leaderId,
+        chat_group_id: chatGroupId
+      }])
+      .select()
+      .single();
+
+    if (teamErr) {
+      // Rollback chat group if team creation fails
+      if (chatGroupId) {
+        await supabase.from('groups').delete().eq('id', chatGroupId).catch(() => {});
       }
       throw teamErr;
     }
-  });
+
+    await supabase.from('team_members').insert([{
+      team_id: team.id,
+      user_id: leaderId,
+      role: 'leader'
+    }]).catch(() => {});
+
+    return { data: team, error: null };
+  } catch (teamErr) {
+    if (isTableMissingError(teamErr)) {
+      const localTeam = {
+        id: `local_team_${Date.now()}`,
+        name: trimmedName,
+        description: description?.trim() || '',
+        category,
+        skills,
+        max_members: Number(maxMembers) || 4,
+        current_members: 1,
+        privacy,
+        status: 'recruiting',
+        banner_emoji: bannerEmoji || '🚀',
+        banner_url: bannerUrl || null,
+        leader_id: leaderId,
+        created_at: new Date().toISOString(),
+        chat_group_id: chatGroupId,
+        leader: { id: leaderId, name: payload.leaderName || 'You', avatar: '🎓' },
+        members: [
+          { id: `mem_${Date.now()}`, role: 'leader', user_id: leaderId, profile: { id: leaderId, name: payload.leaderName || 'You', avatar: '🎓' } }
+        ]
+      };
+      const custom = storage.get('groupsync_local_teams', []);
+      storage.set('groupsync_local_teams', deduplicateTeams([localTeam, ...custom]));
+      return { data: localTeam, error: null, isOffline: true };
+    }
+    return { data: null, error: teamErr };
+  }
 }
 
 // ─── GET TEAMS ───────────────────────────────────────────────────────────────
 
 /**
- * Fetch teams with search and filtering capabilities.
+ * Fetch teams with search, filtering, and automated deduplication.
  */
 export async function getTeams(filters = {}) {
   const { category, status, search, skill } = filters;
@@ -280,7 +393,7 @@ export async function getTeams(filters = {}) {
       if (error) {
         if (isTableMissingError(error)) {
           const filtered = filterLocalTeams(getLocalTeams(), filters);
-          return { data: filtered, error: null, isOffline: true };
+          return { data: deduplicateTeams(filtered), error: null, isOffline: true };
         }
         throw error;
       }
@@ -293,11 +406,14 @@ export async function getTeams(filters = {}) {
         );
       }
 
-      return { data: filtered, error: null, isOffline: false };
+      // Always deduplicate returned squads so duplicate/replicate groups are never shown
+      const deduplicated = deduplicateTeams(filtered);
+
+      return { data: deduplicated, error: null, isOffline: false };
     } catch (err) {
       if (isTableMissingError(err)) {
         const filtered = filterLocalTeams(getLocalTeams(), filters);
-        return { data: filtered, error: null, isOffline: true };
+        return { data: deduplicateTeams(filtered), error: null, isOffline: true };
       }
       throw err;
     }
@@ -663,23 +779,29 @@ export async function updateTeam(teamId, updates) {
 // ─── DELETE TEAM ─────────────────────────────────────────────────────────────
 
 export async function deleteTeam(teamId, chatGroupId) {
-  return withRetry(async () => {
-    try {
+  try {
+    await supabase
+      .from('teams')
+      .delete()
+      .eq('id', teamId)
+      .catch(() => {});
+
+    if (chatGroupId) {
       await supabase
-        .from('teams')
+        .from('groups')
         .delete()
-        .eq('id', teamId)
+        .eq('id', chatGroupId)
         .catch(() => {});
-
-      const localTeams = storage.get('groupsync_local_teams', []);
-      const remaining = localTeams.filter(t => t.id !== teamId);
-      storage.set('groupsync_local_teams', remaining);
-
-      return { success: true, error: null };
-    } catch (e) {
-      return { success: true, error: null };
     }
-  });
+
+    const localTeams = storage.get('groupsync_local_teams', []);
+    const remaining = localTeams.filter(t => t.id !== teamId);
+    storage.set('groupsync_local_teams', remaining);
+
+    return { success: true, error: null };
+  } catch (e) {
+    return { success: true, error: null };
+  }
 }
 
 export default {
@@ -693,6 +815,8 @@ export default {
   leaveTeam,
   updateTeam,
   deleteTeam,
+  deduplicateTeams,
+  cleanupDuplicateSquadsForLeader,
   SAMPLE_TEAMS,
   getLocalTeams
 };

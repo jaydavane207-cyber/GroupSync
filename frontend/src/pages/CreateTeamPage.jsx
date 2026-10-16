@@ -39,6 +39,7 @@ export default function CreateTeamPage() {
   const [skills, setSkills] = useState(['React', 'Node.js']);
   const [skillInput, setSkillInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isSubmittingRef = useRef(false);
 
   const handleAddSkill = (skillToAdd) => {
     const trimmed = (skillToAdd || skillInput).trim();
@@ -61,6 +62,8 @@ export default function CreateTeamPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmittingRef.current || isSubmitting) return;
+
     if (!user?.id) {
       showToast('Please log in to create a team', 'error');
       return;
@@ -78,25 +81,32 @@ export default function CreateTeamPage() {
       return;
     }
 
+    isSubmittingRef.current = true;
     setIsSubmitting(true);
-    const { data: newTeam, error } = await createTeam({
-      name,
-      description,
-      category,
-      skills,
-      maxMembers,
-      privacy,
-      bannerEmoji,
-      leaderId: user.id
-    });
 
-    setIsSubmitting(false);
+    try {
+      const { data: newTeam, error } = await createTeam({
+        name: name.trim(),
+        description: description.trim(),
+        category,
+        skills,
+        maxMembers,
+        privacy,
+        bannerEmoji,
+        leaderId: user.id
+      });
 
-    if (error) {
-      showToast(error.userMessage || 'Failed to create team', 'error');
-    } else if (newTeam) {
-      showToast('Team created successfully', 'success');
-      navigate(`/teams/${newTeam.id}`);
+      if (error) {
+        showToast(error.userMessage || error.message || 'Failed to create team', 'error');
+      } else if (newTeam) {
+        showToast('Team created successfully', 'success');
+        navigate(`/teams/${newTeam.id}`);
+      }
+    } catch (submitErr) {
+      showToast(submitErr.message || 'An error occurred while creating team', 'error');
+    } finally {
+      setIsSubmitting(false);
+      isSubmittingRef.current = false;
     }
   };
 

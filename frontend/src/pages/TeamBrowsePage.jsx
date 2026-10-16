@@ -2,10 +2,10 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Users, Plus, Search, Filter, Globe, Trophy, Rocket,
-  GraduationCap, Cpu, ArrowRight, AlertCircle, RefreshCw, CheckCircle2
+  GraduationCap, Cpu, ArrowRight, AlertCircle, RefreshCw, CheckCircle2, Trash2
 } from 'lucide-react';
 import { useAppContext } from '@/context/AppContext';
-import { getTeams } from '@/lib/services/teamService';
+import { getTeams, deleteTeam, cleanupDuplicateSquadsForLeader } from '@/lib/services/teamService';
 import supabase from '@/lib/supabase';
 
 const CATEGORIES = [
@@ -56,6 +56,17 @@ export default function TeamBrowsePage() {
     fetchTeamList();
   }, [fetchTeamList]);
 
+  // Auto-cleanup any duplicate squads created by this user in database
+  useEffect(() => {
+    if (user?.id) {
+      cleanupDuplicateSquadsForLeader(user.id).then(({ cleanedCount }) => {
+        if (cleanedCount > 0) {
+          fetchTeamList();
+        }
+      });
+    }
+  }, [user?.id, fetchTeamList]);
+
   // Realtime Subscriptions
   useEffect(() => {
     const channel = supabase
@@ -73,6 +84,17 @@ export default function TeamBrowsePage() {
       if (channelRef.current) supabase.removeChannel(channelRef.current);
     };
   }, [fetchTeamList]);
+
+  const handleDeleteSquad = async (e, teamToDelete) => {
+    e.stopPropagation();
+    if (!window.confirm(`Are you sure you want to permanently disband "${teamToDelete.name}"?`)) return;
+    const { error: delErr } = await deleteTeam(teamToDelete.id, teamToDelete.chat_group_id);
+    if (delErr) {
+      setError('Could not disband squad. Please retry.');
+    } else {
+      fetchTeamList();
+    }
+  };
 
   const spotlightTeam = teams.find(t => (t.max_members || 4) > (t.current_members || 1)) || teams[0];
   const regularTeams = teams.filter(t => t.id !== spotlightTeam?.id);
@@ -280,9 +302,21 @@ export default function TeamBrowsePage() {
                 </div>
               </div>
 
-              <span className="text-xs font-medium text-[#9182f8] group-hover:underline flex items-center gap-1">
-                View & Apply <ArrowRight size={13} />
-              </span>
+              <div className="flex items-center gap-3">
+                {user?.id && (spotlightTeam.leader_id === user.id || spotlightTeam.leader?.id === user.id) && (
+                  <button
+                    type="button"
+                    onClick={(e) => handleDeleteSquad(e, spotlightTeam)}
+                    className="p-1.5 rounded-md text-gs-text-muted hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+                    title="Disband squad"
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                )}
+                <span className="text-xs font-medium text-[#9182f8] group-hover:underline flex items-center gap-1">
+                  View & Apply <ArrowRight size={13} />
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -375,9 +409,21 @@ export default function TeamBrowsePage() {
                     <span className="text-[11px] text-gs-text-muted">
                       {team.event || 'Campus Event'}
                     </span>
-                    <span className="font-medium text-[#9182f8] group-hover:underline flex items-center gap-1">
-                      View & Apply <ArrowRight size={12} />
-                    </span>
+                    <div className="flex items-center gap-2">
+                      {user?.id && (team.leader_id === user.id || team.leader?.id === user.id) && (
+                        <button
+                          type="button"
+                          onClick={(e) => handleDeleteSquad(e, team)}
+                          className="p-1 rounded text-gs-text-muted hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+                          title="Disband squad"
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      )}
+                      <span className="font-medium text-[#9182f8] group-hover:underline flex items-center gap-1">
+                        View & Apply <ArrowRight size={12} />
+                      </span>
+                    </div>
                   </div>
                 </div>
               );
