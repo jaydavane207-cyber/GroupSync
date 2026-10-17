@@ -1,9 +1,11 @@
-﻿/**
+/**
  * quizService.js — GroupSync Quiz & Skill Verification Operations
- * Handles quiz loading, attempt management, answer saving, scoring, badge awarding.
+ * Handles quiz loading, randomized question generation, attempt management,
+ * answer saving, scoring, badge awarding.
  */
 import supabase from '@/lib/supabase';
 import { withRetry } from '@/lib/withRetry';
+import { getRandomQuestionsForSkill, shuffleArray } from '@/lib/data/quizQuestionsData';
 
 // ─── BADGE TIER CALCULATION ───────────────────────────────────────────────────
 
@@ -71,22 +73,97 @@ export async function getQuiz(quizId) {
   );
 }
 
-/** Fetch quiz with all questions */
-export async function getQuizWithQuestions(quizId) {
+/**
+ * Fetch quiz with randomized questions.
+ * Combines any DB questions with our 30-question bank and randomizes them.
+ * If resuming an existing attempt, returns the preserved questions for that attempt.
+ *
+ * @param {string} quizId
+ * @param {object} [options]
+ * @param {string} [options.resumeAttemptId]
+ * @param {boolean} [options.forceNew]
+ */
+export async function getQuizWithQuestions(quizId, { resumeAttemptId = null, forceNew = false } = {}) {
   return withRetry(async () => {
     const quizResult = await supabase
       .from('quizzes').select('*').eq('id', quizId).single();
     if (quizResult.error) return quizResult;
 
-    const questionsResult = await supabase
-      .from('quiz_questions')
-      .select('*')
-      .eq('quiz_id', quizId)
-      .order('question_order', { ascending: true });
+    const quiz = quizResult.data;
 
-    if (questionsResult.error) return questionsResult;
+    // 1. If resuming, check if questions were saved for this specific attempt
+    if (resumeAttemptId && !forceNew) {
+      try {
+        const attemptSaved = localStorage.getItem(`group_sync_quiz_questions_${resumeAttemptId}`);
+        if (attemptSaved) {
+          const parsed = JSON.parse(attemptSaved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return { data: { quiz, questions: parsed }, error: null };
+          }
+        }
+      } catch (_) {}
+    }
 
-    return { data: { quiz: quizResult.data, questions: questionsResult.data }, error: null };
+    // 2. Fetch any questions that exist in the database for this quiz
+    let dbQuestions = [];
+    try {
+      const questionsResult = await supabase
+        .from('quiz_questions')
+        .select('*')
+        .eq('quiz_id', quizId)
+        .order('question_order', { ascending: true });
+
+      if (!questionsResult.error && questionsResult.data) {
+        dbQuestions = questionsResult.data;
+      }
+    } catch (_) {}
+
+    // 3. Generate questions from our extensive 30-question bank
+    const totalCount = quiz.total_questions || 10;
+    const clientPool = getRandomQuestionsForSkill(
+      quiz.skill_name || quiz.title,
+      30,
+      'db',
+      { quizId }
+    );
+
+    // 4. Merge DB questions and client question bank without duplicates
+    const combinedMap = new Map();
+    // Add DB questions
+    for (const q of dbQuestions) {
+      if (q && q.question_text) {
+        combinedMap.set(q.question_text.trim().toLowerCase(), q);
+      }
+    }
+    // Add client questions
+    for (const q of clientPool) {
+      if (q && q.question_text) {
+        const key = q.question_text.trim().toLowerCase();
+        if (!combinedMap.has(key)) {
+          combinedMap.set(key, q);
+        }
+      }
+    }
+
+    // 5. Randomize with Fisher-Yates and pick required count
+    const combinedList = Array.from(combinedMap.values());
+    const randomizedQuestions = shuffleArray(combinedList)
+      .slice(0, Math.min(totalCount, combinedList.length))
+      .map((q, idx) => ({
+        ...q,
+        quiz_id: quizId,
+        question_order: idx + 1
+      }));
+
+    // 6. Cache for the active session / attempt
+    try {
+      if (resumeAttemptId) {
+        localStorage.setItem(`group_sync_quiz_questions_${resumeAttemptId}`, JSON.stringify(randomizedQuestions));
+      }
+      localStorage.setItem(`group_sync_quiz_questions_${quizId}_active`, JSON.stringify(randomizedQuestions));
+    } catch (_) {}
+
+    return { data: { quiz, questions: randomizedQuestions }, error: null };
   });
 }
 
@@ -108,11 +185,22 @@ export async function getExistingAttempt(userId, quizId) {
 
 /** Start a new quiz attempt */
 export async function startAttempt(userId, quizId) {
-  return withRetry(() =>
-    supabase.from('quiz_attempts')
+  return withRetry(async () => {
+    const res = await supabase.from('quiz_attempts')
       .insert([{ user_id: userId, quiz_id: quizId, status: 'in_progress' }])
-      .select().single()
-  );
+      .select().single();
+
+    if (res.data?.id) {
+      // Associate active randomized questions with this new attemptId
+      try {
+        const activeQuestions = localStorage.getItem(`group_sync_quiz_questions_${quizId}_active`);
+        if (activeQuestions) {
+          localStorage.setItem(`group_sync_quiz_questions_${res.data.id}`, activeQuestions);
+        }
+      } catch (_) {}
+    }
+    return res;
+  });
 }
 
 /** Update attempt state (for pause/resume/current question tracking) */
@@ -124,28 +212,55 @@ export async function updateAttemptState(attemptId, updates) {
 
 /** Save/update an answer for a question (upsert) */
 export async function saveAnswer(attemptId, questionId, userAnswer) {
-  return supabase.from('quiz_answers').upsert({
-    attempt_id: attemptId,
-    question_id: questionId,
-    user_answer: userAnswer,
-    answered_at: new Date().toISOString(),
-  }, { onConflict: 'attempt_id,question_id' });
+  // Always cache locally in case questionId is from client randomized bank
+  try {
+    const key = `group_sync_quiz_answers_${attemptId}`;
+    const local = JSON.parse(localStorage.getItem(key) || '{}');
+    local[questionId] = userAnswer;
+    localStorage.setItem(key, JSON.stringify(local));
+  } catch (_) {}
+
+  // Attempt database upsert if questionId is a UUID
+  try {
+    const isUuid = typeof questionId === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(questionId);
+    if (isUuid) {
+      return await supabase.from('quiz_answers').upsert({
+        attempt_id: attemptId,
+        question_id: questionId,
+        user_answer: userAnswer,
+        answered_at: new Date().toISOString(),
+      }, { onConflict: 'attempt_id,question_id' });
+    }
+  } catch (_) {}
+
+  return { data: null, error: null };
 }
 
 /** Load all saved answers for an attempt (for resume) */
 export async function loadSavedAnswers(attemptId) {
-  const { data, error } = await supabase
-    .from('quiz_answers')
-    .select('question_id, user_answer')
-    .eq('attempt_id', attemptId);
-
-  if (error) return { data: {}, error };
-
-  // Convert to { questionId: answer } map
   const answerMap = {};
-  for (const a of (data || [])) {
-    answerMap[a.question_id] = a.user_answer;
-  }
+
+  // First load from localStorage cache
+  try {
+    const key = `group_sync_quiz_answers_${attemptId}`;
+    const local = JSON.parse(localStorage.getItem(key) || '{}');
+    Object.assign(answerMap, local);
+  } catch (_) {}
+
+  // Then merge with DB answers
+  try {
+    const { data } = await supabase
+      .from('quiz_answers')
+      .select('question_id, user_answer')
+      .eq('attempt_id', attemptId);
+
+    if (data && Array.isArray(data)) {
+      for (const a of data) {
+        answerMap[a.question_id] = a.user_answer;
+      }
+    }
+  } catch (_) {}
+
   return { data: answerMap, error: null };
 }
 
@@ -165,13 +280,13 @@ export async function loadSavedAnswers(attemptId) {
  */
 export async function submitQuiz(attemptId, userId, quiz, questions, answers, startedAtMs) {
   const completedAt = new Date();
-  const timeTakenMinutes = (completedAt.getTime() - startedAtMs) / 60000;
+  const timeTakenMinutes = (completedAt.getTime() - (startedAtMs || completedAt.getTime())) / 60000;
 
   // ── Grade each question ─────────────────────────────────────────────────
   let correctCount = 0;
   const gradedAnswers = questions.map(q => {
-    const userAnswer = (answers[q.id] || '').trim().toLowerCase();
-    const correct = q.correct_answer.trim().toLowerCase();
+    const userAnswer = String(answers[q.id] || '').trim().toLowerCase();
+    const correct = String(q.correct_answer || '').trim().toLowerCase();
     let isCorrect = false;
 
     if (q.question_type === 'mcq' || q.question_type === 'true_false') {
@@ -184,22 +299,27 @@ export async function submitQuiz(attemptId, userId, quiz, questions, answers, st
     return { question_id: q.id, user_answer: answers[q.id] || '', is_correct: isCorrect };
   });
 
-  const percentage = questions.length > 0 ? (correctCount / questions.length) * 100 : 0;
-  const passed = percentage >= quiz.passing_score;
+  const totalQuestions = questions.length > 0 ? questions.length : 10;
+  const percentage = (correctCount / totalQuestions) * 100;
+  const passed = percentage >= (quiz.passing_score || 70);
 
-  // ── Save answers ─────────────────────────────────────────────────────────
-  if (gradedAnswers.length > 0) {
-    await supabase.from('quiz_answers').upsert(
-      gradedAnswers.map(a => ({
-        attempt_id: attemptId,
-        question_id: a.question_id,
-        user_answer: a.user_answer,
-        is_correct: a.is_correct,
-        answered_at: new Date().toISOString(),
-      })),
-      { onConflict: 'attempt_id,question_id' }
-    );
-  }
+  // ── Save answers safely to DB (filter valid UUIDs to avoid constraint errors) ─
+  try {
+    const isUuid = (id) => typeof id === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+    const dbAnswers = gradedAnswers.filter(a => isUuid(a.question_id));
+    if (dbAnswers.length > 0) {
+      await supabase.from('quiz_answers').upsert(
+        dbAnswers.map(a => ({
+          attempt_id: attemptId,
+          question_id: a.question_id,
+          user_answer: a.user_answer,
+          is_correct: a.is_correct,
+          answered_at: new Date().toISOString(),
+        })),
+        { onConflict: 'attempt_id,question_id' }
+      );
+    }
+  } catch (_) {}
 
   // ── Update attempt ────────────────────────────────────────────────────────
   const { error: attemptError } = await supabase.from('quiz_attempts').update({
@@ -227,24 +347,26 @@ export async function submitQuiz(attemptId, userId, quiz, questions, answers, st
         quiz_score: Math.round(percentage * 100) / 100,
         quiz_id: quiz.id,
         attempt_id: attemptId,
-        metadata: { quiz_title: quiz.title, correct: correctCount, total: questions.length },
+        metadata: { quiz_title: quiz.title, correct: correctCount, total: totalQuestions },
       };
       const { data: badgeData } = await supabase.from('skill_badges').insert([badgePayload]).select().single();
       badge = badgeData ? { ...badgeData, ...tierInfo } : null;
     }
 
     // ── Update/create user_skills entry ──────────────────────────────────
-    await supabase.from('user_skills').upsert({
-      user_id: userId,
-      skill_name: quiz.skill_name,
-      is_verified: true,
-      verified_via: 'quiz',
-      credibility_score: Math.round(percentage * 0.40),
-      updated_at: new Date().toISOString(),
-    }, { onConflict: 'user_id,skill_name' });
+    try {
+      await supabase.from('user_skills').upsert({
+        user_id: userId,
+        skill_name: quiz.skill_name,
+        is_verified: true,
+        verified_via: 'quiz',
+        credibility_score: Math.round(percentage * 0.40),
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'user_id,skill_name' });
+    } catch (_) {}
 
     // ── Award XP ──────────────────────────────────────────────────────────
-    const xpGain = passed ? Math.round(percentage / 10) * 5 : 0; // 30-50 XP for passing
+    const xpGain = passed ? Math.round(percentage / 10) * 5 : 0;
     if (xpGain > 0) {
       try {
         await supabase.rpc('increment_xp', { user_id_input: userId, xp_delta: xpGain });
@@ -252,10 +374,17 @@ export async function submitQuiz(attemptId, userId, quiz, questions, answers, st
     }
   }
 
+  // Clean up localStorage for this attempt so next attempt generates fresh random questions
+  try {
+    localStorage.removeItem(`group_sync_quiz_questions_${attemptId}`);
+    localStorage.removeItem(`group_sync_quiz_questions_${quiz.id}_active`);
+    localStorage.removeItem(`group_sync_quiz_answers_${attemptId}`);
+  } catch (_) {}
+
   return {
     data: {
       score: correctCount,
-      total: questions.length,
+      total: totalQuestions,
       percentage: Math.round(percentage * 100) / 100,
       passed,
       badge,
@@ -292,3 +421,22 @@ export async function getUserBadges(userId) {
   );
 }
 
+// Default export object for hooks and backward compatibility
+export const quizService = {
+  getQuiz,
+  getQuizById: getQuizWithQuestions,
+  getQuizWithQuestions,
+  browseQuizzes,
+  getExistingAttempt,
+  startAttempt,
+  updateAttemptState,
+  saveAnswer,
+  loadSavedAnswers,
+  submitQuiz,
+  getQuizHistory,
+  getUserBadges,
+  getBadgeTier,
+  calculateCredibilityScore,
+};
+
+export default quizService;

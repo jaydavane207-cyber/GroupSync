@@ -1,4 +1,5 @@
 ﻿import React, { useState } from 'react';
+import { getRandomQuestionsForSkill } from '@/lib/data/quizQuestionsData';
 
 const QUESTION_BANK = {
   "React": [
@@ -246,6 +247,7 @@ const QUESTION_BANK = {
 
 const SkillVerificationQuiz = () => {
   const [selectedSkill, setSelectedSkill] = useState(null);
+  const [activeQuestions, setActiveQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -253,6 +255,7 @@ const SkillVerificationQuiz = () => {
 
   const handleSkillSelect = (skill) => {
     setSelectedSkill(skill);
+    setActiveQuestions(getRandomQuestionsForSkill(skill, 10, 'quiz'));
     setCurrentQuestionIndex(0);
     setScore(0);
     setSelectedOption(null);
@@ -268,7 +271,7 @@ const SkillVerificationQuiz = () => {
   const handleNextOrSubmit = () => {
     if (!selectedOption) return;
 
-    const currentQuestions = QUESTION_BANK[selectedSkill];
+    const currentQuestions = activeQuestions.length > 0 ? activeQuestions : getRandomQuestionsForSkill(selectedSkill, 10, 'quiz');
     const currentQ = currentQuestions[currentQuestionIndex];
 
     // Check Answer
@@ -287,6 +290,7 @@ const SkillVerificationQuiz = () => {
   };
 
   const handleRetryQuiz = () => {
+    setActiveQuestions(getRandomQuestionsForSkill(selectedSkill, 10, 'quiz'));
     setCurrentQuestionIndex(0);
     setScore(0);
     setSelectedOption(null);
@@ -295,6 +299,7 @@ const SkillVerificationQuiz = () => {
 
   const handleChooseDifferentSkill = () => {
     setSelectedSkill(null);
+    setActiveQuestions([]);
     setCurrentQuestionIndex(0);
     setScore(0);
     setSelectedOption(null);
@@ -320,7 +325,7 @@ const SkillVerificationQuiz = () => {
         </p>
         
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
-          {Object.keys(QUESTION_BANK).map((skill) => (
+          {['React', 'Python', 'UI/UX', 'SQL', 'JavaScript', 'Machine Learning'].map((skill) => (
             <button
               key={skill}
               onClick={() => handleSkillSelect(skill)}
@@ -406,7 +411,7 @@ const SkillVerificationQuiz = () => {
   // -----------------------------------------------------
   // RENDER: Active Quiz
   // -----------------------------------------------------
-  const currentQuestions = QUESTION_BANK[selectedSkill];
+  const currentQuestions = activeQuestions.length > 0 ? activeQuestions : getRandomQuestionsForSkill(selectedSkill, 10, 'quiz');
   const totalQuestions = currentQuestions.length;
   const currentQ = currentQuestions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === totalQuestions - 1;

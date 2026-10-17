@@ -126,8 +126,20 @@ export default function TakingQuizPage() {
       setIsLoading(true);
       setError(null);
 
-      // Load quiz + questions
-      const { data: quizData, error: quizErr } = await getQuizWithQuestions(quizId);
+      const resumeId = location.state?.resumeAttemptId;
+
+      // Check for in-progress/paused attempt
+      let activeAttempt = null;
+      if (resumeId) {
+        const { data: existing } = await getExistingAttempt(user.id, quizId);
+        activeAttempt = existing;
+      }
+
+      // Load quiz + randomized questions (preserves questions if resuming an active attempt)
+      const { data: quizData, error: quizErr } = await getQuizWithQuestions(quizId, {
+        resumeAttemptId: activeAttempt?.id || resumeId
+      });
+
       if (quizErr || !quizData) {
         setError('Could not load quiz. Please try again.');
         setIsLoading(false);
@@ -139,14 +151,6 @@ export default function TakingQuizPage() {
       setQuestions(quizData.questions);
 
       const totalSecs = (quizData.quiz.duration_minutes || 30) * 60;
-      const resumeId = location.state?.resumeAttemptId;
-
-      // Check for in-progress/paused attempt
-      let activeAttempt = null;
-      if (resumeId) {
-        const { data: existing } = await getExistingAttempt(user.id, quizId);
-        activeAttempt = existing;
-      }
 
       if (activeAttempt) {
         // Resume: load saved answers and remaining time

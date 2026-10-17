@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import supabase from '@/lib/supabase';
 import { useAppContext } from '@/context/AppContext';
+import { getRandomQuestionsForSkill, FULL_QUESTION_BANK } from '@/lib/data/quizQuestionsData';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -414,7 +415,7 @@ function MethodSelector({ skill, onSelectMethod, onBack }) {
 
 // ─── Path A: Quiz Flow ────────────────────────────────────────────────────────
 function QuizFlow({ skill, onComplete, onCancel }) {
-  const questions = QUESTION_BANK[skill.id];
+  const [questions, setQuestions] = useState(() => getRandomQuestionsForSkill(skill.id, 10, 'module'));
 
   // Quiz state
   const [currentIndex, setCurrentIndex]   = useState(0);
@@ -480,6 +481,7 @@ function QuizFlow({ skill, onComplete, onCancel }) {
   };
 
   const handleRetry = () => {
+    setQuestions(getRandomQuestionsForSkill(skill.id, 10, 'module'));
     setCurrentIndex(0);
     setSelectedOption(null);
     setAnswers([]);
