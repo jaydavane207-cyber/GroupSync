@@ -83,13 +83,13 @@ export default function Navbar({ currentPage, onNavigate }) {
               ))}
             </div>
             
-            <div className="flex items-center space-x-4 pl-6 border-l border-white/10">
+            <div className="flex items-center space-x-4 pl-6 border-l border-gs-border">
               <button
                 onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-                className="text-gs-text-muted hover:text-gs-text-main transition-colors p-2 rounded-lg hover:bg-white/[0.06] cursor-pointer"
+                className="text-gs-text-muted hover:text-gs-text-main transition-colors p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-white/[0.06] cursor-pointer"
                 aria-label="Toggle Theme"
               >
-                {theme === 'light' ? <Moon size={15} /> : <Sun size={15} />}
+                {theme === 'light' ? <Moon size={15} /> : <Sun size={15} className="text-amber-500" />}
               </button>
               <button 
                 onClick={() => handleNav('login')}

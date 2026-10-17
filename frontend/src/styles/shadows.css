@@ -23,3 +23,17 @@
 .shadow-glass {
   box-shadow: var(--shadow-card), var(--shadow-glass-inner);
 }
+
+.theme-light {
+  --shadow-subtle: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --shadow-card: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 4px 12px -1px rgba(15, 23, 42, 0.05);
+  --shadow-modal: 0 20px 32px -4px rgba(15, 23, 42, 0.12), 0 8px 16px -4px rgba(15, 23, 42, 0.06);
+  --shadow-primary-glow: 0 4px 20px rgba(79, 70, 229, 0.15);
+  --shadow-primary-glow-sm: 0 2px 10px rgba(79, 70, 229, 0.10);
+  --shadow-glass-inner: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.theme-light .shadow-card-elevated {
+  box-shadow: 0 10px 25px -3px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.04) !important;
+}
+

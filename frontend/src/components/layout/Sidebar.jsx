@@ -61,7 +61,7 @@ export default function Sidebar() {
         <div className="flex flex-col flex-1 overflow-y-auto">
           {/* Logo */}
           <div 
-            className="h-14 px-5 flex items-center gap-2.5 cursor-pointer border-b border-white/[0.06] shrink-0" 
+            className="h-14 px-5 flex items-center gap-2.5 cursor-pointer border-b border-gs-border shrink-0" 
             onClick={() => navigate('/dashboard')}
           >
             <div className="w-7 h-7 rounded-lg bg-[#7c6af6]/15 border border-[#7c6af6]/30 flex items-center justify-center text-[#9182f8] shrink-0 shadow-[0_0_10px_rgba(124,106,246,0.20)]">
@@ -86,7 +86,7 @@ export default function Sidebar() {
                   className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-xs transition-all duration-150 relative group w-full text-left font-normal ${
                     isActive
                       ? 'bg-[#7c6af6]/15 text-[#9182f8] font-medium border border-[#7c6af6]/20 shadow-[0_0_12px_rgba(124,106,246,0.12)]'
-                      : 'text-gs-text-muted hover:bg-white/[0.05] hover:text-gs-text-main'
+                      : 'text-gs-text-muted hover:bg-slate-100/80 dark:hover:bg-white/[0.05] hover:text-gs-text-main'
                   }`}
                 >
                   <Icon 
@@ -108,14 +108,14 @@ export default function Sidebar() {
         </div>
 
         {/* Bottom controls */}
-        <div className="flex flex-col gap-2 p-2.5 border-t border-white/[0.06] shrink-0">
+        <div className="flex flex-col gap-2 p-2.5 border-t border-gs-border shrink-0">
           {/* Theme Toggle */}
           <div className="flex items-center justify-between px-2 py-1 text-xs text-gs-text-muted">
             <span className="text-[11px] font-medium">Theme</span>
             <button
               onClick={toggleTheme}
               aria-label="Toggle theme"
-              className="p-1.5 rounded-md hover:bg-white/[0.06] text-gs-text-muted hover:text-gs-text-main transition-colors flex items-center gap-1.5 text-xs"
+              className="p-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-white/[0.06] text-gs-text-muted hover:text-gs-text-main transition-colors flex items-center gap-1.5 text-xs cursor-pointer"
             >
               {theme === 'dark' ? (
                 <>
@@ -124,7 +124,7 @@ export default function Sidebar() {
                 </>
               ) : (
                 <>
-                  <Sun size={13} className="text-amber-400" />
+                  <Sun size={13} className="text-amber-500" />
                   <span className="text-[11px]">Light</span>
                 </>
               )}
@@ -136,7 +136,7 @@ export default function Sidebar() {
             <div className="relative">
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
-                className="w-full flex items-center gap-2.5 p-1.5 rounded-lg border border-white/[0.08] hover:bg-white/[0.05] hover:border-[#7c6af6]/25 transition-all cursor-pointer text-left backdrop-blur-sm"
+                className="w-full flex items-center gap-2.5 p-1.5 rounded-lg border border-gs-border hover:bg-slate-100/80 dark:hover:bg-white/[0.05] hover:border-[#7c6af6]/25 transition-all cursor-pointer text-left backdrop-blur-sm"
               >
                 <div className="w-6 h-6 rounded-md bg-[#7c6af6]/15 border border-[#7c6af6]/25 flex items-center justify-center text-xs shrink-0 text-gs-text-main font-medium">
                   {user.avatar ? (
@@ -159,14 +159,14 @@ export default function Sidebar() {
                 <div className="absolute bottom-full left-0 right-0 mb-1.5 glass-elevated rounded-lg overflow-hidden shadow-xl z-50 p-1">
                   <button
                     onClick={() => { navigate('/profile'); setShowUserMenu(false); }}
-                    className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-md text-xs font-medium text-gs-text-main hover:bg-white/[0.07] transition-colors"
+                    className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-md text-xs font-medium text-gs-text-main hover:bg-slate-100 dark:hover:bg-white/[0.07] transition-colors"
                   >
                     <UserCircle size={14} className="text-[#7c6af6]" />
                     My profile
                   </button>
                   <button
                     onClick={() => { setShowLogoutModal(true); setShowUserMenu(false); }}
-                    className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-md text-xs font-medium text-rose-400 hover:bg-rose-500/10 transition-colors"
+                    className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-md text-xs font-medium text-rose-500 hover:bg-rose-500/10 transition-colors"
                   >
                     <LogOut size={14} />
                     Sign out

@@ -304,15 +304,15 @@ export default function DashboardPage() {
               {deadlinesLoading ? (
                 Array.from({ length: 3 }).map((_, i) => (
                   <div key={i} className="py-3 animate-pulse">
-                    <div className="h-4 bg-white/5 rounded w-3/4 mb-1.5" />
-                    <div className="h-3 bg-white/5 rounded w-1/3" />
+                    <div className="h-4 bg-slate-200 dark:bg-white/5 rounded w-3/4 mb-1.5" />
+                    <div className="h-3 bg-slate-200 dark:bg-white/5 rounded w-1/3" />
                   </div>
                 ))
               ) : upcomingDeadlines.length === 0 ? (
                 <div className="text-center py-8 text-gs-text-muted text-xs">
                   <p>No active project deadlines.</p>
                   <button onClick={() => navigate('/projects')}
-                    className="text-[#9182f8] font-medium text-xs mt-1.5 hover:underline">
+                    className="text-[#4f46e5] dark:text-[#9182f8] font-medium text-xs mt-1.5 hover:underline">
                     Browse projects →
                   </button>
                 </div>
@@ -322,7 +322,7 @@ export default function DashboardPage() {
                   return (
                     <div 
                       key={item.id || idx} 
-                      className="py-3 flex items-center justify-between gap-4 cursor-pointer hover:bg-white/[0.02] -mx-2 px-2 rounded-lg transition-colors"
+                      className="py-3 flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-50/80 dark:hover:bg-white/[0.02] -mx-2 px-2 rounded-lg transition-colors"
                       onClick={() => navigate('/projects')}
                     >
                       <div className="min-w-0">
@@ -380,18 +380,18 @@ export default function DashboardPage() {
             <div className="p-4 rounded-xl border border-gs-border bg-gs-elevated">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-medium text-gs-text-muted flex items-center gap-1.5">
-                  <BarChart3 size={13} className="text-[#9182f8]" /> Credibility index
+                  <BarChart3 size={13} className="text-[#4f46e5] dark:text-[#9182f8]" /> Credibility index
                 </span>
                 <span className="text-xs font-semibold text-gs-text-main">
                   {credibilityScore} / 100
-                  <span className="ml-1.5 text-[11px] font-medium text-[#9182f8]">({credibilityLabel})</span>
+                  <span className="ml-1.5 text-[11px] font-semibold text-[#4f46e5] dark:text-[#9182f8]">({credibilityLabel})</span>
                 </span>
               </div>
               
               {/* Single slim progress bar in accent color */}
-              <div className="w-full bg-white/[0.06] rounded-full h-1.5 overflow-hidden mb-3">
+              <div className="w-full bg-slate-200 dark:bg-white/[0.06] rounded-full h-1.5 overflow-hidden mb-3">
                 <div
-                  className="h-full bg-[#6D6AF6] rounded-full transition-all duration-300"
+                  className="h-full bg-[#4f46e5] dark:bg-[#6D6AF6] rounded-full transition-all duration-300"
                   style={{ width: `${credibilityScore}%` }}
                 />
               </div>

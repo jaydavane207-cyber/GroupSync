@@ -1,25 +1,25 @@
-﻿import React from 'react';
+import React from 'react';
 import { Award, Code, Cpu, ShieldCheck } from 'lucide-react';
 
 const TIER_CONFIG = {
   platinum: {
-    pill: 'bg-[#6D6AF6]/10 text-[#7E7BF8] border-[#7c6af6]/20',
-    iconColor: 'text-[#9182f8]',
+    pill: 'bg-[#6D6AF6]/10 text-[#4f46e5] dark:text-[#7E7BF8] border-[#7c6af6]/20',
+    iconColor: 'text-[#4f46e5] dark:text-[#9182f8]',
     label: 'Platinum',
   },
   gold: {
-    pill: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-    iconColor: 'text-amber-400',
+    pill: 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20',
+    iconColor: 'text-amber-600 dark:text-amber-400',
     label: 'Gold',
   },
   silver: {
-    pill: 'bg-zinc-500/10 text-zinc-300 border-zinc-500/20',
-    iconColor: 'text-zinc-400',
+    pill: 'bg-zinc-500/10 text-slate-700 dark:text-zinc-300 border-zinc-500/20',
+    iconColor: 'text-slate-600 dark:text-zinc-400',
     label: 'Silver',
   },
   bronze: {
-    pill: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
-    iconColor: 'text-orange-400',
+    pill: 'bg-orange-500/10 text-orange-700 dark:text-orange-400 border-orange-500/20',
+    iconColor: 'text-orange-600 dark:text-orange-400',
     label: 'Bronze',
   },
 };
@@ -31,7 +31,7 @@ export const SkillBadge = ({ level = 'gold', skill = 'React', score = 92 }) => {
   return (
     <div className="w-full rounded-xl border border-gs-border bg-gs-card p-3.5 flex items-center justify-between gap-3 hover:border-gs-border-hover transition-colors machined-edge">
       <div className="flex items-center gap-2.5 min-w-0">
-        <div className={`w-8 h-8 rounded-lg bg-white/[0.04] border border-gs-border flex items-center justify-center shrink-0 ${config.iconColor}`}>
+        <div className={`w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/[0.04] border border-gs-border flex items-center justify-center shrink-0 ${config.iconColor}`}>
           <ShieldCheck size={16} />
         </div>
         <div className="min-w-0">

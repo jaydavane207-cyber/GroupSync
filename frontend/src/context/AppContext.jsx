@@ -194,10 +194,14 @@ export const AppProvider = ({ children }) => {
   // Apply theme class to <html> element
   useEffect(() => {
     const html = document.documentElement;
-    html.classList.remove('theme-dark', 'theme-light');
+    html.classList.remove('theme-dark', 'theme-light', 'dark');
     html.classList.add(`theme-${theme}`);
+    if (theme === 'dark') {
+      html.classList.add('dark');
+    }
     localStorage.setItem('gs-theme', theme);
   }, [theme]);
+
 
   const setTheme = (newTheme) => {
     setThemeState(newTheme);
